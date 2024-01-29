@@ -8,7 +8,8 @@ const handleLogin = async (req, res) => {
     return res.status(400).json({ Error: "email and password required." });
 
   const foundUser = await User.findOne({ email: email }).exec();
-  if (!foundUser) return res.status(404).json({ error: "error at founduser" });
+  if (!foundUser)
+    return res.status(404).json({ error: `username ${email} not found` });
 
   //   const pwdMatch = await bcrypt.compare(pwd, foundUser.password);
   //   if (pwdMatch) {
@@ -19,6 +20,7 @@ const handleLogin = async (req, res) => {
   if (password !== foundUser.password) {
     return res.status(401).json({ error: "Password donot match" });
   } else {
+    const roles = Object.values(foundUser.roles).filter(Boolean);
     const accessToken = jwt.sign(
       {
         UserInfo: {
@@ -48,7 +50,7 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(201).json({ accessToken });
+    res.status(201).json({ accessToken, roles });
   }
   //   } else {
   //     res.status(401).json({ error: "Error" });
