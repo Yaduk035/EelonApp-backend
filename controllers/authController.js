@@ -5,11 +5,11 @@ const jwt = require("jsonwebtoken");
 const handleLogin = async (req, res) => {
   const { email, password } = req.body;
   if (!email | !password)
-    return res.status(400).json({ Error: "email and password required." });
+    return res.status(400).json({ message: "email and password required." });
 
   const foundUser = await User.findOne({ email: email }).exec();
   if (!foundUser)
-    return res.status(404).json({ error: `username ${email} not found` });
+    return res.status(404).json({ message: `username ${email} not found` });
 
   //   const pwdMatch = await bcrypt.compare(pwd, foundUser.password);
   //   if (pwdMatch) {
@@ -18,7 +18,9 @@ const handleLogin = async (req, res) => {
   //     const userId = foundUser?._id;
   //     const lastname = foundUser?.lastname;
   if (password !== foundUser.password) {
-    return res.status(401).json({ error: "Password donot match" });
+    return res
+      .status(401)
+      .json({ message: "Password donot match", success: false });
   } else {
     const roles = Object.values(foundUser.roles).filter(Boolean);
     const accessToken = jwt.sign(
