@@ -13,21 +13,20 @@ const getUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const { name, password } = req.body;
-    if (!name && !password)
-      return res.status(400).json({ error: "No data sent" });
-    try {
-      const results = await User.create({ name, password });
-      console.log(results);
-      res.status(201).json({ message: "User created" });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Server error" });
-    }
-
-    res.status(200).json({ message: "User created" });
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ error: "Username and password must not be empty" });
+    const duplicateUser = await User.findOne({ email: email }).exec();
+    if (duplicateUser)
+      return res.status(409).json({ error: "Username already exists" });
+    const results = await User.create({ email, password });
+    console.log(results);
+    res.status(201).json({ message: "User created" });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
