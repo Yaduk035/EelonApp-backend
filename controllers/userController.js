@@ -127,10 +127,10 @@ const addStudent = async (req, res) => {
     const duplicateUser = await StudentSchema.findOne({
       email: userData.email,
     }).exec();
-    if (duplicateUser)
-      return res
-        .status(409)
-        .json({ message: "Student email already exists", success: false });
+    // if (duplicateUser)
+    //   return res
+    //     .status(409)
+    //     .json({ message: "Student email already exists", success: false });
     const results = await StudentSchema.create(userData);
     console.log(results);
     res.status(201).json({ message: "Student created", success: true });
@@ -148,7 +148,7 @@ const deleteStudent = async (req, res) => {
     const user = await StudentSchema.findOneAndDelete(id);
     if (!user)
       return res.status(404).json({ message: `No user with id ${id} found` });
-    res.status(201).json({ message: `User with id ${id} deleted` });
+    res.status(201).json({ message: `Student with id ${id} deleted` });
   } catch (error) {
     console.log(error);
   }
