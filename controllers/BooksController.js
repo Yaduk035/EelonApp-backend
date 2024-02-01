@@ -263,6 +263,34 @@ const bookRentlist = async (req, res) => {
   }
 };
 
+const bookIssueList = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    if (!bookId) return res.status(400).json({ error: "No book id sent" });
+    const bookData = await Books.findById(bookId).exec();
+    if (!bookData) {
+      return res
+        .status(400)
+        .json({ error: `No book with id ${bookId} found.` });
+    }
+    const book = await Books.findById(bookId);
+    const rentlist = book.students.issueList;
+    const rentlistData = [];
+
+    for (const itemId of rentlist) {
+      const user = await Students.findById(itemId);
+      if (user) {
+        rentlistData.push(user);
+      }
+    }
+
+    res.status(200).json(rentlistData);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error." });
+  }
+};
+
 module.exports = {
   getBook,
   getAllBooks,
@@ -273,4 +301,5 @@ module.exports = {
   deleteFromRentlist,
   userRentlist,
   bookRentlist,
+  bookIssueList,
 };
