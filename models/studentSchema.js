@@ -12,6 +12,12 @@ const studentSchema = new Schema(
     nameTamil: {
       type: String,
     },
+    roles: {
+      student: {
+        type: Number,
+        default: 999,
+      },
+    },
     DOB: {
       type: String,
     },

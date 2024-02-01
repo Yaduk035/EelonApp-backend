@@ -1,9 +1,10 @@
-const User = require("../models/user");
+const Admin = require("../models/adminModel");
+const Staff = require("../models/staffSchema");
 const StudentSchema = require("../models/studentSchema");
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find().exec();
+    const users = await Staff.find().exec();
     if (!users)
       return res
         .status(400)
@@ -15,7 +16,7 @@ const getUsers = async (req, res) => {
   }
 };
 
-const addUser = async (req, res) => {
+const addAdmin = async (req, res) => {
   try {
     const userData = req.body;
     if (!userData)
@@ -23,24 +24,62 @@ const addUser = async (req, res) => {
         message: "Username and password must not be empty",
         success: false,
       });
-    const duplicateUser = await User.findOne({ email: userData.email }).exec();
+    const duplicateUser = await Admin.findOne({ email: userData.email }).exec();
     if (duplicateUser)
       return res
         .status(409)
         .json({ message: "Username already exists", success: false });
-    const results = await User.create(userData);
+    const results = await Admin.create(userData);
     console.log(results);
-    res.status(201).json({ message: "User created", success: true });
+    res.status(201).json({ message: "Admin created", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", success: false });
   }
 };
 
-const deleteUsers = async (req, res) => {
+const deleteAdmin = async (req, res) => {
   try {
     const id = req.params.id;
-    const user = await User.findByIdAndDelete(id);
+    const user = await Staff.findByIdAndDelete(id);
+    if (!user)
+      return res
+        .status(204)
+        .json({ message: `User with id ${id} deleted`, success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+/////////////////////////////////////////////////////////
+
+const addStaff = async (req, res) => {
+  try {
+    const userData = req.body;
+    if (!userData)
+      return res.status(400).json({
+        message: "Username and password must not be empty",
+        success: false,
+      });
+    const duplicateUser = await Staff.findOne({ email: userData.email }).exec();
+    if (duplicateUser)
+      return res
+        .status(409)
+        .json({ message: "Username already exists", success: false });
+    const results = await Staff.create(userData);
+    console.log(results);
+    res.status(201).json({ message: "Staff created", success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const deleteStaff = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await Staff.findByIdAndDelete(id);
     if (!user)
       return res
         .status(204)
@@ -156,9 +195,11 @@ const deleteStudent = async (req, res) => {
 
 module.exports = {
   getUsers,
-  addUser,
-  deleteUsers,
+  addStaff,
+  deleteStaff,
   getStudents,
   addStudent,
   deleteStudent,
+  addAdmin,
+  deleteAdmin,
 };
