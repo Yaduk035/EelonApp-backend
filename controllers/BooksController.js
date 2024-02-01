@@ -53,9 +53,13 @@ const addBook = async (req, res) => {
       rentPeriod,
       rentData,
       availabilityStatus,
-      ISBNnumber,
+      IsbnNo,
       year,
       description,
+      bookId,
+      barcode,
+      refSub,
+      refNo,
     } = req.body;
 
     if (!bookName)
@@ -72,9 +76,13 @@ const addBook = async (req, res) => {
       rentPeriod,
       rentData,
       availabilityStatus,
-      ISBNnumber,
+      IsbnNo,
       year,
       description,
+      bookId,
+      barcode,
+      refSub,
+      refNo,
       createdAt: Date.now(),
     });
     res.status(201).json(book);
