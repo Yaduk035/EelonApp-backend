@@ -10,9 +10,6 @@ const bookSchema = new Schema(
     rentAmount: {
       type: Number,
     },
-    imageName: {
-      type: String,
-    },
     author: {
       type: String,
     },
@@ -22,27 +19,45 @@ const bookSchema = new Schema(
     rentPeriod: {
       type: String,
     },
+    language: {
+      type: String,
+    },
+    year: {
+      type: Number,
+    },
+    barcode: {
+      type: String,
+    },
+    refSubject: {
+      type: String,
+    },
     rentData: {
       type: Number,
     },
     availabilityStatus: {
       type: String,
     },
-    ISBNnumber: {
+    refNo: {
+      type: Number,
+    },
+    IsbnNo: {
       type: String,
     },
     description: {
       type: String,
     },
-    users: {
-      wishlist: [String],
-      rentlist: [String],
+    students: {
+      currentlyIssued: String,
+      issueList: [String],
     },
     createdAt: {
       type: Date,
       default: Date.now,
     },
     image: String,
+    imageId: {
+      type: String,
+    },
     updatedAt: {
       type: Date,
       default: Date.now,
