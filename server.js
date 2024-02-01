@@ -5,13 +5,16 @@ const connectDb = require("./config/connectDb");
 const PORT = 4000;
 const cors = require("cors");
 require("dotenv").config();
+const credentials = require("./middleware/credentials");
 
 connectDb();
-app.use(express.json());
+app.use(credentials);
 app.use(cors());
+app.use(express.json());
 
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
+app.use("/api/library", require("./routes/api/library"));
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDb database");
