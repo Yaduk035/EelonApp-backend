@@ -266,6 +266,8 @@ const bookRentlist = async (req, res) => {
 const bookIssueList = async (req, res) => {
   try {
     const bookId = req.params.id;
+    if (!bookId) return res.status(400).json({ message: "No book id sent" });
+    const { studentId } = req.body;
     if (!bookId) return res.status(400).json({ error: "No book id sent" });
     const bookData = await Books.findById(bookId).exec();
     if (!bookData) {
@@ -274,17 +276,21 @@ const bookIssueList = async (req, res) => {
         .json({ error: `No book with id ${bookId} found.` });
     }
     const book = await Books.findById(bookId);
-    const rentlist = book.students.issueList;
-    const rentlistData = [];
+    book.students.currentlyIssued = studentId;
 
-    for (const itemId of rentlist) {
-      const user = await Students.findById(itemId);
-      if (user) {
-        rentlistData.push(user);
-      }
-    }
+    await book.save();
 
-    res.status(200).json(rentlistData);
+    // const rentlist = book.students.issueList;
+    // const rentlistData = [];
+
+    // for (const itemId of rentlist) {
+    //   const user = await Students.findById(itemId);
+    //   if (user) {
+    //     rentlistData.push(user);
+    //   }
+    // }
+
+    res.status(200).json(book);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error." });

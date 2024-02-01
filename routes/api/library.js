@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const booksController = require("../../controllers/BooksController");
 
+router.route("/books/issuelist/:id").post(booksController.bookIssueList);
 router
   .route("/books")
   .get(booksController.getAllBooks)
