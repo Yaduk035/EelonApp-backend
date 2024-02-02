@@ -310,7 +310,7 @@ const bookUnIssueList = async (req, res) => {
         .json({ error: `No book with id ${bookId} found.` });
     }
     const book = await Books.findById(bookId);
-    book.students.currentlyIssued = studentId;
+    book.students.currentlyIssued = "";
 
     await book.save();
 

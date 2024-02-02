@@ -211,6 +211,22 @@ const getStudentByName = async (req, res) => {
   }
 };
 
+const issueLibCard = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    if (!data) return res.status(400).json({ message: "No info sent" });
+    const user = await StudentSchema.findByIdAndUpdate(id, data);
+    if (!user) return res.status(404).json({ message: "No user found" });
+    res
+      .status(201)
+      .json({ message: `User with id ${id} successfully updated` });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getUsers,
   addStaff,
@@ -221,4 +237,5 @@ module.exports = {
   addAdmin,
   deleteAdmin,
   getStudentByName,
+  issueLibCard,
 };
