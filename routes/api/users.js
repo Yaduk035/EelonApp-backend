@@ -8,6 +8,7 @@ router
   .post(userController.addAdmin);
 router.route("/student/:id").delete(userController.deleteAdmin);
 
+router.route("/student/issuelibrarycard/:id").put(userController.issueLibCard);
 router
   .route("/student")
   .get(userController.getStudents)

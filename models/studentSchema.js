@@ -150,6 +150,12 @@ const studentSchema = new Schema(
     annualIncome: {
       type: String,
     },
+    libCardStatus: {
+      type: Boolean,
+    },
+    libCardNo: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
