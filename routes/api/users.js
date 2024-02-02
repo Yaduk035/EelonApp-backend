@@ -13,6 +13,7 @@ router
   .get(userController.getStudents)
   .post(userController.addStudent);
 router.route("/student/:id").delete(userController.deleteStudent);
+router.route("/student/search/:id").get(userController.getStudentByName);
 
 router
   .route("/staff")

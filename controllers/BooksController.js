@@ -297,6 +297,56 @@ const bookIssueList = async (req, res) => {
   }
 };
 
+const bookUnIssueList = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    if (!bookId) return res.status(400).json({ message: "No book id sent" });
+    const { studentId } = req.body;
+    if (!bookId) return res.status(400).json({ error: "No book id sent" });
+    const bookData = await Books.findById(bookId).exec();
+    if (!bookData) {
+      return res
+        .status(400)
+        .json({ error: `No book with id ${bookId} found.` });
+    }
+    const book = await Books.findById(bookId);
+    book.students.currentlyIssued = studentId;
+
+    await book.save();
+
+    // const rentlist = book.students.issueList;
+    // const rentlistData = [];
+
+    // for (const itemId of rentlist) {
+    //   const user = await Students.findById(itemId);
+    //   if (user) {
+    //     rentlistData.push(user);
+    //   }
+    // }
+
+    res.status(200).json(book);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error." });
+  }
+};
+
+const getBookByName = async (req, res) => {
+  try {
+    if (!req.params.id)
+      return res.status(400).json({ error: "No book name sent" });
+    const book = await Books.findOne({ bookName: req.params.id });
+    if (!book)
+      return res.status(204).json({
+        error: `Book with name ${req.params.id} not found in database.`,
+      });
+    res.status(200).json([book]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   getBook,
   getAllBooks,
@@ -308,4 +358,6 @@ module.exports = {
   userRentlist,
   bookRentlist,
   bookIssueList,
+  getBookByName,
+  bookUnIssueList,
 };
