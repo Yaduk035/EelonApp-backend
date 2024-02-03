@@ -15,6 +15,7 @@ const adminSchema = new Schema(
     roles: {
       admin: {
         type: Number,
+        default: 2000,
       },
     },
     password: {

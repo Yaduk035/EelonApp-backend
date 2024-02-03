@@ -9,6 +9,9 @@ const studentSchema = new Schema(
     admnNo: {
       type: Number,
     },
+    rollNo: {
+      type: Number,
+    },
     nameTamil: {
       type: String,
     },
@@ -43,7 +46,7 @@ const studentSchema = new Schema(
       type: Number,
     },
     std: {
-      type: Number,
+      type: String,
     },
     section: {
       type: String,
@@ -100,12 +103,12 @@ const studentSchema = new Schema(
       type: String,
     },
     concessionStudent: {
-      type: String,
+      type: Boolean,
     },
     academicYear: {
       type: Number,
     },
-    category: {
+    studentCategory: {
       type: String,
     },
     studentGp: {
