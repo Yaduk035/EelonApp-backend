@@ -199,7 +199,12 @@ const getStudentByName = async (req, res) => {
       return res
         .status(400)
         .json({ message: "No student name sent as params" });
-    const users = await StudentSchema.findOne({ email: req.params.id });
+    const users = await StudentSchema.find({
+      $or: [
+        { email: { $regex: new RegExp(req.params.id, "i") } },
+        { studentName: { $regex: new RegExp(req.params.id, "i") } },
+      ],
+    });
     if (!users)
       return res
         .status(400)
