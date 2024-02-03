@@ -4,6 +4,9 @@ const booksController = require("../../controllers/BooksController");
 
 router.route("/books/issuelist/search/:id").get(booksController.getBookByName);
 router
+  .route("/books/issuelist/searchGenre/:id")
+  .get(booksController.getBookByGenre);
+router
   .route("/books/issuelist/:id")
   .post(booksController.bookIssueList)
   .put(booksController.bookUnIssueList);
