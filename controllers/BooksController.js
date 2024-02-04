@@ -337,12 +337,35 @@ const getBookByName = async (req, res) => {
   try {
     if (!req.params.id)
       return res.status(400).json({ error: "No book name sent" });
-    const book = await Books.findOne({ bookName: req.params.id });
+    const book = await Books.find({
+      $or: [
+        { bookName: { $regex: new RegExp(req.params.id, "i") } },
+        { genre: { $regex: new RegExp(req.params.id, "i") } },
+      ],
+    });
     if (!book)
       return res.status(204).json({
         error: `Book with name ${req.params.id} not found in database.`,
       });
-    res.status(200).json([book]);
+    res.status(200).json(book);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const getBookByGenre = async (req, res) => {
+  try {
+    if (!req.params.id)
+      return res.status(400).json({ error: "No book name sent" });
+    const book = await Books.find({
+      genre: { $regex: new RegExp(`^${req.params.id}$`, "i") },
+    });
+    if (!book)
+      return res.status(204).json({
+        error: `Book with name ${req.params.id} not found in database.`,
+      });
+    res.status(200).json(book);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
@@ -362,4 +385,5 @@ module.exports = {
   bookIssueList,
   getBookByName,
   bookUnIssueList,
+  getBookByGenre,
 };
