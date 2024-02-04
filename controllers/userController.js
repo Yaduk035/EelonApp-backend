@@ -179,6 +179,25 @@ const addStudent = async (req, res) => {
   }
 };
 
+const updateStudent = async (req, res) => {
+  try {
+    if (!req.params.id) return res.status(400).json({ message: "No id sent" });
+    const data = req.body;
+    if (!data) return res.status(400).json({ message: "No data sent" });
+    const studentData = await StudentSchema.findByIdAndUpdate(
+      req.params.id,
+      data
+    );
+    if (!studentData)
+      return res
+        .status(404)
+        .json({ message: `User with id${req.params.id} not found` });
+    res.status(204).json(studentData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const deleteStudent = async (req, res) => {
   const id = req.params.id;
   if (!id)
@@ -283,4 +302,5 @@ module.exports = {
   issueLibCard,
   getStudentByNameIssueLib,
   getStudentById,
+  updateStudent,
 };
