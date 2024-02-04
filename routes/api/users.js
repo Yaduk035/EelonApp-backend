@@ -23,11 +23,9 @@ router
 router
   .route("/student/:id")
   .delete(userController.deleteStudent)
-  .get(userController.getStudentById);
-router
-  .route("/student/search/:id")
-  .get(userController.getStudentByName)
+  .get(userController.getStudentById)
   .put(userController.updateStudent);
+router.route("/student/search/:id").get(userController.getStudentByName);
 
 //////////////    Staff routes     ////////////////
 router
