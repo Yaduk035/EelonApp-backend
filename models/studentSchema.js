@@ -159,6 +159,7 @@ const studentSchema = new Schema(
     libCardNo: {
       type: Number,
     },
+    refreshToken: String,
   },
   { timestamps: true }
 );

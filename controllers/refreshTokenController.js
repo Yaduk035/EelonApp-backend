@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const studentModel = require("../models/StudentSchema");
+const studentModel = require("../models/studentSchema");
 const staffModel = require("../models/staffSchema");
 const adminModel = require("../models/adminModel");
 
@@ -11,7 +11,7 @@ const handleStudentRefreshToken = async (req, res) => {
 
   const foundUser = await studentModel.findOne({ refreshToken }).exec();
   console.log("Found User : ", foundUser?.email);
-  if (!foundUser) return res.sendStatus(403);
+  if (!foundUser) return res.sendStatus(404);
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if (err || foundUser.email !== decoded.email) return res.sendStatus(403);
@@ -37,9 +37,9 @@ const handleStaffRefreshToken = async (req, res) => {
   const refreshToken = cookies.jwt;
   console.log("RT : ", refreshToken);
 
-  const foundUser = await studentModel.findOne({ refreshToken }).exec();
+  const foundUser = await staffModel.findOne({ refreshToken }).exec();
   console.log("Found User : ", foundUser?.email);
-  if (!foundUser) return res.sendStatus(403);
+  if (!foundUser) return res.sendStatus(404);
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if (err || foundUser.email !== decoded.email) return res.sendStatus(403);
@@ -65,9 +65,9 @@ const handleAdminRefreshToken = async (req, res) => {
   const refreshToken = cookies.jwt;
   console.log("RT : ", refreshToken);
 
-  const foundUser = await studentModel.findOne({ refreshToken }).exec();
+  const foundUser = await adminModel.findOne({ refreshToken }).exec();
   console.log("Found User : ", foundUser?.email);
-  if (!foundUser) return res.sendStatus(403);
+  if (!foundUser) return res.sendStatus(404);
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if (err || foundUser.email !== decoded.email) return res.sendStatus(403);
