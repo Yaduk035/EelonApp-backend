@@ -216,6 +216,26 @@ const getStudentByName = async (req, res) => {
   }
 };
 
+const getStudentByNameIssueLib = async (req, res) => {
+  try {
+    if (!req.params.id)
+      return res
+        .status(400)
+        .json({ message: "No student name sent as params" });
+    const users = await StudentSchema.findOne({
+      $or: [{ email: req.params.id }],
+    });
+    if (!users)
+      return res
+        .status(400)
+        .json({ message: "No users found.", success: false });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 const issueLibCard = async (req, res) => {
   try {
     const id = req.params.id;
@@ -243,4 +263,5 @@ module.exports = {
   deleteAdmin,
   getStudentByName,
   issueLibCard,
+  getStudentByNameIssueLib,
 };
