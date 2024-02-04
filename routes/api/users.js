@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../../controllers/userController");
+const notificationController = require("../../controllers/notificationController");
 
 //////////////    Admin routes     ////////////////
 router
@@ -19,10 +20,22 @@ router
   .route("/student")
   .get(userController.getStudents)
   .post(userController.addStudent);
-router.route("/student/:id").delete(userController.deleteStudent);
+router
+  .route("/student/:id")
+  .delete(userController.deleteStudent)
+  .get(userController.getStudentById);
 router.route("/student/search/:id").get(userController.getStudentByName);
 
 //////////////    Staff routes     ////////////////
+router
+  .route("/staff/notifications")
+  .get(notificationController.getAllNotifications)
+  .post(notificationController.postNotifications);
+router
+  .route("/staff/notifications/:id")
+  .get(notificationController.getNotificationsByClass)
+  .delete(notificationController.deleteNotification);
+
 router
   .route("/staff")
   .get(userController.getUsers)

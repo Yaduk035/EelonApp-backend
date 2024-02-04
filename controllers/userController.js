@@ -216,6 +216,24 @@ const getStudentByName = async (req, res) => {
   }
 };
 
+const getStudentById = async (req, res) => {
+  try {
+    if (!req.params.id)
+      return res
+        .status(400)
+        .json({ message: "No student name sent as params" });
+    const users = await StudentSchema.findById(req.params.id);
+    if (!users)
+      return res
+        .status(400)
+        .json({ message: "No users found.", success: false });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 const getStudentByNameIssueLib = async (req, res) => {
   try {
     if (!req.params.id)
@@ -264,4 +282,5 @@ module.exports = {
   getStudentByName,
   issueLibCard,
   getStudentByNameIssueLib,
+  getStudentById,
 };
