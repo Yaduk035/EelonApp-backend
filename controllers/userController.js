@@ -192,7 +192,7 @@ const updateStudent = async (req, res) => {
       return res
         .status(404)
         .json({ message: `User with id${req.params.id} not found` });
-    res.status(204).json(studentData);
+    res.status(201).json(studentData);
   } catch (error) {
     console.log(error);
   }
