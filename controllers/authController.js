@@ -45,6 +45,7 @@ const handleAdminLogin = async (req, res) => {
     );
 
     foundUser.refreshToken = refreshToken;
+    const email = foundUser?.email;
     const result = await foundUser.save();
     console.log(result);
     // console.log(roles);
@@ -56,14 +57,13 @@ const handleAdminLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res
-      .status(201)
-      .json({
-        accessToken,
-        roles,
-        message: "Logged in succesfully",
-        success: true,
-      });
+    res.status(201).json({
+      accessToken,
+      roles,
+      email,
+      message: "Logged in succesfully",
+      success: true,
+    });
   }
   //   } else {
   //     res.status(401).json({ error: "Error" });
@@ -111,6 +111,8 @@ const handleStaffLogin = async (req, res) => {
     );
 
     foundUser.refreshToken = refreshToken;
+    const email = foundUser?.email;
+
     const result = await foundUser.save();
     console.log(result);
     // console.log(roles);
@@ -122,14 +124,13 @@ const handleStaffLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res
-      .status(201)
-      .json({
-        accessToken,
-        roles,
-        message: "Logged in succesfully",
-        success: true,
-      });
+    res.status(201).json({
+      accessToken,
+      roles,
+      email,
+      message: "Logged in succesfully",
+      success: true,
+    });
   }
   //   } else {
   //     res.status(401).json({ error: "Error" });
@@ -178,6 +179,8 @@ const handleStudentLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
+    const email = foundUser?.email;
+
     console.log(result);
     // console.log(roles);
 
@@ -188,14 +191,13 @@ const handleStudentLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res
-      .status(201)
-      .json({
-        accessToken,
-        roles,
-        message: "Logged in succesfully",
-        success: true,
-      });
+    res.status(201).json({
+      accessToken,
+      roles,
+      email,
+      message: "Logged in succesfully",
+      success: true,
+    });
   }
   //   } else {
   //     res.status(401).json({ error: "Error" });
