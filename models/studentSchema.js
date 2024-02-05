@@ -159,6 +159,9 @@ const studentSchema = new Schema(
     libCardNo: {
       type: Number,
     },
+    booksIssuesd: {
+      type: Array,
+    },
     refreshToken: String,
   },
   { timestamps: true }
