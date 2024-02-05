@@ -7,15 +7,18 @@ const cors = require("cors");
 require("dotenv").config();
 const credentials = require("./middleware/credentials");
 const cookieParser = require("cookie-parser");
+const corsOptions = require("./config/corsOptions");
+const verifyJwt = require("./middleware/verifyJWT");
 
 connectDb();
 app.use(credentials);
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
+// app.use(verifyJwt);
+app.use("/api/users", require("./routes/api/users"));
 app.use("/api/library", require("./routes/api/library"));
 app.use("/api/refresh", require("./routes/api/refresh"));
 app.use("/api/classroom", require("./routes/api/classRoom"));

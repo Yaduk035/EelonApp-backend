@@ -39,23 +39,6 @@ const classroomSchema = new Schema(
     upcoming: {
       type: String,
     },
-    password: {
-      type: String,
-    },
-    password: {
-      type: String,
-    },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
-    refreshToken: {
-      type: String,
-    },
   },
   { timestamps: true }
 );

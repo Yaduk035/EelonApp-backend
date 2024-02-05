@@ -120,7 +120,6 @@ const handleStaffLogin = async (req, res) => {
     const userId = foundUser?._id;
 
     console.log(result);
-    console.log(userId);
     // console.log(roles);
 
     res.cookie("jwt", refreshToken, {
