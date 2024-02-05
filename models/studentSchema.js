@@ -162,6 +162,9 @@ const studentSchema = new Schema(
     booksIssued: {
       type: Array,
     },
+    booksIssued: {
+      type: Array,
+    },
     refreshToken: String,
   },
   { timestamps: true }

@@ -5,4 +5,3 @@ const userRoles = {
 };
 
 module.exports = userRoles;
-s;
