@@ -46,9 +46,9 @@ const handleAdminLogin = async (req, res) => {
     );
 
     foundUser.refreshToken = refreshToken;
+    const result = await foundUser.save();
     const email = foundUser?.email;
     const userId = foundUser?._id;
-    const result = await foundUser.save();
     console.log(result);
     // console.log(roles);
 
@@ -115,11 +115,12 @@ const handleStaffLogin = async (req, res) => {
     );
 
     foundUser.refreshToken = refreshToken;
+    const result = await foundUser.save();
     const email = foundUser?.email;
     const userId = foundUser?._id;
 
-    const result = await foundUser.save();
     console.log(result);
+    console.log(userId);
     // console.log(roles);
 
     res.cookie("jwt", refreshToken, {
