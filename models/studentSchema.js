@@ -106,7 +106,7 @@ const studentSchema = new Schema(
       type: Boolean,
     },
     academicYear: {
-      type: Number,
+      type: String,
     },
     studentCategory: {
       type: String,
