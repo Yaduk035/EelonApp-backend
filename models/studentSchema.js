@@ -106,7 +106,7 @@ const studentSchema = new Schema(
       type: Boolean,
     },
     academicYear: {
-      type: Number,
+      type: String,
     },
     studentCategory: {
       type: String,
@@ -158,6 +158,9 @@ const studentSchema = new Schema(
     },
     libCardNo: {
       type: Number,
+    },
+    booksIssuesd: {
+      type: Array,
     },
     refreshToken: String,
   },
