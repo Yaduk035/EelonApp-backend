@@ -159,7 +159,7 @@ const studentSchema = new Schema(
     libCardNo: {
       type: Number,
     },
-    booksIssuesd: {
+    booksIssued: {
       type: Array,
     },
     refreshToken: String,
