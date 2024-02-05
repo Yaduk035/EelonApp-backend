@@ -32,6 +32,7 @@ const handleAdminLogin = async (req, res) => {
         UserInfo: {
           email: foundUser.email,
           roles: foundUser.roles,
+          userId: foundUser._id,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -46,6 +47,7 @@ const handleAdminLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const email = foundUser?.email;
+    const userId = foundUser?._id;
     const result = await foundUser.save();
     console.log(result);
     // console.log(roles);
@@ -61,6 +63,7 @@ const handleAdminLogin = async (req, res) => {
       accessToken,
       roles,
       email,
+      userId,
       message: "Logged in succesfully",
       success: true,
     });
@@ -98,6 +101,7 @@ const handleStaffLogin = async (req, res) => {
         UserInfo: {
           email: foundUser.email,
           roles: foundUser.roles,
+          userId: foundUser._id,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -112,6 +116,7 @@ const handleStaffLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const email = foundUser?.email;
+    const userId = foundUser?._id;
 
     const result = await foundUser.save();
     console.log(result);
@@ -128,6 +133,7 @@ const handleStaffLogin = async (req, res) => {
       accessToken,
       roles,
       email,
+      userId,
       message: "Logged in succesfully",
       success: true,
     });
@@ -165,6 +171,7 @@ const handleStudentLogin = async (req, res) => {
         UserInfo: {
           email: foundUser.email,
           roles: foundUser.roles,
+          userId: foundUser._id,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -180,6 +187,7 @@ const handleStudentLogin = async (req, res) => {
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
     const email = foundUser?.email;
+    const userId = foundUser?._id;
 
     console.log(result);
     // console.log(roles);
@@ -195,6 +203,7 @@ const handleStudentLogin = async (req, res) => {
       accessToken,
       roles,
       email,
+      userId,
       message: "Logged in succesfully",
       success: true,
     });
