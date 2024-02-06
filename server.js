@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/refresh", require("./routes/api/refresh"));
 app.use("/api/users", require("./routes/api/users"));
-// app.use(verifyJwt);
+app.use(verifyJwt);
 app.use("/api/library", require("./routes/api/library"));
 app.use("/api/classroom", require("./routes/api/classRoom"));
 

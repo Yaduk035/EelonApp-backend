@@ -1,6 +1,7 @@
 const Admin = require("../models/adminModel");
 const Staff = require("../models/staffSchema");
 const StudentSchema = require("../models/studentSchema");
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
   try {
@@ -67,9 +68,17 @@ const addStaff = async (req, res) => {
       return res
         .status(409)
         .json({ message: "Username already exists", success: false });
-    const results = await Staff.create(userData);
+
+    const hashedPwd = await bcrypt.hash(userData.password, 10);
+
+    const reqData = {
+      ...userData,
+      password: hashedPwd,
+    };
+    console.log(reqData);
+    const results = await Staff.create(reqData);
     console.log(results);
-    res.status(201).json({ message: "Staff created", success: true });
+    res.status(201).json({ results, message: "Staff created", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", success: false });
