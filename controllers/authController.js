@@ -14,24 +14,18 @@ const handleAdminLogin = async (req, res) => {
     return res
       .status(404)
       .json({ message: `username ${email} not found`, success: false });
+  console.log(foundUser);
 
-  //   const pwdMatch = await bcrypt.compare(pwd, foundUser.password);
-  //   if (pwdMatch) {
-  //     const roles = await Object.values(foundUser.roles).filter(Boolean);
-  //     const firstname = foundUser?.firstname;
-  //     const userId = foundUser?._id;
-  //     const lastname = foundUser?.lastname;
-  if (password !== foundUser.password) {
-    return res
-      .status(401)
-      .json({ message: "Password donot match", success: false });
-  } else {
-    const roles = Object.values(foundUser.roles).filter(Boolean);
+  const pwdMatch = await bcrypt.compare(password, foundUser.password);
+  if (pwdMatch) {
+    const roles = await Object.values(foundUser.roles).filter(Boolean);
+    const userId = foundUser?._id;
+    const email = foundUser?.email;
     const accessToken = jwt.sign(
       {
         UserInfo: {
           email: foundUser.email,
-          roles: foundUser.roles,
+          roles: roles,
           userId: foundUser._id,
         },
       },
@@ -47,10 +41,8 @@ const handleAdminLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    const email = foundUser?.email;
-    const userId = foundUser?._id;
     console.log(result);
-    // console.log(roles);
+    console.log(roles);
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
@@ -59,18 +51,10 @@ const handleAdminLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(201).json({
-      accessToken,
-      roles,
-      email,
-      userId,
-      message: "Logged in succesfully",
-      success: true,
-    });
+    res.json({ roles, accessToken, userId });
+  } else {
+    res.status(401).json({ error: "Error" });
   }
-  //   } else {
-  //     res.status(401).json({ error: "Error" });
-  //   }
 };
 ///////////////////////////////////////////////////////////
 
@@ -96,6 +80,7 @@ const handleStaffLogin = async (req, res) => {
         UserInfo: {
           email: foundUser.email,
           roles: roles,
+          userId: foundUser._id,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -138,24 +123,18 @@ const handleStudentLogin = async (req, res) => {
     return res
       .status(404)
       .json({ message: `username ${email} not found`, success: false });
+  console.log(foundUser);
 
-  //   const pwdMatch = await bcrypt.compare(pwd, foundUser.password);
-  //   if (pwdMatch) {
-  //     const roles = await Object.values(foundUser.roles).filter(Boolean);
-  //     const firstname = foundUser?.firstname;
-  //     const userId = foundUser?._id;
-  //     const lastname = foundUser?.lastname;
-  if (password !== foundUser.password) {
-    return res
-      .status(401)
-      .json({ message: "Password donot match", success: false });
-  } else {
-    const roles = Object.values(foundUser.roles).filter(Boolean);
+  const pwdMatch = await bcrypt.compare(password, foundUser.password);
+  if (pwdMatch) {
+    const roles = await Object.values(foundUser.roles).filter(Boolean);
+    const userId = foundUser?._id;
+    const email = foundUser?.email;
     const accessToken = jwt.sign(
       {
         UserInfo: {
           email: foundUser.email,
-          roles: foundUser.roles,
+          roles: roles,
           userId: foundUser._id,
         },
       },
@@ -171,11 +150,8 @@ const handleStudentLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    const email = foundUser?.email;
-    const userId = foundUser?._id;
-
     console.log(result);
-    // console.log(roles);
+    console.log(roles);
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
@@ -184,18 +160,10 @@ const handleStudentLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(201).json({
-      accessToken,
-      roles,
-      email,
-      userId,
-      message: "Logged in succesfully",
-      success: true,
-    });
+    res.json({ roles, accessToken, userId });
+  } else {
+    res.status(401).json({ error: "Error" });
   }
-  //   } else {
-  //     res.status(401).json({ error: "Error" });
-  //   }
 };
 
 module.exports = { handleAdminLogin, handleStaffLogin, handleStudentLogin };
