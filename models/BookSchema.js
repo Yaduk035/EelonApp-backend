@@ -23,7 +23,7 @@ const bookSchema = new Schema(
       type: String,
     },
     year: {
-      type: String,
+      type: Number,
     },
     barcode: {
       type: String,
