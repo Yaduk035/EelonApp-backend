@@ -36,13 +36,13 @@ const classroomSchema = new Schema(
     grades: {
       type: Array,
     },
-    upcoming: {
-      type: String,
-    },
     subject: {
       type: String,
     },
     description: {
+      type: String,
+    },
+    createdBy: {
       type: String,
     },
   },
