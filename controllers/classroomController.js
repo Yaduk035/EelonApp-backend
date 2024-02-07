@@ -373,7 +373,7 @@ const updateClassroomAnnouncement = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const announcementsDbData = await announcementsModel.create(data);
+    const [announcementsDbData] = await announcementsModel.create(data);
     if (!announcementsDbData)
       return res
         .status(400)
@@ -404,7 +404,7 @@ const updateClassroomAssignment = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const assignmentsDbData = await assignmentModel.create(data);
+    const [assignmentsDbData] = await assignmentModel.create(data);
     if (!assignmentsDbData)
       return res
         .status(400)
@@ -433,7 +433,7 @@ const updateClassroomMaterial = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const materialsDbData = await materialsModel.create(data);
+    const [materialsDbData] = await materialsModel.create(data);
     if (!materialsDbData)
       return res
         .status(400)
@@ -460,7 +460,7 @@ const updateClassroomGrade = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const gradeDbData = await gradeModel.create(data);
+    const [gradeDbData] = await gradeModel.create(data);
     if (!gradeDbData)
       return res
         .status(400)
