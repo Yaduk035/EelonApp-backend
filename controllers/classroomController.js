@@ -45,14 +45,22 @@ const createClassroom = async (req, res) => {
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
     const roomName = data.roomName;
-    const duplicateClassroom = await classroomModel.findOne({
-      roomName: roomName,
-    });
-    if (duplicateClassroom)
-      return res.status(409).json({
-        message: `Class room with room name ${roomName} alreay exists`,
-      });
+    // const duplicateClassroom = await classroomModel.findOne({
+    //   roomName: roomName,
+    // });
+    // if (duplicateClassroom)
+    //   return res.status(409).json({
+    //     message: `Class room with room name ${roomName} alreay exists`,
+    //   });
     const classrooms = await classroomModel.create(data);
+    const DbId = [classrooms._id.toString()];
+
+    await staffModel.findByIdAndUpdate(
+      data.createdBy,
+      { $addToSet: { classRooms: { $each: DbId } } },
+      { new: true }
+    );
+
     res.status(201).json(classrooms);
   } catch (error) {
     console.log(error);
@@ -109,6 +117,46 @@ const getStudentClassrooms = async (req, res) => {
     console.log(error);
   }
 };
+
+const getClassroomTeachers = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classRooms = await classroomModel.findById(userId).exec();
+    if (!classRooms)
+      return res.status(404).json({ message: "Classroom not found" });
+    const staffsArray = classRooms.teachers;
+    const classroomsData = await staffModel
+      .find({ _id: { $in: staffsArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getClassroomStudents = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classRooms = await classroomModel.findById(userId).exec();
+    if (!classRooms)
+      return res.status(404).json({ message: "Classroom not found" });
+    const studentsArray = classRooms.students;
+    const classroomsData = await studentModel
+      .find({ _id: { $in: studentsArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/////////////////////////////////////////////////////////////
 
 const getUpcomingTasks = async (req, res) => {
   try {
@@ -644,4 +692,6 @@ module.exports = {
   getAssignments,
   getMaterials,
   getGrades,
+  getClassroomTeachers,
+  getClassroomStudents,
 };
