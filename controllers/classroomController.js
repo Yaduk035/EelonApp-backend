@@ -118,6 +118,46 @@ const getStudentClassrooms = async (req, res) => {
   }
 };
 
+const getClassroomTeachers = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classRooms = await classroomModel.findById(userId).exec();
+    if (!classRooms)
+      return res.status(404).json({ message: "Classroom not found" });
+    const staffsArray = classRooms.teachers;
+    const classroomsData = await staffModel
+      .find({ _id: { $in: staffsArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getClassroomStudents = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classRooms = await classroomModel.findById(userId).exec();
+    if (!classRooms)
+      return res.status(404).json({ message: "Classroom not found" });
+    const studentsArray = classRooms.students;
+    const classroomsData = await studentModel
+      .find({ _id: { $in: studentsArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/////////////////////////////////////////////////////////////
+
 const getUpcomingTasks = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -652,4 +692,6 @@ module.exports = {
   getAssignments,
   getMaterials,
   getGrades,
+  getClassroomTeachers,
+  getClassroomStudents,
 };

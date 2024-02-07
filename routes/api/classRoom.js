@@ -10,6 +10,16 @@ router
   .get(classroomController.getStudentClassrooms);
 
 router
+  .route("/getclassroomsteachers/:id")
+  .get(classroomController.getClassroomTeachers);
+
+router
+  .route("/getclassroomsstudents/:id")
+  .get(classroomController.getClassroomStudents);
+
+///////////////////////
+
+router
   .route("/editteacher/:id")
   .put(classroomController.updateClassroomTeacher)
   .delete(classroomController.deleteTeacher);
