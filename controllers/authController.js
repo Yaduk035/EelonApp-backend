@@ -51,7 +51,7 @@ const handleAdminLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ roles, accessToken, userId });
+    res.json({ roles, accessToken, userId, email });
   } else {
     res.status(401).json({ error: "Error" });
   }
@@ -105,7 +105,7 @@ const handleStaffLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ roles, accessToken, userId });
+    res.json({ roles, accessToken, userId, email });
   } else {
     res.status(401).json({ error: "Error" });
   }
@@ -160,7 +160,7 @@ const handleStudentLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ roles, accessToken, userId });
+    res.json({ roles, accessToken, userId, email });
   } else {
     res.status(401).json({ error: "Error" });
   }

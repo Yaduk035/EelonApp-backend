@@ -45,14 +45,22 @@ const createClassroom = async (req, res) => {
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
     const roomName = data.roomName;
-    const duplicateClassroom = await classroomModel.findOne({
-      roomName: roomName,
-    });
-    if (duplicateClassroom)
-      return res.status(409).json({
-        message: `Class room with room name ${roomName} alreay exists`,
-      });
+    // const duplicateClassroom = await classroomModel.findOne({
+    //   roomName: roomName,
+    // });
+    // if (duplicateClassroom)
+    //   return res.status(409).json({
+    //     message: `Class room with room name ${roomName} alreay exists`,
+    //   });
     const classrooms = await classroomModel.create(data);
+    const DbId = [classrooms._id.toString()];
+
+    await staffModel.findByIdAndUpdate(
+      data.createdBy,
+      { $addToSet: { classRooms: { $each: DbId } } },
+      { new: true }
+    );
+
     res.status(201).json(classrooms);
   } catch (error) {
     console.log(error);

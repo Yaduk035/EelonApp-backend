@@ -18,6 +18,9 @@ const classroomSchema = new Schema(
     roomName: {
       type: String,
     },
+    roomId: {
+      type: String,
+    },
     inviteLink: {
       type: String,
     },

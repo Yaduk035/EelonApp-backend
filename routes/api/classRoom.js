@@ -20,31 +20,31 @@ router
   .delete(classroomController.deletStudent);
 
 router
-  .route("/editupcomingtask/:id")
+  .route("/upcomingtask/:id")
   .put(classroomController.updateClassroomUpcomingtask)
   .delete(classroomController.deleteClassroomUpcomingTask)
   .get(classroomController.getUpcomingTasks);
 
 router
-  .route("/editannoucement/:id")
+  .route("/annoucement/:id")
   .put(classroomController.updateClassroomAnnouncement)
   .delete(classroomController.deleteClassroomAnnouncement)
   .get(classroomController.getAnnouncements);
 
 router
-  .route("/editassignment/:id")
+  .route("/assignment/:id")
   .put(classroomController.updateClassroomAssignment)
   .delete(classroomController.deleteClassroomAssignment)
   .get(classroomController.getAssignments);
 
 router
-  .route("/editmaterial/:id")
+  .route("/material/:id")
   .put(classroomController.updateClassroomMaterial)
   .delete(classroomController.deleteClassroomMaterial)
   .get(classroomController.getMaterials);
 
 router
-  .route("/editgrade/:id")
+  .route("/grade/:id")
   .put(classroomController.updateClassroomGrade)
   .delete(classroomController.deleteClassroomGrade)
   .get(classroomController.getGrades);
