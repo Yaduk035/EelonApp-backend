@@ -166,6 +166,9 @@ const studentSchema = new Schema(
       type: Array,
     },
     refreshToken: String,
+    classRooms: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

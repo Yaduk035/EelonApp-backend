@@ -35,6 +35,9 @@ const staffSchema = new Schema(
     accessibleModules: {
       type: Object,
     },
+    classRooms: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );
