@@ -5,6 +5,7 @@ const materialsModel = require("../models/materialsModel");
 const gradeModel = require("../models/gradeModel");
 const studentModel = require("../models/studentSchema");
 const staffModel = require("../models/staffSchema");
+const assignmentModel = require("../models/assignmentModel");
 
 const immer = require("immer");
 const produce = immer.produce;
@@ -43,6 +44,14 @@ const createClassroom = async (req, res) => {
   try {
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
+    const roomName = data.roomName;
+    const duplicateClassroom = await classroomModel.findOne({
+      roomName: roomName,
+    });
+    if (duplicateClassroom)
+      return res.status(409).json({
+        message: `Class room with room name ${roomName} alreay exists`,
+      });
     const classrooms = await classroomModel.create(data);
     res.status(201).json(classrooms);
   } catch (error) {
@@ -60,6 +69,135 @@ const deleteClassroom = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////////
+
+const getStaffClassrooms = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const user = await staffModel.findById(userId).exec();
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const classRoomsEnrolled = user.classRooms;
+    const classroomsData = await classroomModel
+      .find({ _id: { $in: classRoomsEnrolled } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getStudentClassrooms = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const user = await studentModel.findById(userId).exec();
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const classRoomsEnrolled = user.classRooms;
+    const classroomsData = await classroomModel
+      .find({ _id: { $in: classRoomsEnrolled } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getUpcomingTasks = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classroom = await classroomModel.findById(userId).exec();
+    if (!classroom) return res.status(404).json({ message: "User not found" });
+    const upcomingTasksArray = classroom.upcomingTasks;
+    console.log(upcomingTasksArray);
+    const classroomsData = await upcomingTasksModel
+      .find({ _id: { $in: upcomingTasksArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAnnouncements = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classroom = await classroomModel.findById(userId).exec();
+    if (!classroom) return res.status(404).json({ message: "User not found" });
+    const dataArray = classroom.announcements;
+    const classroomsData = await announcementsModel
+      .find({ _id: { $in: dataArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAssignments = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classroom = await classroomModel.findById(userId).exec();
+    if (!classroom) return res.status(404).json({ message: "User not found" });
+    const dataArray = classroom.assignments;
+    const classroomsData = await assignmentModel
+      .find({ _id: { $in: dataArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getMaterials = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classroom = await classroomModel.findById(userId).exec();
+    if (!classroom) return res.status(404).json({ message: "User not found" });
+    const dataArray = classroom.materials;
+    const classroomsData = await materialsModel
+      .find({ _id: { $in: dataArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getGrades = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classroom = await classroomModel.findById(userId).exec();
+    if (!classroom) return res.status(404).json({ message: "User not found" });
+    const dataArray = classroom.grades;
+    const classroomsData = await gradeModel
+      .find({ _id: { $in: dataArray } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -104,23 +242,20 @@ const updateClassroomTeacher = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const classRoomData = await classroomModel.findById(id).exec();
-    const teachersData = classRoomData?.teachers;
-    const updatedData = { teachers: teachersData.concat(...data.teachers) };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
 
-    // Prepare bulk write operations for teachersModel collection
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { teachers: { $each: data.teachers } } },
+      { new: true }
+    );
+
     const bulkOps = data.teachers.map((teacherId) => ({
       updateOne: {
         filter: { _id: teacherId },
-        update: { $addToSet: { classroom: id } }, // Add the classroom id to the classroom array
+        update: { $addToSet: { classRooms: id } },
       },
     }));
-
-    // Execute bulk write operations
-    await teachersModel.bulkWrite(bulkOps);
+    await staffModel.bulkWrite(bulkOps);
     res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
@@ -134,13 +269,21 @@ const updateClassroomStudent = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const classRoomData = await classroomModel.findById(id).exec();
-    const studentsData = classRoomData?.students;
-    const updatedData = { students: studentsData.concat(...data.students) };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res.status(201).json({ message: "Updated", classroom });
+
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { students: { $each: data.students } } },
+      { new: true }
+    );
+
+    const bulkOps = data.students.map((studentId) => ({
+      updateOne: {
+        filter: { _id: studentId },
+        update: { $addToSet: { classRooms: id } },
+      },
+    }));
+    await studentModel.bulkWrite(bulkOps);
+    res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -159,17 +302,17 @@ const updateClassroomUpcomingtask = async (req, res) => {
     const upcomDbId = [upcomingTaskDbData._id.toString()];
     if (!upcomDbId)
       return res.status(404).json({ message: "No upComDbId found" });
-    const classRoomData = await classroomModel.findById(id).exec();
-    if (!classRoomData)
-      return res.status(404).json({ message: "No classRoomData found" });
-    const parentDbData = classRoomData?.upcomingTasks;
-    const updatedData = {
-      upcomingTasks: parentDbData.concat(upcomDbId),
-    };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res.status(201).json({ message: "Updated", classroom });
+
+    const bulkOps = upcomDbId.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $addToSet: { upcomingTasks: Id } },
+        upsert: true,
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+
+    res.status(201).json({ message: "Updated", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -188,20 +331,19 @@ const updateClassroomAnnouncement = async (req, res) => {
         .status(400)
         .json({ message: "Error fetching data from announcementsDb" });
     const childDbId = [announcementsDbData._id.toString()];
+    if (!childDbId)
+      return res.status(404).json({ message: "No upComDbId found" });
 
-    const classRoomData = await classroomModel.findById(id).exec();
-    if (!classRoomData)
-      return res.status(404).json({ message: "No classRoomData found" });
-    const parentDbData = classRoomData?.announcements;
-    const updatedData = {
-      announcements: parentDbData.concat(childDbId),
-    };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res
-      .status(201)
-      .json({ message: "Announcements updated", success: true, classroom });
+    const bulkOps = childDbId.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $addToSet: { announcements: Id } },
+        upsert: true,
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+
+    res.status(201).json({ message: "Updated", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -214,26 +356,23 @@ const updateClassroomAssignment = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const assignmentsDbData = await announcementsModel.create(data);
+    const assignmentsDbData = await assignmentModel.create(data);
     if (!assignmentsDbData)
       return res
         .status(400)
         .json({ message: "Error fetching data from assignmentsDb" });
     const childDbId = [assignmentsDbData._id.toString()];
 
-    const classRoomData = await classroomModel.findById(id).exec();
-    if (!classRoomData)
-      return res.status(404).json({ message: "No classRoomData found" });
-    const parentDbData = classRoomData?.assignments;
-    const updatedData = {
-      assignments: parentDbData.concat(childDbId),
-    };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res
-      .status(201)
-      .json({ message: "Announcements updated", success: true, classroom });
+    const bulkOps = childDbId.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $addToSet: { assignments: Id } },
+        upsert: true,
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+
+    res.status(201).json({ message: "Updated", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -252,21 +391,15 @@ const updateClassroomMaterial = async (req, res) => {
         .status(400)
         .json({ message: "Error fetching data from materialsDb" });
     const childDbId = [materialsDbData._id.toString()];
-    materials;
 
-    const classRoomData = await classroomModel.findById(id).exec();
-    if (!classRoomData)
-      return res.status(404).json({ message: "No classRoomData found" });
-    const parentDbData = classRoomData?.materials;
-    const updatedData = {
-      materials: parentDbData.concat(childDbId),
-    };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res
-      .status(201)
-      .json({ message: "Announcements updated", success: true, classroom });
+    const bulkOps = childDbId.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $addToSet: { materials: Id } },
+        upsert: true,
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -286,19 +419,141 @@ const updateClassroomGrade = async (req, res) => {
         .json({ message: "Error fetching data from gradesDb" });
     const childDbId = [gradeDbData._id.toString()];
 
-    const classRoomData = await classroomModel.findById(id).exec();
-    if (!classRoomData)
-      return res.status(404).json({ message: "No classRoomData found" });
-    const parentDbData = classRoomData?.grades;
-    const updatedData = {
-      grades: parentDbData.concat(childDbId),
-    };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res
-      .status(201)
-      .json({ message: "Announcements updated", success: true, classroom });
+    const bulkOps = childDbId.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $addToSet: { grades: Id } },
+        upsert: true,
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+//////////////////////////////////////////////
+
+const deleteClassroomUpcomingTask = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = [req.body.deleteId];
+    if (!data) return res.status(400).json({ message: "Invalid data sent" });
+    console.log(data);
+
+    const deleteResult = await upcomingTasksModel.findByIdAndDelete(data);
+    if (!deleteResult)
+      return res.status(404).json({ message: "Upcoming task not found" });
+
+    const bulkOps = data.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $pull: { upcomingTasks: Id } },
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+    res.status(200).json({ message: "Upcoming task deleted", success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteClassroomAnnouncement = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = [req.body.deleteId];
+    if (!data) return res.status(400).json({ message: "Invalid data sent" });
+    console.log(data);
+
+    const deleteResult = await announcementsModel.findByIdAndDelete(data);
+    if (!deleteResult)
+      return res.status(404).json({ message: "Upcoming task not found" });
+
+    const bulkOps = data.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $pull: { announcements: Id } },
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+    res.status(200).json({ message: "Upcoming task deleted", success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteClassroomAssignment = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = [req.body.deleteId];
+    if (!data) return res.status(400).json({ message: "Invalid data sent" });
+    console.log(data);
+
+    const deleteResult = await assignmentModel.findByIdAndDelete(data);
+    if (!deleteResult)
+      return res.status(404).json({ message: "Upcoming task not found" });
+
+    const bulkOps = data.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $pull: { assignments: Id } },
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+    res.status(200).json({ message: "Upcoming task deleted", success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteClassroomMaterial = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = [req.body.deleteId];
+    if (!data) return res.status(400).json({ message: "Invalid data sent" });
+    console.log(data);
+
+    const deleteResult = await materialsModel.findByIdAndDelete(data);
+    if (!deleteResult)
+      return res.status(404).json({ message: "Upcoming task not found" });
+
+    const bulkOps = data.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $pull: { materials: Id } },
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+    res.status(200).json({ message: "Upcoming task deleted", success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteClassroomGrade = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = [req.body.deleteId];
+    if (!data) return res.status(400).json({ message: "Invalid data sent" });
+    console.log(data);
+
+    const deleteResult = await gradeModel.findByIdAndDelete(data);
+    if (!deleteResult)
+      return res.status(404).json({ message: "Upcoming task not found" });
+
+    const bulkOps = data.map((Id) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $pull: { grades: Id } },
+      },
+    }));
+    await classroomModel.bulkWrite(bulkOps);
+    res.status(200).json({ message: "Upcoming task deleted", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -308,36 +563,56 @@ const updateClassroomGrade = async (req, res) => {
 /////////////////////////////////////////////
 
 const deleteTeacher = async (req, res) => {
-  const id = req.params.id;
   try {
-    const { teachers } = req.body;
-    const classRoomData = await classroomModel.findById(id);
-    classRoomData.teachers = classRoomData.teachers.filter(
-      (data) => data !== teachers
-    );
-    console.log(classRoomData);
-    await classRoomData.save();
+    const data = req.body;
+    if (!data) return res.status(400).json({ message: "No data sent" });
+    const id = req.params.id;
+    if (!id) return res.status(400).json({ message: "No id sent" });
 
-    res.status(201).json({ message: "Deleted", success: true });
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $pull: { teachers: { $in: data.teachers } } },
+      { new: true }
+    );
+    const bulkOps = data.teachers.map((teacherId) => ({
+      updateOne: {
+        filter: { _id: teacherId },
+        update: { $pull: { classRooms: id } },
+      },
+    }));
+    await staffModel.bulkWrite(bulkOps);
+
+    res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 const deletStudent = async (req, res) => {
-  const id = req.params.id;
   try {
-    const { students } = req.body;
-    const classRoomData = await classroomModel.findById(id);
-    classRoomData.students = classRoomData.students.filter(
-      (data) => data !== students
-    );
-    console.log(classRoomData);
-    await classRoomData.save();
+    const data = req.body;
+    if (!data) return res.status(400).json({ message: "No data sent" });
+    const id = req.params.id;
+    if (!id) return res.status(400).json({ message: "No id sent" });
 
-    res.status(201).json({ message: "Deleted", success: true });
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $pull: { students: { $in: data.students } } },
+      { new: true }
+    );
+    const bulkOps = data.students.map((studentId) => ({
+      updateOne: {
+        filter: { _id: studentId },
+        update: { $pull: { classRooms: id } },
+      },
+    }));
+    await studentModel.bulkWrite(bulkOps);
+
+    res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -357,4 +632,16 @@ module.exports = {
   deletStudent,
   getTeacher,
   getStudent,
+  getStaffClassrooms,
+  getStudentClassrooms,
+  deleteClassroomUpcomingTask,
+  deleteClassroomAnnouncement,
+  deleteClassroomAssignment,
+  deleteClassroomMaterial,
+  deleteClassroomGrade,
+  getUpcomingTasks,
+  getAnnouncements,
+  getAssignments,
+  getMaterials,
+  getGrades,
 };
