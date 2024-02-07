@@ -104,23 +104,20 @@ const updateClassroomTeacher = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const classRoomData = await classroomModel.findById(id).exec();
-    const teachersData = classRoomData?.teachers;
-    const updatedData = { teachers: teachersData.concat(...data.teachers) };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
 
-    // Prepare bulk write operations for teachersModel collection
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { teachers: { $each: data.teachers } } },
+      { new: true }
+    );
+
     const bulkOps = data.teachers.map((teacherId) => ({
       updateOne: {
         filter: { _id: teacherId },
-        update: { $addToSet: { classroom: id } }, // Add the classroom id to the classroom array
+        update: { $addToSet: { classRooms: id } },
       },
     }));
-
-    // Execute bulk write operations
-    await teachersModel.bulkWrite(bulkOps);
+    await staffModel.bulkWrite(bulkOps);
     res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
@@ -134,13 +131,21 @@ const updateClassroomStudent = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const classRoomData = await classroomModel.findById(id).exec();
-    const studentsData = classRoomData?.students;
-    const updatedData = { students: studentsData.concat(...data.students) };
-    const classroom = await classroomModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res.status(201).json({ message: "Updated", classroom });
+
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { students: { $each: data.students } } },
+      { new: true }
+    );
+
+    const bulkOps = data.students.map((studentId) => ({
+      updateOne: {
+        filter: { _id: studentId },
+        update: { $addToSet: { classRooms: id } },
+      },
+    }));
+    await studentModel.bulkWrite(bulkOps);
+    res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
