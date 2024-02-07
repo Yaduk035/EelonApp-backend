@@ -17,7 +17,7 @@ router
   .route("/getclassroomsstudents/:id")
   .get(classroomController.getClassroomStudents);
 
-///////////////////////
+///////////////////////getclassroomsteachers
 
 router
   .route("/editteacher/:id")
@@ -36,7 +36,7 @@ router
   .get(classroomController.getUpcomingTasks);
 
 router
-  .route("/annoucement/:id")
+  .route("/announcement/:id")
   .put(classroomController.updateClassroomAnnouncement)
   .delete(classroomController.deleteClassroomAnnouncement)
   .get(classroomController.getAnnouncements);
