@@ -24,7 +24,7 @@ const classroomSchema = new Schema(
     upcomingTasks: {
       type: Array,
     },
-    annoucements: {
+    announcements: {
       type: Array,
     },
     assignments: {
@@ -37,6 +37,12 @@ const classroomSchema = new Schema(
       type: Array,
     },
     upcoming: {
+      type: String,
+    },
+    subject: {
+      type: String,
+    },
+    description: {
       type: String,
     },
   },
