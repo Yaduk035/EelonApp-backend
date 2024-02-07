@@ -43,6 +43,16 @@ const createClassroom = async (req, res) => {
   try {
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
+    const roomName = data.roomName;
+    const duplicateClassroom = await classroomModel.findOne({
+      roomName: roomName,
+    });
+    if (duplicateClassroom)
+      return res
+        .status(409)
+        .json({
+          message: `Class room with room name ${roomName} alreay exists`,
+        });
     const classrooms = await classroomModel.create(data);
     res.status(201).json(classrooms);
   } catch (error) {
@@ -60,6 +70,44 @@ const deleteClassroom = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////////
+
+const getStaffClassrooms = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const user = await staffModel.findById(userId).exec();
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const classRoomsEnrolled = user.classRooms;
+    const classroomsData = await classroomModel
+      .find({ _id: { $in: classRoomsEnrolled } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getStudentClassrooms = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const user = await studentModel.findById(userId).exec();
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const classRoomsEnrolled = user.classRooms;
+    const classroomsData = await classroomModel
+      .find({ _id: { $in: classRoomsEnrolled } })
+      .exec();
+
+    res.status(200).json(classroomsData);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -313,36 +361,56 @@ const updateClassroomGrade = async (req, res) => {
 /////////////////////////////////////////////
 
 const deleteTeacher = async (req, res) => {
-  const id = req.params.id;
   try {
-    const { teachers } = req.body;
-    const classRoomData = await classroomModel.findById(id);
-    classRoomData.teachers = classRoomData.teachers.filter(
-      (data) => data !== teachers
-    );
-    console.log(classRoomData);
-    await classRoomData.save();
+    const data = req.body;
+    if (!data) return res.status(400).json({ message: "No data sent" });
+    const id = req.params.id;
+    if (!id) return res.status(400).json({ message: "No id sent" });
 
-    res.status(201).json({ message: "Deleted", success: true });
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $pull: { teachers: { $in: data.teachers } } },
+      { new: true }
+    );
+    const bulkOps = data.teachers.map((teacherId) => ({
+      updateOne: {
+        filter: { _id: teacherId },
+        update: { $pull: { classRooms: id } },
+      },
+    }));
+    await staffModel.bulkWrite(bulkOps);
+
+    res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 const deletStudent = async (req, res) => {
-  const id = req.params.id;
   try {
-    const { students } = req.body;
-    const classRoomData = await classroomModel.findById(id);
-    classRoomData.students = classRoomData.students.filter(
-      (data) => data !== students
-    );
-    console.log(classRoomData);
-    await classRoomData.save();
+    const data = req.body;
+    if (!data) return res.status(400).json({ message: "No data sent" });
+    const id = req.params.id;
+    if (!id) return res.status(400).json({ message: "No id sent" });
 
-    res.status(201).json({ message: "Deleted", success: true });
+    const classroom = await classroomModel.findByIdAndUpdate(
+      id,
+      { $pull: { students: { $in: data.students } } },
+      { new: true }
+    );
+    const bulkOps = data.students.map((studentId) => ({
+      updateOne: {
+        filter: { _id: studentId },
+        update: { $pull: { classRooms: id } },
+      },
+    }));
+    await studentModel.bulkWrite(bulkOps);
+
+    res.status(201).json(classroom);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -362,4 +430,6 @@ module.exports = {
   deletStudent,
   getTeacher,
   getStudent,
+  getStaffClassrooms,
+  getStudentClassrooms,
 };

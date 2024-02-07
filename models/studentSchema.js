@@ -51,6 +51,9 @@ const studentSchema = new Schema(
     section: {
       type: String,
     },
+    classId: {
+      type: String,
+    },
     email: {
       type: String,
     },

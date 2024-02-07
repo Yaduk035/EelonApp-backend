@@ -3,13 +3,21 @@ const router = express.Router();
 const classroomController = require("../../controllers/classroomController");
 
 router
+  .route("/getstaffclassrooms/:id")
+  .get(classroomController.getStaffClassrooms);
+router
+  .route("/getstudentclassrooms/:id")
+  .get(classroomController.getStudentClassrooms);
+
+router
   .route("/editteacher/:id")
   .put(classroomController.updateClassroomTeacher)
   .delete(classroomController.deleteTeacher);
 
 router
   .route("/editstudent/:id")
-  .put(classroomController.updateClassroomStudent);
+  .put(classroomController.updateClassroomStudent)
+  .delete(classroomController.deletStudent);
 
 router
   .route("/editupcomingtask/:id")
