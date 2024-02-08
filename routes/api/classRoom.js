@@ -60,6 +60,14 @@ router
   .get(classroomController.getGrades);
 
 router
+  .route("/search/student/:id")
+  .get(classroomController.searchStudentByNameClassroom);
+
+router
+  .route("/search/teacher/:id")
+  .get(classroomController.searchTeacherByNameClassroom);
+
+router
   .route("/")
   .get(classroomController.getAllClassrooms)
   .post(classroomController.createClassroom);
