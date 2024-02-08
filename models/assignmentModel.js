@@ -9,6 +9,15 @@ const assignmentsSchema = new Schema(
     content: {
       type: String,
     },
+    link: {
+      type: Object,
+    },
+    studentsTurnedIn: {
+      type: Array,
+    },
+    studentsEnrolled: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

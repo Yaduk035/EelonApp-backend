@@ -433,12 +433,12 @@ const updateClassroomMaterial = async (req, res) => {
     if (!data) return res.status(400).json({ message: "No data sent" });
     const id = req.params.id;
     if (!id) return res.status(400).json({ message: "No id sent" });
-    const [materialsDbData] = await materialsModel.create(data);
-    if (!materialsDbData)
+    const [DbData] = await materialsModel.create(data);
+    if (!DbData)
       return res
         .status(400)
-        .json({ message: "Error fetching data from materialsDb" });
-    const childDbId = [materialsDbData._id.toString()];
+        .json({ message: "Error fetching data from assignmentsDb" });
+    const childDbId = [DbData._id.toString()];
 
     const bulkOps = childDbId.map((Id) => ({
       updateOne: {
@@ -448,6 +448,8 @@ const updateClassroomMaterial = async (req, res) => {
       },
     }));
     await classroomModel.bulkWrite(bulkOps);
+
+    res.status(201).json({ message: "Updated", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -608,6 +610,44 @@ const deleteClassroomGrade = async (req, res) => {
   }
 };
 
+const addToTurnedInListAssignments = async (req, res) => {
+  try {
+    const data = req.body.studentId;
+    const assignmentId = req.params.id;
+    const assignment = await assignmentModel.findByIdAndUpdate(
+      assignmentId,
+      { $addToSet: { studentsTurnedIn: { $each: data } } },
+      { new: true }
+    );
+    if (!assignment)
+      return res.status(400).json({ message: "No assignments found" });
+    res
+      .status(201)
+      .json({ message: "Student added to the assignment list", success: true });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const removeFromTurnedInListAssignments = async (req, res) => {
+  try {
+    const data = req.body.studentId;
+    const assignmentId = req.params.id;
+    const assignment = await assignmentModel.findByIdAndUpdate(
+      assignmentId,
+      { $pull: { studentsTurnedIn: { $each: data } } },
+      { new: true }
+    );
+    if (!assignment)
+      return res.status(400).json({ message: "No assignments found" });
+    res
+      .status(201)
+      .json({ message: "Student added to the assignment list", success: true });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 /////////////////////////////////////////////
 
 const deleteTeacher = async (req, res) => {
@@ -736,4 +776,6 @@ module.exports = {
   getClassroomStudents,
   searchStudentByNameClassroom,
   searchTeacherByNameClassroom,
+  addToTurnedInListAssignments,
+  removeFromTurnedInListAssignments,
 };
