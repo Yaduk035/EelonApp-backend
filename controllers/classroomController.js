@@ -621,9 +621,10 @@ const addToTurnedInListAssignments = async (req, res) => {
     );
     if (!assignment)
       return res.status(400).json({ message: "No assignments found" });
-    res
-      .status(201)
-      .json({ message: "Student added to the assignment list", success: true });
+    res.status(201).json({
+      message: "Student(s) added to the assignment list",
+      success: true,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -635,14 +636,15 @@ const removeFromTurnedInListAssignments = async (req, res) => {
     const assignmentId = req.params.id;
     const assignment = await assignmentModel.findByIdAndUpdate(
       assignmentId,
-      { $pull: { studentsTurnedIn: { $each: data } } },
+      { $pullAll: { studentsTurnedIn: data } },
       { new: true }
     );
     if (!assignment)
       return res.status(400).json({ message: "No assignments found" });
-    res
-      .status(201)
-      .json({ message: "Student added to the assignment list", success: true });
+    res.status(201).json({
+      message: "Student(s) removed to the assignment list",
+      success: true,
+    });
   } catch (error) {
     console.log(error);
   }
