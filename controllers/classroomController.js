@@ -664,6 +664,46 @@ const deletStudent = async (req, res) => {
   }
 };
 
+const searchStudentByNameClassroom = async (req, res) => {
+  try {
+    if (!req.params.id)
+      return res
+        .status(400)
+        .json({ message: "No student name sent as params" });
+    const users = await studentModel.findOne({
+      $or: [{ email: req.params.id }],
+    });
+    if (!users)
+      return res
+        .status(400)
+        .json({ message: "No users found.", success: false });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const searchTeacherByNameClassroom = async (req, res) => {
+  try {
+    if (!req.params.id)
+      return res
+        .status(400)
+        .json({ message: "No teacher name sent as params" });
+    const users = await staffModel.findOne({
+      $or: [{ email: req.params.id }],
+    });
+    if (!users)
+      return res
+        .status(400)
+        .json({ message: "No users found.", success: false });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   getAllClassrooms,
   getClassroom,
@@ -694,4 +734,6 @@ module.exports = {
   getGrades,
   getClassroomTeachers,
   getClassroomStudents,
+  searchStudentByNameClassroom,
+  searchTeacherByNameClassroom,
 };
