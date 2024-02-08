@@ -9,6 +9,9 @@ const materialsSchema = new Schema(
     content: {
       type: String,
     },
+    link: {
+      type: Object,
+    },
   },
   { timestamps: true }
 );

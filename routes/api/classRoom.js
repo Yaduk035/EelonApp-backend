@@ -17,6 +17,10 @@ router
   .route("/getclassroomsstudents/:id")
   .get(classroomController.getClassroomStudents);
 
+router
+  .route("/getstudentdata/")
+  .post(classroomController.getStudentsByArrayData);
+
 ///////////////////////getclassroomsteachers
 
 router
@@ -46,6 +50,10 @@ router
   .put(classroomController.updateClassroomAssignment)
   .delete(classroomController.deleteClassroomAssignment)
   .get(classroomController.getAssignments);
+router
+  .route("/assignments/turnin/:id")
+  .put(classroomController.addToTurnedInListAssignments)
+  .delete(classroomController.removeFromTurnedInListAssignments);
 
 router
   .route("/material/:id")
