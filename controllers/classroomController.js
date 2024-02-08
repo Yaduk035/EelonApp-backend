@@ -156,6 +156,18 @@ const getClassroomStudents = async (req, res) => {
   }
 };
 
+const getStudentsByArrayData = async (req, res) => {
+  try {
+    const data = req.body.studentArray;
+    const studentData = await studentModel.find({ _id: { $in: data } }).exec();
+    if (!studentData)
+      return res.status(400).json({ message: "No data found", success: false });
+    res.status(200).json(studentData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 /////////////////////////////////////////////////////////////
 
 const getUpcomingTasks = async (req, res) => {
@@ -780,4 +792,5 @@ module.exports = {
   searchTeacherByNameClassroom,
   addToTurnedInListAssignments,
   removeFromTurnedInListAssignments,
+  getStudentsByArrayData,
 };

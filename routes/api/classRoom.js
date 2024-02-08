@@ -17,6 +17,10 @@ router
   .route("/getclassroomsstudents/:id")
   .get(classroomController.getClassroomStudents);
 
+router
+  .route("/getstudentdata/")
+  .post(classroomController.getStudentsByArrayData);
+
 ///////////////////////getclassroomsteachers
 
 router
