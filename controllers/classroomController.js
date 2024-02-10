@@ -178,7 +178,6 @@ const getUpcomingTasks = async (req, res) => {
     const classroom = await classroomModel.findById(userId).exec();
     if (!classroom) return res.status(404).json({ message: "User not found" });
     const upcomingTasksArray = classroom.upcomingTasks;
-    console.log(upcomingTasksArray);
     const classroomsData = await upcomingTasksModel
       .find({ _id: { $in: upcomingTasksArray } })
       .exec();
@@ -502,7 +501,6 @@ const deleteClassroomUpcomingTask = async (req, res) => {
     const id = req.params.id;
     const data = [req.body.deleteId];
     if (!data) return res.status(400).json({ message: "Invalid data sent" });
-    console.log(data);
 
     const deleteResult = await upcomingTasksModel.findByIdAndDelete(data);
     if (!deleteResult)
@@ -527,7 +525,6 @@ const deleteClassroomAnnouncement = async (req, res) => {
     const id = req.params.id;
     const data = [req.body.deleteId];
     if (!data) return res.status(400).json({ message: "Invalid data sent" });
-    console.log(data);
 
     const deleteResult = await announcementsModel.findByIdAndDelete(data);
     if (!deleteResult)
@@ -552,7 +549,6 @@ const deleteClassroomAssignment = async (req, res) => {
     const id = req.params.id;
     const data = [req.body.deleteId];
     if (!data) return res.status(400).json({ message: "Invalid data sent" });
-    console.log(data);
 
     const deleteResult = await assignmentModel.findByIdAndDelete(data);
     if (!deleteResult)
@@ -577,7 +573,6 @@ const deleteClassroomMaterial = async (req, res) => {
     const id = req.params.id;
     const data = [req.body.deleteId];
     if (!data) return res.status(400).json({ message: "Invalid data sent" });
-    console.log(data);
 
     const deleteResult = await materialsModel.findByIdAndDelete(data);
     if (!deleteResult)
@@ -602,7 +597,6 @@ const deleteClassroomGrade = async (req, res) => {
     const id = req.params.id;
     const data = [req.body.deleteId];
     if (!data) return res.status(400).json({ message: "Invalid data sent" });
-    console.log(data);
 
     const deleteResult = await gradeModel.findByIdAndDelete(data);
     if (!deleteResult)
