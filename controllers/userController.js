@@ -305,7 +305,7 @@ const getStudentByNameIssueLib = async (req, res) => {
     });
     if (!users)
       return res
-        .status(400)
+        .status(404)
         .json({ message: "No users found.", success: false });
     res.status(200).json(users);
   } catch (error) {
