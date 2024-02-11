@@ -22,4 +22,8 @@ router
   .route("/class/deleteattendance/:id")
   .delete(attendanceController.deleteAStudentAttendance);
 
+router
+  .route("/class/getstudentattendance/:id")
+  .get(attendanceController.getAttendanceByStudentId);
+
 module.exports = router;
