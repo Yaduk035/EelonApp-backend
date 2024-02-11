@@ -250,6 +250,7 @@ const deleteStudent = async (req, res) => {
     res.status(201).json({ message: `Student with id ${id} deleted` });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error", success: false });
   }
 };
 

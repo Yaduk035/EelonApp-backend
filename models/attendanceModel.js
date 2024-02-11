@@ -16,7 +16,7 @@ const attendanceStudentSchema = new Schema(
       type: String,
     },
     reason: {
-      type: Array,
+      type: Object,
     },
   },
   { timestamps: true }
@@ -24,6 +24,7 @@ const attendanceStudentSchema = new Schema(
 
 const attendanceSchema = new Schema(
   {
+    classObjId: String,
     classId: String,
     std: String,
     section: String,

@@ -24,6 +24,7 @@ app.use("/api/library", require("./routes/api/library"));
 app.use("/api/classroom", require("./routes/api/studyRoom"));
 app.use("/api/librarysettings", require("./routes/api/librarySettings"));
 app.use("/api/classsection", require("./routes/api/classSection"));
+app.use("/api/attendance", require("./routes/api/attendance"));
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDb database");
