@@ -51,6 +51,9 @@ const studentSchema = new Schema(
     section: {
       type: String,
     },
+    classId: {
+      type: String,
+    },
     email: {
       type: String,
     },
@@ -166,6 +169,9 @@ const studentSchema = new Schema(
       type: Array,
     },
     refreshToken: String,
+    classRooms: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

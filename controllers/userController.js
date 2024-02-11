@@ -1,10 +1,25 @@
 const Admin = require("../models/adminModel");
 const Staff = require("../models/staffSchema");
 const StudentSchema = require("../models/studentSchema");
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
   try {
     const users = await Staff.find().exec();
+    if (!users)
+      return res
+        .status(400)
+        .json({ message: "No users found.", success: false });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const getAdmins = async (req, res) => {
+  try {
+    const users = await Admin.find().exec();
     if (!users)
       return res
         .status(400)
@@ -29,9 +44,17 @@ const addAdmin = async (req, res) => {
       return res
         .status(409)
         .json({ message: "Username already exists", success: false });
-    const results = await Admin.create(userData);
+
+    const hashedPwd = await bcrypt.hash(userData.password, 10);
+
+    const reqData = {
+      ...userData,
+      password: hashedPwd,
+    };
+    console.log(reqData);
+    const results = await Admin.create(reqData);
     console.log(results);
-    res.status(201).json({ message: "Admin created", success: true });
+    res.status(201).json({ results, message: "Admin created", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -67,9 +90,17 @@ const addStaff = async (req, res) => {
       return res
         .status(409)
         .json({ message: "Username already exists", success: false });
-    const results = await Staff.create(userData);
+
+    const hashedPwd = await bcrypt.hash(userData.password, 10);
+
+    const reqData = {
+      ...userData,
+      password: hashedPwd,
+    };
+    console.log(reqData);
+    const results = await Staff.create(reqData);
     console.log(results);
-    res.status(201).json({ message: "Staff created", success: true });
+    res.status(201).json({ results, message: "Staff created", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -166,13 +197,23 @@ const addStudent = async (req, res) => {
     const duplicateUser = await StudentSchema.findOne({
       email: userData.email,
     }).exec();
-    // if (duplicateUser)
-    //   return res
-    //     .status(409)
-    //     .json({ message: "Student email already exists", success: false });
-    const results = await StudentSchema.create(userData);
+    if (duplicateUser)
+      return res
+        .status(409)
+        .json({ message: "Student email already exists", success: false });
+
+    const hashedPwd = await bcrypt.hash(userData.password, 10);
+
+    const reqData = {
+      ...userData,
+      password: hashedPwd,
+    };
+    console.log(reqData);
+    const results = await StudentSchema.create(reqData);
     console.log(results);
-    res.status(201).json({ message: "Student created", success: true });
+    res
+      .status(201)
+      .json({ results, message: "Student created", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -264,7 +305,7 @@ const getStudentByNameIssueLib = async (req, res) => {
     });
     if (!users)
       return res
-        .status(400)
+        .status(404)
         .json({ message: "No users found.", success: false });
     res.status(200).json(users);
   } catch (error) {
@@ -303,4 +344,5 @@ module.exports = {
   getStudentByNameIssueLib,
   getStudentById,
   updateStudent,
+  getAdmins,
 };

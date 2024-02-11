@@ -17,11 +17,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", require("./routes/api/auth"));
-// app.use(verifyJwt);
-app.use("/api/users", require("./routes/api/users"));
-app.use("/api/library", require("./routes/api/library"));
 app.use("/api/refresh", require("./routes/api/refresh"));
-app.use("/api/classroom", require("./routes/api/classRoom"));
+app.use("/api/users", require("./routes/api/users"));
+// app.use(verifyJwt);
+app.use("/api/library", require("./routes/api/library"));
+app.use("/api/classroom", require("./routes/api/studyRoom"));
+app.use("/api/librarysettings", require("./routes/api/librarySettings"));
+app.use("/api/classsection", require("./routes/api/classSection"));
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDb database");

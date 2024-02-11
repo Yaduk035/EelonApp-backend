@@ -18,13 +18,16 @@ const classroomSchema = new Schema(
     roomName: {
       type: String,
     },
+    roomId: {
+      type: String,
+    },
     inviteLink: {
       type: String,
     },
     upcomingTasks: {
       type: Array,
     },
-    annoucements: {
+    announcements: {
       type: Array,
     },
     assignments: {
@@ -36,7 +39,13 @@ const classroomSchema = new Schema(
     grades: {
       type: Array,
     },
-    upcoming: {
+    subject: {
+      type: String,
+    },
+    description: {
+      type: String,
+    },
+    createdBy: {
       type: String,
     },
   },
