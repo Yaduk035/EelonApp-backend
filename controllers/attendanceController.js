@@ -116,6 +116,35 @@ const deleteAStudentAttendance = async (req, res) => {
   }
 };
 
+const getAttendanceByStudentId = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+
+    const aggregationOperation = [
+      {
+        $match: {
+          "attendance.studentId": studentId,
+        },
+      },
+      {
+        $project: {
+          attendance: {
+            $filter: {
+              input: "$attendance",
+              as: "attendee",
+              cond: { $eq: ["$$attendee.studentId", studentId] },
+            },
+          },
+        },
+      },
+    ];
+    const result = await attendanceModel.aggregate(aggregationOperation);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   addAttendanceCollection,
   deleteAttendance,
@@ -124,4 +153,5 @@ module.exports = {
   getAttendanceById,
   addAttendanceToArray,
   deleteAStudentAttendance,
+  getAttendanceByStudentId,
 };
