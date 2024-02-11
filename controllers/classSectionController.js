@@ -1,6 +1,5 @@
 const classSectionModel = require("../models/classSectionModel");
 const attendanceModel = require("../models/attendanceModel");
-const classSection = require("../models/classSectionModel");
 const mongoose = require("mongoose");
 const { Types } = mongoose;
 
@@ -32,6 +31,7 @@ const addClass = async (req, res) => {
     res.status(200).json(classSection);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -83,4 +83,58 @@ const deleteClass = async (req, res) => {
   }
 };
 
-module.exports = { addClass, deleteClass };
+const updateClass = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+
+    const updateClass = await classSectionModel.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    if (!updateClass)
+      return res.status(400).json({ message: "Error updating classroom" });
+    res.status(201).json(updateClass);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "No server response", success: false });
+  }
+};
+
+const getAllClasses = async (req, res) => {
+  try {
+    const classes = await classSectionModel.find().exec();
+    if (!classes)
+      return res
+        .status(404)
+        .json({ message: "No class rooms found", success: false });
+    res.status(200).json(classes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "No server response", success: false });
+  }
+};
+
+const getAClassroom = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id)
+      return res.status(400).json({ message: "No id sent", success: false });
+    const classes = await classSectionModel.findById(id).exec();
+    if (!classes)
+      return res
+        .status(404)
+        .json({ message: "No class rooms found", success: false });
+    res.status(200).json(classes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "No server response", success: false });
+  }
+};
+
+module.exports = {
+  addClass,
+  deleteClass,
+  updateClass,
+  getAllClasses,
+  getAClassroom,
+};
