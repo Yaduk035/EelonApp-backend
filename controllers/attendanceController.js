@@ -115,7 +115,7 @@ const deleteAStudentAttendance = async (req, res) => {
     res.status(500).json({ message: "Server error", success: true });
   }
 };
-
+//////  sent a student id on params to get all the occurence of the student id in the attendance database/////////////////
 const getAttendanceByStudentId = async (req, res) => {
   try {
     const studentId = req.params.id;
@@ -128,6 +128,9 @@ const getAttendanceByStudentId = async (req, res) => {
       },
       {
         $project: {
+          classId: 1,
+          std: 1,
+          section: 1,
           attendance: {
             $filter: {
               input: "$attendance",
