@@ -19,50 +19,21 @@ const addClass = async (req, res) => {
 };
 
 const deleteClass = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
   try {
-    const classId = req.params.id;
-
-    const bulkOperations = [];
-
-    const deleteClassOperation = {
-      deleteOne: {
-        filter: { _id: classId },
-      },
-    };
-    bulkOperations.push(deleteClassOperation);
-
-    const classDb = await classSectionModel
-      .findById(classId)
-      .session(session)
-      .exec();
-
+    const id = req.params.id;
+    if (!id)
+      return res
+        .status(400)
+        .json({ message: "No id sent on params", success: false });
+    const classDb = await classSectionModel.findByIdAndDelete(id);
     if (!classDb)
       return res
         .status(404)
-        .json({ message: "No entries found", success: false });
-    const attendanceDbId = classDb.attendanceDbId;
-    const deleteAttendanceOperation = {
-      deleteOne: {
-        filter: { _id: attendanceDbId },
-      },
-    };
-    bulkOperations.push(deleteAttendanceOperation);
-
-    // Perform bulk write operation
-    const result = await Promise.all([
-      classSectionModel.bulkWrite(bulkOperations, { session }),
-      attendanceModel.bulkWrite(bulkOperations, { session }),
-    ]);
-
-    await session.commitTransaction();
-    session.endSession();
-
+        .json({ message: "No class collection found.", success: false });
     res.status(200).json({ message: "Class deleted", success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error deleting class", success: false });
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
