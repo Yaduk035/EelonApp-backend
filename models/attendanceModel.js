@@ -24,8 +24,8 @@ const attendanceStudentSchema = new Schema(
 
 const attendanceSchema = new Schema(
   {
-    classObjId: String,
     classId: String,
+    classObjId: String,
     std: String,
     section: String,
     board: String,

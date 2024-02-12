@@ -6,28 +6,11 @@ const { Types } = mongoose;
 const addClass = async (req, res) => {
   try {
     const data = req.body;
-    const { std, section, classId, attendance } = data;
-    if (!data)
+    const classSection = await classSectionModel.create(data);
+    if (!classSection)
       return res
         .status(400)
-        .json({ message: "No data sent with body", success: false });
-    const attendanceDb = await attendanceModel.create({
-      std,
-      section,
-      classId,
-      attendance: [attendance],
-    });
-    if (!attendanceDb)
-      return res
-        .status(400)
-        .json({ message: "Error creating class collection", success: true });
-    const attendanceId = attendanceDb._id.toString();
-    const classSection = await classSectionModel.create({
-      std,
-      section,
-      classId,
-      attendanceDbId: attendanceId,
-    });
+        .json({ message: "Error creating collection", success: false });
     res.status(200).json(classSection);
   } catch (error) {
     console.log(error);
