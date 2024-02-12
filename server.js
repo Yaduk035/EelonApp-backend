@@ -9,8 +9,12 @@ const credentials = require("./middleware/credentials");
 const cookieParser = require("cookie-parser");
 const corsOptions = require("./config/corsOptions");
 const verifyJwt = require("./middleware/verifyJWT");
+const { logger } = require("./middleware/logEvents");
+const errorHandler = require("./middleware/errorHandler");
 
 connectDb();
+
+app.use(logger);
 app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -25,6 +29,8 @@ app.use("/api/classroom", require("./routes/api/studyRoom"));
 app.use("/api/librarysettings", require("./routes/api/librarySettings"));
 app.use("/api/classsection", require("./routes/api/classSection"));
 app.use("/api/attendance", require("./routes/api/attendance"));
+
+app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDb database");
