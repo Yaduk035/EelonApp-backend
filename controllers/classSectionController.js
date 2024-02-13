@@ -6,6 +6,17 @@ const { Types } = mongoose;
 const addClass = async (req, res) => {
   try {
     const data = req.body;
+    const classId = req.body.classId;
+    const duplicateClass = await classSectionModel.findOne({
+      classId: classId,
+    });
+    if (duplicateClass)
+      return res
+        .status(409)
+        .json({
+          message: "Collection with class id already exists",
+          success: false,
+        });
     const classSection = await classSectionModel.create(data);
     if (!classSection)
       return res
