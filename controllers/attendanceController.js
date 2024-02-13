@@ -2,6 +2,22 @@ const attendanceModel = require("../models/attendanceModel");
 
 const addAttendanceCollection = async (req, res) => {
   try {
+    const date = req.body.date;
+    const classId = req.body.classId;
+    const duplicateAttendanceEntry = await attendanceModel
+      .find({ classId: classId })
+      .exec();
+    if (duplicateAttendanceEntry) {
+      const filteredAttendance = duplicateAttendanceEntry.filter(
+        (entry) => entry.date === date
+      );
+      if (filteredAttendance.length !== 0)
+        return res
+          .status(409)
+          .json({ message: "Attendance data already exists" });
+    }
+
+    /////////////////////////
     const attendanceData = req.body;
     if (!attendanceData)
       return res

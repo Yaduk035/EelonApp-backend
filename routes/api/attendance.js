@@ -28,6 +28,6 @@ router
 
 router
   .route("/class/datewiseattendance/:id")
-  .get(attendanceController.getClasswise_DateAttendance);
+  .put(attendanceController.getClasswise_DateAttendance);
 
 module.exports = router;
