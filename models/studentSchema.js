@@ -54,6 +54,9 @@ const studentSchema = new Schema(
     classId: {
       type: String,
     },
+    classObjId: {
+      type: String,
+    },
     email: {
       type: String,
     },

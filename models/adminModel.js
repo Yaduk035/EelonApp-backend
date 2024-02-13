@@ -14,6 +14,15 @@ const adminSchema = new Schema(
     },
     roles: {
       admin: {
+        // createdAt: {
+        //   type: Date,
+        //   default: Date.now,
+        // },
+        // updatedAt: {
+        //   type: Date,
+        //   default: Date.now,
+        // },
+
         type: Number,
         default: 2000,
       },
@@ -21,14 +30,6 @@ const adminSchema = new Schema(
     password: {
       type: String,
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
     refreshToken: {
       type: String,
     },
