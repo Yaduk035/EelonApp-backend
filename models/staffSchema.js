@@ -21,14 +21,6 @@ const staffSchema = new Schema(
     password: {
       type: String,
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
     refreshToken: {
       type: String,
     },

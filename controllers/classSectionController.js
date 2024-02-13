@@ -1,5 +1,6 @@
 const classSectionModel = require("../models/classSectionModel");
 const attendanceModel = require("../models/attendanceModel");
+const studentModel = require("../models/studentSchema");
 const mongoose = require("mongoose");
 const { Types } = mongoose;
 
@@ -97,7 +98,37 @@ const getAClassroom = async (req, res) => {
 const addStudentToClass = async (req, res) => {
   try {
     const classObjId = req.params.id;
-    const studentData = req.data.studentArray;
+    const studentData = req.body;
+    if (!studentData) return res.status(400).json({ message: "No data sent" });
+
+    const classroom = await classSectionModel.findByIdAndUpdate(
+      classObjId,
+      { $addToSet: { students: { $each: studentData.students } } },
+      { new: true }
+    );
+
+    const bulkOps = studentData.students.map((studentId) => ({
+      updateOne: {
+        filter: { _id: studentId },
+        update: { $set: { classObjId: classObjId } },
+        upsert: true,
+      },
+    }));
+    await studentModel.bulkWrite(bulkOps);
+    res.status(201).json(classroom);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getClassDropdowns = async (req, res) => {
+  try {
+    const classIds = await classSectionModel.aggregate([
+      { $group: { _id: "$classId" } },
+      { $project: { _id: 0, classId: "$_id" } },
+    ]);
+    const classIdArray = classIds.map((doc) => doc.classId);
+    res.status(200).json(classIdArray);
   } catch (error) {
     console.error(error);
   }
@@ -109,4 +140,6 @@ module.exports = {
   updateClass,
   getAllClasses,
   getAClassroom,
+  getClassDropdowns,
+  addStudentToClass,
 };
