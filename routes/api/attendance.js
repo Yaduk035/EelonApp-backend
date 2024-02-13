@@ -26,4 +26,8 @@ router
   .route("/class/getstudentattendance/:id")
   .get(attendanceController.getAttendanceByStudentId);
 
+router
+  .route("/class/datewiseattendance/:id")
+  .get(attendanceController.getClasswise_DateAttendance);
+
 module.exports = router;

@@ -63,7 +63,7 @@ const getAttendanceById = async (req, res) => {
 const getClasswiseAttendance = async (req, res) => {
   try {
     const attendance = await attendanceModel
-      .findOne({ classId: req.params.id })
+      .find({ classId: req.params.id })
       .exec();
     if (!attendance)
       return res
@@ -73,6 +73,46 @@ const getClasswiseAttendance = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", success: true });
+  }
+};
+
+// const getClasswise_DateAttendance = async (req, res) => {
+//   try {
+//     const date = req.body.date;
+//     const attendance = await attendanceModel
+//       .findOne({ classId: req.params.id })
+//       .exec();
+//     if (!attendance)
+//       return res
+//         .status(404)
+//         .json({ message: "No attendance data found", success: false });
+//     res.status(200).json(attendance);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Server error", success: true });
+//   }
+// };
+
+const getClasswise_DateAttendance = async (req, res) => {
+  try {
+    const date = req.body.date;
+    const attendance = await attendanceModel
+      .find({ classId: req.params.id })
+      .exec();
+    if (!attendance)
+      return res
+        .status(404)
+        .json({ message: "No attendance data found", success: false });
+
+    // Filter attendance data based on the received date
+    const filteredAttendance = attendance.filter(
+      (entry) => entry.date === date
+    );
+
+    res.status(200).json(filteredAttendance);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error", success: false });
   }
 };
 
@@ -157,4 +197,5 @@ module.exports = {
   addAttendanceToArray,
   deleteAStudentAttendance,
   getAttendanceByStudentId,
+  getClasswise_DateAttendance,
 };

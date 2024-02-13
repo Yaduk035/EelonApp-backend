@@ -11,12 +11,10 @@ const addClass = async (req, res) => {
       classId: classId,
     });
     if (duplicateClass)
-      return res
-        .status(409)
-        .json({
-          message: "Collection with class id already exists",
-          success: false,
-        });
+      return res.status(409).json({
+        message: "Collection with class id already exists",
+        success: false,
+      });
     const classSection = await classSectionModel.create(data);
     if (!classSection)
       return res
@@ -93,6 +91,15 @@ const getAClassroom = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "No server response", success: false });
+  }
+};
+
+const addStudentToClass = async (req, res) => {
+  try {
+    const classObjId = req.params.id;
+    const studentData = req.data.studentArray;
+  } catch (error) {
+    console.error(error);
   }
 };
 
