@@ -21,4 +21,8 @@ router
   .delete(booksController.deleteBook)
   .put(booksController.editBook);
 
+router.route("/reports/bookcount").get(booksController.getBookCount);
+router.route("/reports/issuecount").get(booksController.getIssuedCount);
+router.route("/reports/genrecount").get(booksController.genreCount);
+
 module.exports = router;

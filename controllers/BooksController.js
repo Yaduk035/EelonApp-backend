@@ -372,6 +372,54 @@ const getBookByGenre = async (req, res) => {
   }
 };
 
+////////////////////  Library report routes   //////////////////////////////
+
+const getBookCount = async (req, res) => {
+  try {
+    const count = await Books.countDocuments();
+    if (!count)
+      return res.status(400).json({ message: "No data", success: false });
+    res.status(200).json(count);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getIssuedCount = async (req, res) => {
+  try {
+    const issueCount = await Books.countDocuments({
+      "students.currentlyIssued": { $exists: true, $ne: null },
+    });
+    if (!issueCount)
+      return res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(issueCount);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const genreCount = async (req, res) => {
+  try {
+    const count = await Books.aggregate([
+      {
+        $group: {
+          _id: "$genre",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const formattedGenreCount = {};
+    count.forEach((genre) => {
+      formattedGenreCount[genre._id] = genre.count;
+    });
+
+    res.status(200).json(formattedGenreCount);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   getBook,
   getAllBooks,
@@ -386,4 +434,7 @@ module.exports = {
   getBookByName,
   bookUnIssueList,
   getBookByGenre,
+  getBookCount,
+  getIssuedCount,
+  genreCount,
 };
