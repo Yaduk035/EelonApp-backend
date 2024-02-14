@@ -21,6 +21,9 @@ const classSchema = new Schema(
     attendanceDbId: {
       type: String,
     },
+    academicYear: {
+      type: String,
+    },
     examDbId: {
       type: String,
     },

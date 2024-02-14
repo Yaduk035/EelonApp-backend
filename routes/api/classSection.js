@@ -4,6 +4,13 @@ const classSectionController = require("../../controllers/classSectionController
 
 router.route("/dropdowns/").get(classSectionController.getClassDropdowns);
 router.route("/addstudent/:id").put(classSectionController.addStudentToClass);
+router.route("/academicyear").post(classSectionController.postAcademicYear);
+router
+  .route("/academicyear/:id")
+  .put(classSectionController.addAcademicYear)
+  .get(classSectionController.getAcademicYearDropdowns)
+  .delete(classSectionController.removeAcademicYear);
+
 router
   .route("/")
   .post(classSectionController.addClass)
