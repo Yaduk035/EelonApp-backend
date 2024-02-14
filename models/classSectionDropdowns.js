@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 const classSectionDropdownSchema = new Schema(
   {
-    settingType: {
-      type: String,
+    academicYear: {
+      type: Array,
     },
-    genre: {
+    type: {
       type: String,
     },
   },

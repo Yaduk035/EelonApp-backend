@@ -1,6 +1,7 @@
 const classSectionModel = require("../models/classSectionModel");
 const attendanceModel = require("../models/attendanceModel");
 const studentModel = require("../models/studentSchema");
+const classSectionDropdown = require("../models/classSectionDropdowns");
 const mongoose = require("mongoose");
 const { Types } = mongoose;
 
@@ -118,6 +119,7 @@ const addStudentToClass = async (req, res) => {
     res.status(201).json(classroom);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -131,6 +133,72 @@ const getClassDropdowns = async (req, res) => {
     res.status(200).json(classIdArray);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAcademicYearDropdowns = async (req, res) => {
+  try {
+    const academicYear = req.params.id;
+    const academicYrData = await classSectionDropdown.findOne({
+      type: academicYear,
+    });
+    if (!academicYrData)
+      return res
+        .status(404)
+        .json({ message: "No dropdown data found", success: false });
+    res.status(200).json(academicYrData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const postAcademicYear = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await classSectionDropdown.create(data);
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const addAcademicYear = async (req, res) => {
+  try {
+    const dataType = req.params.id;
+    const academicData = req.body.academicYear;
+    if (!academicData)
+      return res.status(400).json({ message: "No data sent with body" });
+
+    const result = await classSectionDropdown.updateOne(
+      { type: dataType },
+      { $addToSet: { academicYear: { $each: academicData } } },
+      { upsert: true }
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const removeAcademicYear = async (req, res) => {
+  try {
+    const dataType = req.params.id;
+    const academicData = req.body.academicYear;
+    if (!academicData)
+      return res.status(400).json({ message: "No data sent with body" });
+
+    const result = await classSectionDropdown.updateOne(
+      { type: dataType },
+      { $pull: { academicYear: { $in: academicData } } }
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -142,4 +210,8 @@ module.exports = {
   getAClassroom,
   getClassDropdowns,
   addStudentToClass,
+  getAcademicYearDropdowns,
+  addAcademicYear,
+  postAcademicYear,
+  removeAcademicYear,
 };
