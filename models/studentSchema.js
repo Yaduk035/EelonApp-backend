@@ -27,8 +27,13 @@ const studentSchema = new Schema(
     gender: {
       type: String,
     },
-    studentPhoto: {
-      type: String,
+    studentProfilePic: {
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     AadharNo: {
       type: Number,

@@ -47,7 +47,7 @@ router
   .route("/staff/:id")
   .delete(userController.deleteStaff)
   .get(userController.getIndividualStaff)
-  .get(userController.updateStaff);
+  .put(userController.updateStaff);
 // router.route('/staff')
 
 module.exports = router;
