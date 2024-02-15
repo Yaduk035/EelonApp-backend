@@ -10,8 +10,22 @@ const getUsers = async (req, res) => {
     const users = await Staff.find().exec();
     if (!users)
       return res
-        .status(400)
+        .status(404)
         .json({ message: "No users found.", success: false });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const getIndividualStaff = async (req, res) => {
+  try {
+    const users = await Staff.findById(req.params.id).exec();
+    if (!users)
+      return res
+        .status(404)
+        .json({ message: "No user found.", success: false });
     res.status(200).json(users);
   } catch (error) {
     console.log(error);
@@ -113,6 +127,25 @@ const deleteStaff = async (req, res) => {
   try {
     const id = req.params.id;
     const user = await Staff.findByIdAndDelete(id);
+    if (!user)
+      return res
+        .status(204)
+        .json({ message: `User with id ${id} deleted`, success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const updateStaff = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    if (!data)
+      return res
+        .status(400)
+        .json({ message: "No data send with body", success: false });
+    const user = await Staff.findByIdAndUpdate(id, data);
     if (!user)
       return res
         .status(204)
@@ -436,4 +469,6 @@ module.exports = {
   updateStudent,
   getAdmins,
   getStudentsByLimit,
+  getIndividualStaff,
+  updateStaff,
 };

@@ -43,7 +43,11 @@ router
   .route("/staff")
   .get(userController.getUsers)
   .post(userController.addStaff);
-router.route("/:id").delete(userController.deleteStaff);
+router
+  .route("/staff/:id")
+  .delete(userController.deleteStaff)
+  .get(userController.getIndividualStaff)
+  .get(userController.updateStaff);
 // router.route('/staff')
 
 module.exports = router;
