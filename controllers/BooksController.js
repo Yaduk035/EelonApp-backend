@@ -409,12 +409,13 @@ const genreCount = async (req, res) => {
         },
       },
     ]);
-    const formattedGenreCount = {};
-    count.forEach((genre) => {
-      formattedGenreCount[genre._id] = genre.count;
-    });
-
-    res.status(200).json(formattedGenreCount);
+    // const formattedGenreCount = {};
+    // count.forEach((genre) => {
+    //   formattedGenreCount[genre._id] = genre.count;
+    // });
+    if (!count)
+      return res.status(400).json({ message: "No data", success: false });
+    res.status(200).json(count);
   } catch (error) {
     console.error(error);
   }
