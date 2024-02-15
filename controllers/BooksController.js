@@ -1,5 +1,5 @@
 const Books = require("../models/BookSchema");
-const Students = require("../models/StudentSchema");
+const Students = require("../models/studentSchema");
 
 const getAllBooks = async (req, res) => {
   try {
@@ -497,19 +497,6 @@ const getBooksByLimit = async (req, res) => {
 
     if (!books || books.length === 0)
       return res.status(204).json("No books found");
-
-    // if (startIndex + limit < pagination.totalBooks) {
-    //   pagination.next = {
-    //     page: page + 1,
-    //     limit: limit,
-    //   };
-    // }
-    // if (startIndex > 0) {
-    //   pagination.prev = {
-    //     page: page - 1,
-    //     limit: limit,
-    //   };
-    // }
 
     if (endIndex < pagination.totalBooks) {
       pagination.next = {

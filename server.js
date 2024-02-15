@@ -11,10 +11,16 @@ const corsOptions = require("./config/corsOptions");
 const verifyJwt = require("./middleware/verifyJWT");
 const { logger } = require("./middleware/logEvents");
 const errorHandler = require("./middleware/errorHandler");
+const bodyParser = require("body-parser");
 
 connectDb();
 
 app.use(logger);
+
+app.use(bodyParser.json({ limit: "100mb" }));
+app.use(
+  express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 })
+);
 app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -29,6 +35,7 @@ app.use("/api/classroom", require("./routes/api/studyRoom"));
 app.use("/api/librarysettings", require("./routes/api/librarySettings"));
 app.use("/api/classsection", require("./routes/api/classSection"));
 app.use("/api/attendance", require("./routes/api/attendance"));
+app.use("/api/images", require("./routes/api/imageUpload"));
 
 app.use(errorHandler);
 
