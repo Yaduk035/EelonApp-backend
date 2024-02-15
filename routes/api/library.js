@@ -10,6 +10,8 @@ router
   .route("/books/issuelist/:id")
   .post(booksController.bookIssueList)
   .put(booksController.bookUnIssueList);
+
+router.route("/books/pagination").get(booksController.getBooksByLimit);
 router
   .route("/books")
   .get(booksController.getAllBooks)

@@ -421,6 +421,45 @@ const genreCount = async (req, res) => {
   }
 };
 
+const getBooksByLimit = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const totalBooks = await Books.countDocuments().exec();
+    const totalPages = Math.ceil(totalBooks / limit);
+
+    const books = await Books.find().limit(limit).skip(startIndex).exec();
+
+    if (!books || books.length === 0)
+      return res.status(204).json("No books found");
+
+    const pagination = {
+      totalPages: totalPages,
+    };
+    if (endIndex < totalBooks) {
+      pagination.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      pagination.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+
+    res.status(200).json({ books, pagination });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   getBook,
   getAllBooks,
@@ -438,4 +477,5 @@ module.exports = {
   getBookCount,
   getIssuedCount,
   genreCount,
+  getBooksByLimit,
 };
