@@ -16,6 +16,8 @@ router
   .put(userController.issueLibCard)
   .get(userController.getStudentByNameIssueLib);
 
+router.route("/student/pagination").get(userController.getStudentsByLimit);
+
 router
   .route("/student")
   .get(userController.getStudents)
