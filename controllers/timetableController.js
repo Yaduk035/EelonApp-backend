@@ -1,8 +1,18 @@
 const ClassTimetableTemplate = require("../models/classTimeTableTemplate");
+const ClassTimetable = require("../models/classTimeTable");
 
 const addTemplate = async (req, res) => {
   try {
     const data = req.body;
+    const { templateId } = data;
+    const duplicateTemplate = await ClassTimetableTemplate.findOne({
+      templateId,
+    });
+    if (duplicateTemplate)
+      return res.status(409).json({
+        message: `Template with template id: '${templateId}' already exists`,
+        success: false,
+      });
     const template = await ClassTimetableTemplate.create(data);
     if (!template)
       res
