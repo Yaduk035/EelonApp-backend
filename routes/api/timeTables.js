@@ -7,6 +7,8 @@ router
   .put(timetableController.addTimetableToArray)
   .delete(timetableController.deleteTimetableFromArray);
 
+router.route("/class/dropdowns").get(timetableController.getTemplateDropdowns);
+
 router
   .route("/class/:id")
   .get(timetableController.getTemplateByTemplateId)
