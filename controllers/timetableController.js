@@ -118,6 +118,20 @@ const deleteTemplateById = async (req, res) => {
   }
 };
 
+const getTemplateDropdowns = async (req, res) => {
+  try {
+    const templateIds = await ClassTimetableTemplate.aggregate([
+      { $group: { _id: "$templateId" } },
+      { $project: { _id: 0, templateId: "$_id" } },
+    ]);
+    const templateIdArray = templateIds.map((doc) => doc.templateId);
+    res.status(200).json(templateIdArray);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   addTemplate,
   getTemplates,
@@ -126,4 +140,5 @@ module.exports = {
   deleteTemplateById,
   addTimetableToArray,
   deleteTimetableFromArray,
+  getTemplateDropdowns,
 };
