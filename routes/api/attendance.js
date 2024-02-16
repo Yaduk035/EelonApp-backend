@@ -7,13 +7,6 @@ router.route("/class/:id").get(attendanceController.getClasswiseAttendance);
 
 router.route("/staff/:id").get(staffAttendanceController.getAttendanceById);
 
-router.route("/:id").get(attendanceController.getAttendanceById);
-
-router
-  .route("/")
-  .post(attendanceController.addAttendanceCollection)
-  .get(attendanceController.getAllAttendance);
-
 router
   .route("/staff")
   .post(staffAttendanceController.addAttendanceCollection)
@@ -50,5 +43,12 @@ router
 router
   .route("/staff/datewiseattendance/:id")
   .put(staffAttendanceController.getDatewiseAttendance);
+
+router.route("/:id").get(attendanceController.getAttendanceById);
+
+router
+  .route("/")
+  .post(attendanceController.addAttendanceCollection)
+  .get(attendanceController.getAllAttendance);
 
 module.exports = router;
