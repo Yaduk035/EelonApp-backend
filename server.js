@@ -36,6 +36,7 @@ app.use("/api/librarysettings", require("./routes/api/librarySettings"));
 app.use("/api/classsection", require("./routes/api/classSection"));
 app.use("/api/attendance", require("./routes/api/attendance"));
 app.use("/api/images", require("./routes/api/imageUpload"));
+app.use("/api/timetable", require("./routes/api/timeTables"));
 
 app.use(errorHandler);
 
