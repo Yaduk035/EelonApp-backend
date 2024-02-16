@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 const perDaySchema = new Schema(
   {
+    day: {
+      type: String,
+    },
     timeIn: {
       type: String,
     },
@@ -21,9 +24,6 @@ const perDaySchema = new Schema(
 
 const timeTableTemplateSchema = new Schema(
   {
-    day: {
-      type: String,
-    },
     templateId: {
       type: String,
     },
