@@ -3,16 +3,26 @@ const Schema = mongoose.Schema;
 
 const periodArraySchema = new Schema(
   {
+    subject: { type: String },
+    day: {
+      type: String,
+    },
     periodName: {
       type: String,
     },
     periodNo: {
       type: String,
     },
-    tutorName: {
+    teachersName: {
       type: String,
     },
     periodType: {
+      type: String,
+    },
+    timeIn: {
+      type: String,
+    },
+    timeOut: {
       type: String,
     },
   },
@@ -21,9 +31,6 @@ const periodArraySchema = new Schema(
 
 const timeTableSchema = new Schema(
   {
-    day: {
-      type: String,
-    },
     templateId: {
       type: String,
     },
@@ -34,6 +41,7 @@ const timeTableSchema = new Schema(
       type: String,
     },
     timeTableArray: [periodArraySchema],
+    timing: Array,
   },
   { timestamps: true }
 );
