@@ -18,9 +18,19 @@ router
   .delete(timetableController.deleteTemplateById);
 
 router
+  .route("/classwise/classid/:id")
+  .get(timetableController.getClasswiseTimetableByClassId);
+
+router
   .route("/classwise")
   .post(timetableController.addClasswiseTimetable)
-  .put(timetableController.updateClasswiseTimetable);
+  .get(timetableController.getAllTimetables);
+
+router
+  .route("/classwise/:id")
+  .put(timetableController.updateClasswiseTimetable)
+  .get(timetableController.getClasswiseTimetable)
+  .delete(timetableController.deleteClasswiseTimetable);
 
 router
   .route("/class/template")

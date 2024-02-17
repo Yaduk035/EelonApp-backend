@@ -147,6 +147,13 @@ const addClasswiseTimetable = async (req, res) => {
   try {
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
+    const duplicateEntry = await ClassTimetable.findOne({
+      classId: data?.classId,
+    });
+    if (duplicateEntry)
+      return res
+        .status(409)
+        .json({ message: "Timetable for the class already exists" });
     const timeTable = await ClassTimetable.create(data);
     if (!timeTable)
       return res.status(400).json({ message: "Error adding timetable" });
@@ -208,11 +215,10 @@ const getClasswiseTimetableByClassId = async (req, res) => {
 
 const deleteClasswiseTimetable = async (req, res) => {
   try {
-    if (!data) return res.status(400).json({ message: "No data sent" });
     const timeTable = await ClassTimetable.findByIdAndDelete(req.params.id);
     if (!timeTable)
       return res.status(400).json({ message: "Error adding timetable" });
-    res.status(201).json(timeTable);
+    res.status(201).json({ message: "Attendance deleted" });
   } catch (error) {
     console.error(error);
   }
