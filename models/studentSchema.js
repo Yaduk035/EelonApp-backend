@@ -56,7 +56,7 @@ const studentSchema = new Schema(
     section: {
       type: String,
     },
-    classId: {
+    classSection: {
       type: String,
     },
     classObjId: {
