@@ -41,7 +41,7 @@ router
   .put(attendanceController.getClasswise_DateAttendance);
 
 router
-  .route("/staff/datewiseattendance/:id")
+  .route("/staff/datewiseattendance")
   .put(staffAttendanceController.getDatewiseAttendance);
 
 router.route("/:id").get(attendanceController.getAttendanceById);

@@ -56,7 +56,7 @@ const studentSchema = new Schema(
     section: {
       type: String,
     },
-    classId: {
+    classSection: {
       type: String,
     },
     classObjId: {
@@ -173,7 +173,7 @@ const studentSchema = new Schema(
     booksIssued: {
       type: Array,
     },
-    booksIssued: {
+    booksIssuedHistory: {
       type: Array,
     },
     refreshToken: String,
