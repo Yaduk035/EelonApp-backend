@@ -270,6 +270,8 @@ const bookIssueList = async (req, res) => {
     const bookId = req.params.id;
     if (!bookId) return res.status(400).json({ message: "No book id sent" });
     const { studentId } = req.body;
+    if (!studentId)
+      return res.status(400).json({ message: "No student id sent" });
     if (!bookId) return res.status(400).json({ error: "No book id sent" });
     const bookData = await Books.findById(bookId).exec();
     if (!bookData) {
@@ -279,18 +281,18 @@ const bookIssueList = async (req, res) => {
     }
     const book = await Books.findById(bookId);
     book.students.currentlyIssued = studentId;
-
     await book.save();
-
-    // const rentlist = book.students.issueList;
-    // const rentlistData = [];
-
-    // for (const itemId of rentlist) {
-    //   const user = await Students.findById(itemId);
-    //   if (user) {
-    //     rentlistData.push(user);
-    //   }
-    // }
+    const bookIdArray = [bookId];
+    const studentData = await Students.findByIdAndUpdate(
+      studentId,
+      {
+        $addToSet: {
+          booksIssued: { $each: bookIdArray },
+          booksIssuedHistory: { $each: bookIdArray },
+        },
+      },
+      { new: true }
+    );
 
     res.status(200).json(book);
   } catch (error) {
@@ -311,20 +313,19 @@ const bookUnIssueList = async (req, res) => {
         .status(400)
         .json({ error: `No book with id ${bookId} found.` });
     }
-    const book = await Books.findById(bookId);
-    book.students.currentlyIssued = "";
+    const book = await Books.findByIdAndUpdate(bookId, {
+      students: { currentlyIssued: "" },
+    });
 
-    await book.save();
-
-    // const rentlist = book.students.issueList;
-    // const rentlistData = [];
-
-    // for (const itemId of rentlist) {
-    //   const user = await Students.findById(itemId);
-    //   if (user) {
-    //     rentlistData.push(user);
-    //   }
-    // }
+    const studentDb = await Students.findByIdAndUpdate(
+      studentId,
+      {
+        $pull: {
+          booksIssued: bookId,
+        },
+      },
+      { new: true }
+    );
 
     res.status(200).json(book);
   } catch (error) {

@@ -173,7 +173,7 @@ const studentSchema = new Schema(
     booksIssued: {
       type: Array,
     },
-    booksIssued: {
+    booksIssuedHistory: {
       type: Array,
     },
     refreshToken: String,
