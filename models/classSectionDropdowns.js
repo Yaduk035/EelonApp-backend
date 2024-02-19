@@ -6,6 +6,9 @@ const classSectionDropdownSchema = new Schema(
     academicYear: {
       type: Array,
     },
+    subjects: {
+      type: Array,
+    },
     type: {
       type: String,
     },

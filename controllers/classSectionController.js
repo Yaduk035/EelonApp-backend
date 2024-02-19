@@ -119,7 +119,7 @@ const addStudentToClass = async (req, res) => {
     res.status(201).json(classroom);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -133,7 +133,7 @@ const getClassSectionDropdowns = async (req, res) => {
     res.status(200).json(classIdArray);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -147,7 +147,7 @@ const getClassDropdowns = async (req, res) => {
     res.status(200).json(classIdArray);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -164,7 +164,23 @@ const getAcademicYearDropdowns = async (req, res) => {
     res.status(200).json(academicYrData);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "No server response", success: false });
+  }
+};
+
+const getSubjectsDropdowns = async (req, res) => {
+  try {
+    const dropdownData = await classSectionDropdown.findOne({
+      type: "subjects",
+    });
+    if (!dropdownData)
+      return res
+        .status(404)
+        .json({ message: "No dropdown data found", success: false });
+    res.status(200).json(dropdownData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -175,7 +191,7 @@ const postAcademicYear = async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -194,7 +210,25 @@ const addAcademicYear = async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "No server response", success: false });
+  }
+};
+
+const addDropdownSubs = async (req, res) => {
+  try {
+    const reqData = req.body.subjects;
+    if (!reqData)
+      return res.status(400).json({ message: "No data sent with body" });
+
+    const result = await classSectionDropdown.updateOne(
+      { type: "subjects" },
+      { $addToSet: { subjects: { $each: reqData } } },
+      { upsert: true }
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -212,7 +246,24 @@ const removeAcademicYear = async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "No server response", success: false });
+  }
+};
+
+const removeDropdownSub = async (req, res) => {
+  try {
+    const reqData = req.body.subjects;
+    if (!reqData)
+      return res.status(400).json({ message: "No data sent with body" });
+
+    const result = await classSectionDropdown.updateOne(
+      { type: "subjects" },
+      { $pull: { subjects: { $in: reqData } } }
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "No server response", success: false });
   }
 };
 
@@ -229,4 +280,7 @@ module.exports = {
   postAcademicYear,
   removeAcademicYear,
   getClassDropdowns,
+  getSubjectsDropdowns,
+  addDropdownSubs,
+  removeDropdownSub,
 };
