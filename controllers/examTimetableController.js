@@ -4,6 +4,7 @@ const addTimetable = async (req, res) => {
   try {
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
+    // const duplicateTable = await
     const timeTable = await examTable.create(data);
     if (!timeTable)
       return res.status(400).json({ message: "Error adding timetable" });
