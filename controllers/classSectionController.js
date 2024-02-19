@@ -123,13 +123,27 @@ const addStudentToClass = async (req, res) => {
   }
 };
 
-const getClassDropdowns = async (req, res) => {
+const getClassSectionDropdowns = async (req, res) => {
   try {
     const classIds = await classSectionModel.aggregate([
       { $group: { _id: "$classId" } },
       { $project: { _id: 0, classId: "$_id" } },
     ]);
     const classIdArray = classIds.map((doc) => doc.classId);
+    res.status(200).json(classIdArray);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getClassDropdowns = async (req, res) => {
+  try {
+    const classIds = await classSectionModel.aggregate([
+      { $group: { _id: "$std" } },
+      { $project: { _id: 0, std: "$_id" } },
+    ]);
+    const classIdArray = classIds.map((doc) => doc.std);
     res.status(200).json(classIdArray);
   } catch (error) {
     console.error(error);
@@ -208,10 +222,11 @@ module.exports = {
   updateClass,
   getAllClasses,
   getAClassroom,
-  getClassDropdowns,
+  getClassSectionDropdowns,
   addStudentToClass,
   getAcademicYearDropdowns,
   addAcademicYear,
   postAcademicYear,
   removeAcademicYear,
+  getClassDropdowns,
 };

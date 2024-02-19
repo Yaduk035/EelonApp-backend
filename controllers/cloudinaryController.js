@@ -34,10 +34,11 @@ const deleteStudentProfileImg = async (req, res) => {
     const student = await studentModel.findByIdAndUpdate(studentId, {
       studentProfilePic: null,
     });
-    if (!student) res.status(400).json({ message: "Error deleting file" });
+    if (!student)
+      res.status(400).json({ message: "Error deleting file", success: false });
     const cloudinaryPublicId = student.studentProfilePic.public_id;
     const cloudImg = await cloudinary.uploader.destroy(cloudinaryPublicId);
-    res.status(201).json({ message: "Profile pic deleted", success: false });
+    res.status(201).json({ message: "Profile pic deleted", success: true });
   } catch (error) {
     console.error(error);
   }

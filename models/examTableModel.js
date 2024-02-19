@@ -6,47 +6,22 @@ const examArraySchema = new Schema(
     id: {
       type: String,
     },
-    subject: { type: String },
     day: {
       type: String,
     },
-    periodName: {
+    date: {
       type: String,
     },
-    periodNo: {
+    ANPortions: {
       type: String,
     },
-    teachersName: {
+    ANSub: {
       type: String,
     },
-    periodType: {
+    FNPortions: {
       type: String,
     },
-    timeIn: {
-      type: String,
-    },
-    timeOut: {
-      type: String,
-    },
-  },
-  { timestamps: true }
-);
-
-const timingArraySchema = new Schema(
-  {
-    classId: {
-      type: Array,
-    },
-    std: {
-      type: String,
-    },
-    id: {
-      type: Number,
-    },
-    timeIn: {
-      type: String,
-    },
-    timeOut: {
+    FnSub: {
       type: String,
     },
   },
@@ -64,8 +39,11 @@ const examTableSchema = new Schema(
     classId: {
       type: String,
     },
+    exam1StartTime: String,
+    exam1EndTime: String,
+    exam2StartTime: String,
+    exam2EndTime: String,
     timeTableArray: [examArraySchema],
-    timing: [timingArraySchema],
   },
   { timestamps: true }
 );
