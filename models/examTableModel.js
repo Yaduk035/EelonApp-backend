@@ -57,6 +57,18 @@ const examTableSchema = new Schema(
     classId: {
       type: String,
     },
+    std: {
+      type: String,
+    },
+    examType: {
+      type: String,
+    },
+    term: {
+      type: String,
+    },
+    academicYear: {
+      type: String,
+    },
     exam1StartTime: String,
     exam1EndTime: String,
     exam2StartTime: String,
