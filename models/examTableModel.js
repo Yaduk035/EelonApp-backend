@@ -18,7 +18,25 @@ const examArraySchema = new Schema(
     ANSub: {
       type: String,
     },
+    AnDuty: {
+      type: String,
+    },
+    AnRevDuty: {
+      type: String,
+    },
+    AnRevTopic: {
+      type: String,
+    },
     FNPortions: {
+      type: String,
+    },
+    FnDuty: {
+      type: String,
+    },
+    FnRevDuty: {
+      type: String,
+    },
+    FnRevTopic: {
       type: String,
     },
     FnSub: {
