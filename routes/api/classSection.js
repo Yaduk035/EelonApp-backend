@@ -15,6 +15,12 @@ router
   .delete(classSectionController.removeAcademicYear);
 
 router
+  .route("/subjects/dropdowns")
+  .put(classSectionController.addDropdownSubs)
+  .get(classSectionController.getSubjectsDropdowns)
+  .delete(classSectionController.removeDropdownSub);
+
+router
   .route("/")
   .post(classSectionController.addClass)
   .get(classSectionController.getAllClasses);
