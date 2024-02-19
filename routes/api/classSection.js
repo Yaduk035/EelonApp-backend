@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const classSectionController = require("../../controllers/classSectionController");
 
-router.route("/dropdowns/").get(classSectionController.getClassDropdowns);
+router.route("/dropdowns/std").get(classSectionController.getClassDropdowns);
+router
+  .route("/dropdowns/")
+  .get(classSectionController.getClassSectionDropdowns);
 router.route("/addstudent/:id").put(classSectionController.addStudentToClass);
 router.route("/academicyear").post(classSectionController.postAcademicYear);
 router
