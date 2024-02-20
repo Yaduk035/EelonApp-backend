@@ -44,7 +44,22 @@ const deleteStudentProfileImg = async (req, res) => {
   }
 };
 
+const addSyllabusPdf = async (req, res) => {
+  try {
+    // console.log(req.file);
+    // const result = await cloudinary.uploader.upload(req.file, {
+    //   resource_type: "auto",
+    //   folder: "pdf_uploads",
+    // });
+    // console.log(result);
+    // res.json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   addProfileImage,
   deleteStudentProfileImg,
+  addSyllabusPdf,
 };
