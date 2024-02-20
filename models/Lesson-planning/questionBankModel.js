@@ -24,6 +24,10 @@ const QBSchema = new Schema(
     pdf: {
       type: String,
     },
+    status: {
+      type: String,
+      default: "Pending",
+    },
   },
   { timestamps: true }
 );
