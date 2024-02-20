@@ -122,7 +122,7 @@ const addQBs = async (req, res) => {
     if (!result)
       return res
         .status(400)
-        .json({ message: "Error creating syllabus", success: false });
+        .json({ message: "Error creating question bank", success: false });
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -137,8 +137,8 @@ const removeQB = async (req, res) => {
     if (!result)
       return res
         .status(400)
-        .json({ message: "Error deleting syllabus", success: false });
-    res.status(201).json({ message: "Syllabus deleted", success: true });
+        .json({ message: "Error deleting question bank", success: false });
+    res.status(201).json({ message: "question bank deleted", success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -155,8 +155,8 @@ const updateQB = async (req, res) => {
     if (!result)
       return res
         .status(400)
-        .json({ message: "Error editing syllabus", success: false });
-    res.status(201).json(syllabus);
+        .json({ message: "Error editing question bank", success: false });
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -166,11 +166,11 @@ const updateQB = async (req, res) => {
 const getAllQBs = async (req, res) => {
   try {
     const result = await QBModel.find().exec();
-    if (!syllabus)
+    if (!result)
       return res
         .status(404)
-        .json({ message: "No syllabus found", success: false });
-    res.status(200).json(syllabus);
+        .json({ message: "No question banks found", success: false });
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -180,11 +180,11 @@ const getAllQBs = async (req, res) => {
 const getQBsById = async (req, res) => {
   try {
     const result = await QBModel.findById(req.params.id).exec();
-    if (!syllabus)
+    if (!result)
       return res
         .status(404)
-        .json({ message: "No syllabus found", success: false });
-    res.status(200).json(syllabus);
+        .json({ message: "No question bank found", success: false });
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -248,7 +248,7 @@ const removeQuestionPattern = async (req, res) => {
     if (!result)
       return res
         .status(400)
-        .json({ message: "Error deleting syllabus", success: false });
+        .json({ message: "Error deleting question pattern", success: false });
     res
       .status(201)
       .json({ message: "question pattern deleted", success: true });
@@ -269,7 +269,7 @@ const updateQuestionPattern = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Error editing question pattern", success: false });
-    res.status(201).json(syllabus);
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -279,11 +279,11 @@ const updateQuestionPattern = async (req, res) => {
 const getAllQuestionPattern = async (req, res) => {
   try {
     const result = await questionPatternModel.find().exec();
-    if (!syllabus)
+    if (!result)
       return res
         .status(404)
         .json({ message: "No question patterns found", success: false });
-    res.status(200).json(syllabus);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -293,11 +293,11 @@ const getAllQuestionPattern = async (req, res) => {
 const getQuestionPatternById = async (req, res) => {
   try {
     const result = await questionPatternModel.findById(req.params.id).exec();
-    if (!syllabus)
+    if (!result)
       return res
         .status(404)
         .json({ message: "No question patterns found", success: false });
-    res.status(200).json(syllabus);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -381,7 +381,7 @@ const updateQuestionPaper = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Error editing question paper", success: false });
-    res.status(201).json(syllabus);
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -391,11 +391,11 @@ const updateQuestionPaper = async (req, res) => {
 const getAllQuestionPaper = async (req, res) => {
   try {
     const result = await questionPaperModel.find().exec();
-    if (!syllabus)
+    if (!result)
       return res
         .status(404)
         .json({ message: "No question paper found", success: false });
-    res.status(200).json(syllabus);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -405,11 +405,11 @@ const getAllQuestionPaper = async (req, res) => {
 const getQuestionPaperById = async (req, res) => {
   try {
     const result = await questionPaperModel.findById(req.params.id).exec();
-    if (!syllabus)
+    if (!result)
       return res
         .status(404)
         .json({ message: "No question paper found", success: false });
-    res.status(200).json(syllabus);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
