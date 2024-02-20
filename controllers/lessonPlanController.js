@@ -47,7 +47,7 @@ const getSyllabusById = async (req, res) => {
 };
 
 const syllabusFiltering = async (req, res) => {
-  const { std, termName, year, subject, teacherName } = req.body;
+  const { std, termName, year, subject, teacherName, teacherId } = req.body;
   try {
     const pipeline = [];
 
@@ -65,6 +65,9 @@ const syllabusFiltering = async (req, res) => {
     }
     if (teacherName) {
       pipeline.push({ $match: { teacherName: teacherName } });
+    }
+    if (teacherId) {
+      pipeline.push({ $match: { teacherId: teacherId } });
     }
 
     const result = await syllabusModel.aggregate(pipeline);
@@ -189,7 +192,7 @@ const getQBsById = async (req, res) => {
 };
 
 const QBFiltering = async (req, res) => {
-  const { std, termName, year, subject, teacherName } = req.body;
+  const { std, termName, year, subject, teacherName, teacherId } = req.body;
   try {
     const pipeline = [];
 
@@ -207,6 +210,9 @@ const QBFiltering = async (req, res) => {
     }
     if (teacherName) {
       pipeline.push({ $match: { teacherName: teacherName } });
+    }
+    if (teacherId) {
+      pipeline.push({ $match: { teacherId: teacherId } });
     }
 
     const result = await QBModel.aggregate(pipeline);
@@ -299,7 +305,7 @@ const getQuestionPatternById = async (req, res) => {
 };
 
 const QuestionPatternFiltering = async (req, res) => {
-  const { std, termName, year, subject, teacherName } = req.body;
+  const { std, termName, year, subject, teacherName, teacherId } = req.body;
   try {
     const pipeline = [];
 
@@ -317,6 +323,9 @@ const QuestionPatternFiltering = async (req, res) => {
     }
     if (teacherName) {
       pipeline.push({ $match: { teacherName: teacherName } });
+    }
+    if (teacherId) {
+      pipeline.push({ $match: { teacherId: teacherId } });
     }
 
     const result = await questionPatternModel.aggregate(pipeline);
@@ -408,7 +417,7 @@ const getQuestionPaperById = async (req, res) => {
 };
 
 const QuestionPaperFiltering = async (req, res) => {
-  const { std, termName, year, subject, teacherName } = req.body;
+  const { std, termName, year, subject, teacherName, teacherId } = req.body;
   try {
     const pipeline = [];
 
@@ -426,6 +435,9 @@ const QuestionPaperFiltering = async (req, res) => {
     }
     if (teacherName) {
       pipeline.push({ $match: { teacherName: teacherName } });
+    }
+    if (teacherId) {
+      pipeline.push({ $match: { teacherId: teacherId } });
     }
 
     const result = await questionPaperModel.aggregate(pipeline);
