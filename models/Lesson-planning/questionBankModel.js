@@ -18,7 +18,7 @@ const QBSchema = new Schema(
     termName: {
       type: String,
     },
-    syllabusPdf: {
+    pdf: {
       type: String,
     },
   },

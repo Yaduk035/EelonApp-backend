@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const questionPatternSchema = new Schema(
+const questionPaperSchema = new Schema(
   {
     year: {
       type: String,
@@ -25,8 +25,5 @@ const questionPatternSchema = new Schema(
   { timestamps: true }
 );
 
-const questionPattern = mongoose.model(
-  "questionPattern",
-  questionPatternSchema
-);
-module.exports = questionPattern;
+const questionPaper = mongoose.model("questionPaper", questionPaperSchema);
+module.exports = questionPaper;
