@@ -34,7 +34,9 @@ router
 
 //////////////////////////////////////////////////////////
 
-router.route("/qpattern/filter").put(lessonPlanningController.QBFiltering);
+router
+  .route("/qpattern/filter")
+  .put(lessonPlanningController.QuestionPatternFiltering);
 
 router
   .route("/qpattern")
@@ -46,5 +48,22 @@ router
   .get(lessonPlanningController.getQuestionPatternById)
   .put(lessonPlanningController.updateQuestionPattern)
   .delete(lessonPlanningController.removeQuestionPattern);
+
+//////////////////////////////////////////////////////////
+
+router
+  .route("/qpaper/filter")
+  .put(lessonPlanningController.QuestionPaperFiltering);
+
+router
+  .route("/qpaper")
+  .get(lessonPlanningController.getAllQuestionPaper)
+  .post(lessonPlanningController.addQuestionPaper);
+
+router
+  .route("/qpaper/:id")
+  .get(lessonPlanningController.getQuestionPaperById)
+  .put(lessonPlanningController.updateQuestionPaper)
+  .delete(lessonPlanningController.removeQuestionPaper);
 
 module.exports = router;

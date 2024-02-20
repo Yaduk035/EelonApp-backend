@@ -9,6 +9,9 @@ const QBSchema = new Schema(
     teacherName: {
       type: String,
     },
+    teacherId: {
+      type: String,
+    },
     subject: {
       type: String,
     },
