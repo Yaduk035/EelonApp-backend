@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const syllabusSchema = new Schema(
+const QBSchema = new Schema(
   {
     year: {
       type: String,
@@ -25,5 +25,5 @@ const syllabusSchema = new Schema(
   { timestamps: true }
 );
 
-const syllabus = mongoose.model("syllabusDb", syllabusSchema);
-module.exports = syllabus;
+const questionBank = mongoose.model("questionBank", QBSchema);
+module.exports = questionBank;
