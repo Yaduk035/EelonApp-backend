@@ -28,6 +28,9 @@ const syllabusSchema = new Schema(
       type: String,
       default: "Pending",
     },
+    remarks: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
