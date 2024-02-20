@@ -24,6 +24,10 @@ const syllabusSchema = new Schema(
     syllabusPdf: {
       type: String,
     },
+    status: {
+      type: String,
+      default: "Pending",
+    },
   },
   { timestamps: true }
 );
