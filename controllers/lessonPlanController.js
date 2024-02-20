@@ -18,7 +18,6 @@ const addSyllabus = async (req, res) => {
 
 const getAllSyllabus = async (req, res) => {
   try {
-    const data = req.body;
     const syllabus = await syllabusModel.find().exec();
     if (!syllabus)
       return res
@@ -33,7 +32,6 @@ const getAllSyllabus = async (req, res) => {
 
 const getSyllabusById = async (req, res) => {
   try {
-    const data = req.body;
     const syllabus = await syllabusModel.findById(req.params.id).exec();
     if (!syllabus)
       return res
@@ -158,6 +156,65 @@ const updateQB = async (req, res) => {
   }
 };
 
+const getAllQBs = async (req, res) => {
+  try {
+    const result = await QBModel.find().exec();
+    if (!syllabus)
+      return res
+        .status(404)
+        .json({ message: "No syllabus found", success: false });
+    res.status(200).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getQBsById = async (req, res) => {
+  try {
+    const result = await QBModel.findById(req.params.id).exec();
+    if (!syllabus)
+      return res
+        .status(404)
+        .json({ message: "No syllabus found", success: false });
+    res.status(200).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const QBFiltering = async (req, res) => {
+  const { std, termName, year, subject, teacherName } = req.body;
+  try {
+    const pipeline = [];
+
+    if (std) {
+      pipeline.push({ $match: { std: std } });
+    }
+    if (termName) {
+      pipeline.push({ $match: { termName: termName } });
+    }
+    if (year) {
+      pipeline.push({ $match: { year: year } });
+    }
+    if (subject) {
+      pipeline.push({ $match: { subject: subject } });
+    }
+    if (teacherName) {
+      pipeline.push({ $match: { subject: subject } });
+    }
+
+    const result = await QBModel.aggregate(pipeline);
+
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error filtering question bank:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   addSyllabus,
   removeSyllabus,
@@ -168,4 +225,7 @@ module.exports = {
   addQBs,
   removeQB,
   updateQB,
+  getAllQBs,
+  getQBsById,
+  QBFiltering,
 };
