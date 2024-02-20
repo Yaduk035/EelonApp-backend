@@ -1,6 +1,7 @@
 const syllabusModel = require("../models/Lesson-planning/syllabusPlannningModel");
 const QBModel = require("../models/Lesson-planning/questionBankModel");
 const questionPatternModel = require("../models/Lesson-planning/questionPattern");
+const questionPaperModel = require("../models/Lesson-planning/questionPaperModel");
 
 const addSyllabus = async (req, res) => {
   try {
@@ -63,7 +64,7 @@ const syllabusFiltering = async (req, res) => {
       pipeline.push({ $match: { subject: subject } });
     }
     if (teacherName) {
-      pipeline.push({ $match: { subject: subject } });
+      pipeline.push({ $match: { teacherName: teacherName } });
     }
 
     const result = await syllabusModel.aggregate(pipeline);
@@ -205,7 +206,7 @@ const QBFiltering = async (req, res) => {
       pipeline.push({ $match: { subject: subject } });
     }
     if (teacherName) {
-      pipeline.push({ $match: { subject: subject } });
+      pipeline.push({ $match: { teacherName: teacherName } });
     }
 
     const result = await QBModel.aggregate(pipeline);
@@ -315,7 +316,7 @@ const QuestionPatternFiltering = async (req, res) => {
       pipeline.push({ $match: { subject: subject } });
     }
     if (teacherName) {
-      pipeline.push({ $match: { subject: subject } });
+      pipeline.push({ $match: { teacherName: teacherName } });
     }
 
     const result = await questionPatternModel.aggregate(pipeline);
@@ -326,8 +327,117 @@ const QuestionPatternFiltering = async (req, res) => {
     console.error("Error filtering question bank:", error);
     res.status(500).json({ message: "Server error", success: false });
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const addQuestionPaper = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await questionPaperModel.create(data);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error creating question pattern", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const removeQuestionPaper = async (req, res) => {
+  try {
+    const Id = req.params.id;
+    const result = await questionPaperModel.findByIdAndDelete(Id);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error deleting question paper", success: false });
+    res.status(201).json({ message: "question paper deleted", success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const updateQuestionPaper = async (req, res) => {
+  try {
+    const Id = req.params.id;
+    const data = req.body;
+    const result = await questionPaperModel.findByIdAndUpdate(Id, data, {
+      new: true,
+    });
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error editing question paper", success: false });
+    res.status(201).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getAllQuestionPaper = async (req, res) => {
+  try {
+    const result = await questionPaperModel.find().exec();
+    if (!syllabus)
+      return res
+        .status(404)
+        .json({ message: "No question paper found", success: false });
+    res.status(200).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getQuestionPaperById = async (req, res) => {
+  try {
+    const result = await questionPaperModel.findById(req.params.id).exec();
+    if (!syllabus)
+      return res
+        .status(404)
+        .json({ message: "No question paper found", success: false });
+    res.status(200).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const QuestionPaperFiltering = async (req, res) => {
+  const { std, termName, year, subject, teacherName } = req.body;
+  try {
+    const pipeline = [];
+
+    if (std) {
+      pipeline.push({ $match: { std: std } });
+    }
+    if (termName) {
+      pipeline.push({ $match: { termName: termName } });
+    }
+    if (year) {
+      pipeline.push({ $match: { year: year } });
+    }
+    if (subject) {
+      pipeline.push({ $match: { subject: subject } });
+    }
+    if (teacherName) {
+      pipeline.push({ $match: { teacherName: teacherName } });
+    }
+
+    const result = await questionPaperModel.aggregate(pipeline);
+
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error filtering question paper:", error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   addSyllabus,
@@ -348,4 +458,10 @@ module.exports = {
   getAllQuestionPattern,
   getQuestionPatternById,
   QuestionPatternFiltering,
+  addQuestionPaper,
+  removeQuestionPaper,
+  updateQuestionPaper,
+  getQuestionPaperById,
+  getAllQuestionPaper,
+  QuestionPaperFiltering,
 };
