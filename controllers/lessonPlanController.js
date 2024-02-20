@@ -1,5 +1,6 @@
-const syllabusModel = require("../models/syllabusPlannningModel");
-const QBModel = require("../models/questionBankModel");
+const syllabusModel = require("../models/Lesson-planning/syllabusPlannningModel");
+const QBModel = require("../models/Lesson-planning/questionBankModel");
+const questionPatternModel = require("../models/Lesson-planning/questionPattern");
 
 const addSyllabus = async (req, res) => {
   try {
@@ -70,8 +71,8 @@ const syllabusFiltering = async (req, res) => {
     if (!result) return res.status(404).json({ message: "No data found" });
     res.status(200).json(result);
   } catch (error) {
-    console.error("Error filtering question bank:", error);
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
   }
 };
 
@@ -107,6 +108,8 @@ const updateSyllabus = async (req, res) => {
     res.status(500).json({ message: "Server error", success: false });
   }
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const addQBs = async (req, res) => {
   try {
@@ -210,9 +213,120 @@ const QBFiltering = async (req, res) => {
     if (!result) return res.status(404).json({ message: "No data found" });
     res.status(200).json(result);
   } catch (error) {
-    console.error("Error filtering question bank:", error);
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
   }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+};
+
+const addQuestionPattern = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await questionPatternModel.create(data);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error creating question pattern", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const removeQuestionPattern = async (req, res) => {
+  try {
+    const Id = req.params.id;
+    const result = await questionPatternModel.findByIdAndDelete(Id);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error deleting syllabus", success: false });
+    res
+      .status(201)
+      .json({ message: "question pattern deleted", success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const updateQuestionPattern = async (req, res) => {
+  try {
+    const Id = req.params.id;
+    const data = req.body;
+    const result = await questionPatternModel.findByIdAndUpdate(Id, data, {
+      new: true,
+    });
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error editing question pattern", success: false });
+    res.status(201).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getAllQuestionPattern = async (req, res) => {
+  try {
+    const result = await questionPatternModel.find().exec();
+    if (!syllabus)
+      return res
+        .status(404)
+        .json({ message: "No question patterns found", success: false });
+    res.status(200).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getQuestionPatternById = async (req, res) => {
+  try {
+    const result = await questionPatternModel.findById(req.params.id).exec();
+    if (!syllabus)
+      return res
+        .status(404)
+        .json({ message: "No question patterns found", success: false });
+    res.status(200).json(syllabus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const QuestionPatternFiltering = async (req, res) => {
+  const { std, termName, year, subject, teacherName } = req.body;
+  try {
+    const pipeline = [];
+
+    if (std) {
+      pipeline.push({ $match: { std: std } });
+    }
+    if (termName) {
+      pipeline.push({ $match: { termName: termName } });
+    }
+    if (year) {
+      pipeline.push({ $match: { year: year } });
+    }
+    if (subject) {
+      pipeline.push({ $match: { subject: subject } });
+    }
+    if (teacherName) {
+      pipeline.push({ $match: { subject: subject } });
+    }
+
+    const result = await questionPatternModel.aggregate(pipeline);
+
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error filtering question bank:", error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
 };
 
 module.exports = {
@@ -228,4 +342,10 @@ module.exports = {
   getAllQBs,
   getQBsById,
   QBFiltering,
+  addQuestionPattern,
+  removeQuestionPattern,
+  updateQuestionPattern,
+  getAllQuestionPattern,
+  getQuestionPatternById,
+  QuestionPatternFiltering,
 };
