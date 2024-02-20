@@ -17,4 +17,34 @@ router
   .put(lessonPlanningController.updateSyllabus)
   .delete(lessonPlanningController.removeSyllabus);
 
+//////////////////////////////////////////////////////////
+
+router.route("/qbank/filter").put(lessonPlanningController.QBFiltering);
+
+router
+  .route("/qbank")
+  .get(lessonPlanningController.getAllQBs)
+  .post(lessonPlanningController.addQBs);
+
+router
+  .route("/qbank/:id")
+  .get(lessonPlanningController.getQBsById)
+  .put(lessonPlanningController.updateQB)
+  .delete(lessonPlanningController.removeQB);
+
+//////////////////////////////////////////////////////////
+
+router.route("/qpattern/filter").put(lessonPlanningController.QBFiltering);
+
+router
+  .route("/qpattern")
+  .get(lessonPlanningController.getAllQuestionPattern)
+  .post(lessonPlanningController.addQuestionPattern);
+
+router
+  .route("/qpattern/:id")
+  .get(lessonPlanningController.getQuestionPatternById)
+  .put(lessonPlanningController.updateQuestionPattern)
+  .delete(lessonPlanningController.removeQuestionPattern);
+
 module.exports = router;
