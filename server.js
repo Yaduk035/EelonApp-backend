@@ -12,6 +12,8 @@ const verifyJwt = require("./middleware/verifyJWT");
 const { logger } = require("./middleware/logEvents");
 const errorHandler = require("./middleware/errorHandler");
 const bodyParser = require("body-parser");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 connectDb();
 
@@ -26,6 +28,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
+app.post("/upload", upload.single("file"), (req, res) => {
+  // Here you can process the uploaded file (req.file)
+  // and send a response back to the client
+  res.send("File uploaded successfully");
+});
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/refresh", require("./routes/api/refresh"));
 app.use("/api/users", require("./routes/api/users"));

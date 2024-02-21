@@ -231,6 +231,30 @@ const getStudentsByLimit = async (req, res) => {
   }
 };
 
+const filterStudentsByclass = async (req, res) => {
+  try {
+    const { classSection, std, classId } = req.body;
+    const pipeline = [];
+
+    if (classSection) {
+      pipeline.push({ $match: { classSection: classSection } });
+    }
+    if (std) {
+      pipeline.push({ $match: { std: std } });
+    }
+    if (classId) {
+      pipeline.push({ $match: { classId: classId } });
+    }
+
+    const response = await StudentSchema.aggregate(pipeline);
+    if (!response) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 const addStudent = async (req, res) => {
   try {
     const userData = req.body;
@@ -471,4 +495,5 @@ module.exports = {
   getStudentsByLimit,
   getIndividualStaff,
   updateStaff,
+  filterStudentsByclass,
 };

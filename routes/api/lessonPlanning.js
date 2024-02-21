@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const lessonPlanningController = require("../../controllers/lessonPlanController");
+const multer = require("multer");
+const upload = multer({ dest: "./uploads/" });
 
 router
   .route("/syllabus/filter")
@@ -9,7 +11,7 @@ router
 router
   .route("/syllabus")
   .get(lessonPlanningController.getAllSyllabus)
-  .post(lessonPlanningController.addSyllabus);
+  .post(upload.single("file"), lessonPlanningController.addSyllabus);
 
 router
   .route("/syllabus/:id")
