@@ -5,11 +5,11 @@ const subjects = new Schema(
   {
     subject: String,
     studentName: String,
-    studentRollNo: Number,
     studentId: String,
     internal: Number,
     external: Number,
     total: Number,
+    rollNo: Number,
   },
   { timestamps: true }
 );
