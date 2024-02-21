@@ -2,6 +2,8 @@ const examMarksModel = require("../models/ExamDb/examMarksModel");
 
 const addMarks = async (req, res) => {
   try {
+    if (!req.body)
+      return res.status(400).json({ message: "No data send with body" });
     const { academicYear, term, subject, classSection } = req.body;
     // const duplicateData = await examMarksModel.aggregate([
     //   {
@@ -13,7 +15,7 @@ const addMarks = async (req, res) => {
     //     },
     //   },
     // ]);
-    const result = await examMarksModel.create(req.data);
+    const result = await examMarksModel.create(req.body);
     if (!result) res.status(400).json({ message: "Error adding marks" });
     res.status(201).json(result);
   } catch (error) {
@@ -46,7 +48,9 @@ const getMarksById = async (req, res) => {
 
 const updateMarks = async (req, res) => {
   try {
-    const data = req.data;
+    const data = req.body;
+    if (!data)
+      return res.status(400).json({ message: "No data send with body" });
     const result = await examMarksModel.findByIdAndUpdate(req.params.id, data, {
       new: true,
     });
@@ -61,7 +65,6 @@ const updateMarks = async (req, res) => {
 
 const deleteMarks = async (req, res) => {
   try {
-    const data = req.data;
     const result = await examMarksModel.findByIdAndDelete(req.params.id);
     if (!result)
       return res
