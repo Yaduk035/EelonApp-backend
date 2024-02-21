@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const marksController = require("../../controllers/marksController");
 
+router.route("/exam/filter").put(marksController.filterMarks);
+
 router
   .route("/exam")
   .post(marksController.addMarks)

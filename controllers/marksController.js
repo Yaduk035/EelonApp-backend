@@ -46,6 +46,32 @@ const getMarksById = async (req, res) => {
   }
 };
 
+const filterMarks = async (req, res) => {
+  try {
+    const { classSection, academicYear, subject } = req.body;
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ message: "No data sent with body", success: false });
+
+    const result = await examMarksModel.aggregate([
+      {
+        $match: {
+          academicYear: academicYear,
+          subject: subject,
+          classSection: classSection,
+        },
+      },
+    ]);
+    if (result.length === 0)
+      return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 const updateMarks = async (req, res) => {
   try {
     const data = req.body;
@@ -83,4 +109,5 @@ module.exports = {
   getMarksById,
   updateMarks,
   deleteMarks,
+  filterMarks,
 };
