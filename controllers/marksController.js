@@ -96,6 +96,44 @@ const filterMarksClasswise = async (req, res) => {
   }
 };
 
+const filterMarksStudentwise = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { classSection, academicYear } = req.body;
+
+    const pipeline = [
+      // Match documents containing the specified studentId in marksArray
+      {
+        $match: {
+          academicYear: academicYear,
+          classSection: classSection,
+        },
+      },
+      // Unwind marksArray to work with individual marks
+      { $unwind: "$marksArray" },
+      // Filter for marks of the specified student
+      {
+        $match: {
+          "marksArray.studentId": studentId,
+        },
+      },
+      // Group by subject to accumulate marks for each subject
+      {
+        $group: {
+          _id: "$subject",
+          total: { $sum: "$marksArray.total" },
+        },
+      },
+    ];
+
+    const result = await examMarksModel.aggregate(pipeline);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 const updateMarks = async (req, res) => {
   try {
     const data = req.body;
@@ -127,6 +165,91 @@ const deleteMarks = async (req, res) => {
   }
 };
 
+// const filterMarksClasswise = async (req, res) => {
+//   try {
+//     const result = await examMarksModel.aggregate([
+//       {
+//         $match: {
+//           classSection: "10-B",
+//           academicYear: "2023-2024",
+//           term: "I midterm",
+//         },
+//       },
+//       {
+//         $addFields: {
+//           "marksArray.MathsTotal": "$$REMOVE", // Remove any existing MathsTotal field
+//         },
+//       },
+//       // Calculate MathsTotal for each student
+//       {
+//         $addFields: {
+//           "marksArray.MathsTotal": {
+//             $sum: "$marksArray.total",
+//           },
+//         },
+//       },
+//       // Lookup English marks and join them with existing documents based on studentId
+//       {
+//         $lookup: {
+//           from: "Marks",
+//           let: { studentId: "$marksArray.studentId" },
+//           pipeline: [
+//             {
+//               $match: {
+//                 $expr: { $eq: ["$marksArray.studentId", "$$studentId"] },
+//                 subject: "English",
+//               },
+//             },
+//             {
+//               $project: {
+//                 _id: 0,
+//                 studentId: "$marksArray.studentId",
+//                 EnglishTotal: "$marksArray.total",
+//               },
+//             },
+//           ],
+//           as: "englishMarks",
+//         },
+//       },
+//       // Unwind the englishMarks array
+//       { $unwind: { path: "$englishMarks", preserveNullAndEmptyArrays: true } },
+//       // Add EnglishTotal to marksArray documents
+//       {
+//         $addFields: {
+//           "marksArray.EnglishTotal": "$englishMarks.EnglishTotal",
+//         },
+//       },
+//       // Group the documents by _id to reconstruct the document structure
+//       {
+//         $group: {
+//           _id: "$_id",
+//           classSection: { $first: "$classSection" },
+//           academicYear: { $first: "$academicYear" },
+//           examType: { $first: "$examType" },
+//           term: { $first: "$term" },
+//           marksArray: { $push: "$marksArray" },
+//         },
+//       },
+//       // Project to reshape the document and remove unnecessary fields
+//       {
+//         $project: {
+//           _id: 0,
+//           classSection: 1,
+//           academicYear: 1,
+//           examType: 1,
+//           term: 1,
+//           marksArray: 1,
+//         },
+//       },
+//     ]);
+//     if (!result) res.status(400).json({ message: "No results found" });
+//     res.status(200).json(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
 module.exports = {
   addMarks,
   getAllMarks,
@@ -135,4 +258,5 @@ module.exports = {
   deleteMarks,
   filterMarksSubwise,
   filterMarksClasswise,
+  filterMarksStudentwise,
 };
