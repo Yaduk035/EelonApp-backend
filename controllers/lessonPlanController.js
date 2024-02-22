@@ -6,11 +6,7 @@ const questionPaperModel = require("../models/Lesson-planning/questionPaperModel
 const addSyllabus = async (req, res) => {
   try {
     const data = req.body;
-    const file = req.file;
-    const syllabus = await syllabusModel.create({
-      ...data,
-      syllabusPdf: file.path,
-    });
+    const syllabus = await syllabusModel.create(data);
     if (!syllabus)
       return res
         .status(400)
