@@ -6,6 +6,9 @@ router.route("/exam/filter/subwise").put(marksController.filterMarksSubwise);
 router
   .route("/exam/filter/classwise")
   .put(marksController.filterMarksClasswise);
+router
+  .route("/exam/filter/studentwise/:id")
+  .put(marksController.filterMarksStudentwise);
 
 router
   .route("/exam")
