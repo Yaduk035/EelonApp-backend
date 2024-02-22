@@ -477,6 +477,43 @@ const issueLibCard = async (req, res) => {
   }
 };
 
+const studentFiltering = async (req, res) => {
+  const { std, academicYear, email, classSection, admnNo, studentName } =
+    req.body;
+  try {
+    const pipeline = [];
+
+    if (studentName) {
+      pipeline.push({
+        $match: { studentName: { $regex: new RegExp(studentName, "i") } },
+      });
+    }
+    if (std) {
+      pipeline.push({ $match: { std: std } });
+    }
+    if (academicYear) {
+      pipeline.push({ $match: { academicYear: academicYear } });
+    }
+    if (email) {
+      pipeline.push({ $match: { email: email } });
+    }
+    if (classSection) {
+      pipeline.push({ $match: { classSection: classSection } });
+    }
+    if (admnNo) {
+      pipeline.push({ $match: { admnNo: admnNo } });
+    }
+
+    const result = await StudentSchema.aggregate(pipeline);
+
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 module.exports = {
   getUsers,
   addStaff,
@@ -496,4 +533,5 @@ module.exports = {
   getIndividualStaff,
   updateStaff,
   filterStudentsByclass,
+  studentFiltering,
 };

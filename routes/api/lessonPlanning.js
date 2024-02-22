@@ -11,7 +11,7 @@ router
 router
   .route("/syllabus")
   .get(lessonPlanningController.getAllSyllabus)
-  .post(upload.single("file"), lessonPlanningController.addSyllabus);
+  .post(lessonPlanningController.addSyllabus);
 
 router
   .route("/syllabus/:id")

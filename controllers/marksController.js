@@ -1,4 +1,5 @@
 const examMarksModel = require("../models/ExamDb/examMarksModel");
+const studentModel = require("../models/studentSchema");
 
 const addMarks = async (req, res) => {
   try {
@@ -101,6 +102,8 @@ const filterMarksStudentwise = async (req, res) => {
     const studentId = req.params.id;
     const { classSection, academicYear } = req.body;
 
+    const student = await studentModel.find;
+
     const pipeline = [
       // Match documents containing the specified studentId in marksArray
       {
@@ -121,6 +124,8 @@ const filterMarksStudentwise = async (req, res) => {
       {
         $group: {
           _id: "$subject",
+          internal: { $sum: "$marksArray.internal" },
+          external: { $sum: "$marksArray.external" },
           total: { $sum: "$marksArray.total" },
         },
       },
