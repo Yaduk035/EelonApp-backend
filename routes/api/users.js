@@ -19,6 +19,8 @@ router
 router.route("/student/pagination").get(userController.getStudentsByLimit);
 router.route("/student/filter").put(userController.filterStudentsByclass);
 
+router.route("/student/filterbydata").put(userController.studentFiltering);
+
 router
   .route("/student")
   .get(userController.getStudents)
