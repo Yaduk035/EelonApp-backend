@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const marksController = require("../../controllers/marksController");
 
+//////////// 'marks/*'  ////////////
 router.route("/exam/filter/subwise").put(marksController.filterMarksSubwise);
 router
   .route("/exam/filter/classwise")
@@ -24,6 +25,26 @@ router
   .get(marksController.getMarksById)
   .delete(marksController.deleteMarks);
 
+//////////////  Co-Scholastic  //////////////
+
+router
+  .route("/scholastic/filter/classwise")
+  .put(marksController.filterScholasticMarksClasswise);
+router
+  .route("/scholastic/filter/studentwise/:id")
+  .put(marksController.filterScholasticMarksStudentwise);
+
+router
+  .route("/scholastic")
+  .post(marksController.addScholasticMarks)
+  .get(marksController.getAllScholasticMarks);
+
+router
+  .route("/scholastic/:id")
+  .put(marksController.updateScholasticMarks)
+  .get(marksController.getScholasticMarksById)
+  .delete(marksController.deleteScholasticMarks);
+
 /////////////////////////Hall tickets/////////////////////
 
 router.route("/halltickets/filtering").put(marksController.hallticketFiltering);
@@ -35,5 +56,7 @@ router
   .route("/halltickets/:id")
   .put(marksController.addStudentHalltickets)
   .delete(marksController.deleteClasswiseHalltickets);
+
+////////////////////////////////////////////////
 
 module.exports = router;

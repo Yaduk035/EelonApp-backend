@@ -1,6 +1,7 @@
 const examMarksModel = require("../models/ExamDb/examMarksModel");
 const studentModel = require("../models/studentSchema");
 const HallticketModel = require("../models/ExamDb/hallticketDb");
+const scholasticMarkModel = require("../models/ExamDb/scholasticModel");
 
 const addMarks = async (req, res) => {
   try {
@@ -183,14 +184,12 @@ const filterMarksStudentwise = async (req, res) => {
     // const student = await studentModel.find;
 
     const pipeline = [
-      // Match documents containing the specified studentId in marksArray
       {
         $match: {
           academicYear: academicYear,
           classSection: classSection,
         },
       },
-      // Unwind marksArray to work with individual marks
       { $unwind: "$marksArray" },
       // Filter for marks of the specified student
       {
@@ -237,6 +236,178 @@ const updateMarks = async (req, res) => {
 const deleteMarks = async (req, res) => {
   try {
     const result = await examMarksModel.findByIdAndDelete(req.params.id);
+    if (!result)
+      return res
+        .status(404)
+        .json({ message: "Error deleting marks", success: true });
+    res.status(201).json({ message: "Marks deleted", success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+///////////////////////////  Scholastic marks  /////////////////////
+
+const addScholasticMarks = async (req, res) => {
+  try {
+    if (!req.body)
+      return res.status(400).json({ message: "No data send with body" });
+    const { academicYear, term, subject, classSection } = req.body;
+    // const duplicateData = await examMarksModel.aggregate([
+    //   {
+    //     $match: {
+    //       academicYear: academicYear,
+    //       term: term,
+    //       subject: subject,
+    //       classSection: classSection,
+    //     },
+    //   },
+    // ]);
+    const result = await scholasticMarkModel.create(req.body);
+    if (!result) res.status(400).json({ message: "Error adding marks" });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getAllScholasticMarks = async (req, res) => {
+  try {
+    const result = await scholasticMarkModel.find().exec();
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getScholasticMarksById = async (req, res) => {
+  try {
+    const result = await scholasticMarkModel.findById(req.params.id).exec();
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const filterScholasticMarksClasswise = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { classSection, academicYear } = req.body;
+
+    // const student = await studentModel.find;
+
+    const pipeline = [
+      // Match documents containing the specified studentId in marksArray
+      {
+        $match: {
+          academicYear: academicYear,
+          classSection: classSection,
+        },
+      },
+      // Unwind marksArray to work with individual marks
+      // { $unwind: "$subject" },
+      { $unwind: "$marksArray" },
+      {
+        $group: {
+          _id: "$marksArray.studentId",
+          studentName: { $first: "$marksArray.studentName" },
+          marks: {
+            $push: {
+              subject: "$subject",
+              internal: "$marksArray.internal",
+              external: "$marksArray.external",
+              total: "$marksArray.total",
+            },
+          },
+        },
+      },
+    ];
+
+    const result = await scholasticMarkModel.aggregate(pipeline);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const filterScholasticMarksStudentwise = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { classSection, academicYear } = req.body;
+
+    // const student = await studentModel.find;
+
+    const pipeline = [
+      {
+        $match: {
+          academicYear: academicYear,
+          classSection: classSection,
+        },
+      },
+      { $unwind: "$marksArray" },
+      // Filter for marks of the specified student
+      {
+        $match: {
+          "marksArray.studentId": studentId,
+        },
+      },
+      // Group by subject to accumulate marks for each subject
+      {
+        $group: {
+          _id: "$subject",
+          internal: { $sum: "$marksArray.internal" },
+          external: { $sum: "$marksArray.external" },
+          total: { $sum: "$marksArray.total" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          totalMarks: 1,
+          totalStudents: { $size: "$studentIdArray" },
+        },
+      },
+    ];
+
+    const result = await scholasticMarkModel.aggregate(pipeline);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const updateScholasticMarks = async (req, res) => {
+  try {
+    const data = req.body;
+    if (!data)
+      return res.status(400).json({ message: "No data send with body" });
+    const result = await scholasticMarkModel.findByIdAndUpdate(
+      req.params.id,
+      data,
+      {
+        new: true,
+      }
+    );
+    if (!result)
+      return res.status(404).json({ message: "No data found", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const deleteScholasticMarks = async (req, res) => {
+  try {
+    const result = await scholasticMarkModel.findByIdAndDelete(req.params.id);
     if (!result)
       return res
         .status(404)
@@ -369,4 +540,11 @@ module.exports = {
   getHallticketsById,
   hallticketFiltering,
   getSubwiseTotalMarks,
+  addScholasticMarks,
+  getScholasticMarksById,
+  getAllScholasticMarks,
+  filterScholasticMarksClasswise,
+  filterScholasticMarksStudentwise,
+  updateScholasticMarks,
+  deleteScholasticMarks,
 };
