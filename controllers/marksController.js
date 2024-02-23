@@ -1,5 +1,6 @@
 const examMarksModel = require("../models/ExamDb/examMarksModel");
 const studentModel = require("../models/studentSchema");
+const HallticketModel = require("../models/ExamDb/hallticketDb");
 
 const addMarks = async (req, res) => {
   try {
@@ -212,90 +213,110 @@ const deleteMarks = async (req, res) => {
   }
 };
 
-// const filterMarksClasswise = async (req, res) => {
-//   try {
-//     const result = await examMarksModel.aggregate([
-//       {
-//         $match: {
-//           classSection: "10-B",
-//           academicYear: "2023-2024",
-//           term: "I midterm",
-//         },
-//       },
-//       {
-//         $addFields: {
-//           "marksArray.MathsTotal": "$$REMOVE", // Remove any existing MathsTotal field
-//         },
-//       },
-//       // Calculate MathsTotal for each student
-//       {
-//         $addFields: {
-//           "marksArray.MathsTotal": {
-//             $sum: "$marksArray.total",
-//           },
-//         },
-//       },
-//       // Lookup English marks and join them with existing documents based on studentId
-//       {
-//         $lookup: {
-//           from: "Marks",
-//           let: { studentId: "$marksArray.studentId" },
-//           pipeline: [
-//             {
-//               $match: {
-//                 $expr: { $eq: ["$marksArray.studentId", "$$studentId"] },
-//                 subject: "English",
-//               },
-//             },
-//             {
-//               $project: {
-//                 _id: 0,
-//                 studentId: "$marksArray.studentId",
-//                 EnglishTotal: "$marksArray.total",
-//               },
-//             },
-//           ],
-//           as: "englishMarks",
-//         },
-//       },
-//       // Unwind the englishMarks array
-//       { $unwind: { path: "$englishMarks", preserveNullAndEmptyArrays: true } },
-//       // Add EnglishTotal to marksArray documents
-//       {
-//         $addFields: {
-//           "marksArray.EnglishTotal": "$englishMarks.EnglishTotal",
-//         },
-//       },
-//       // Group the documents by _id to reconstruct the document structure
-//       {
-//         $group: {
-//           _id: "$_id",
-//           classSection: { $first: "$classSection" },
-//           academicYear: { $first: "$academicYear" },
-//           examType: { $first: "$examType" },
-//           term: { $first: "$term" },
-//           marksArray: { $push: "$marksArray" },
-//         },
-//       },
-//       // Project to reshape the document and remove unnecessary fields
-//       {
-//         $project: {
-//           _id: 0,
-//           classSection: 1,
-//           academicYear: 1,
-//           examType: 1,
-//           term: 1,
-//           marksArray: 1,
-//         },
-//       },
-//     ]);
-//     if (!result) res.status(400).json({ message: "No results found" });
-//     res.status(200).json(result);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
+////////////////////////////  Halltickets  //////////////////////////
+
+const createClasswiseHalltickets = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await HallticketModel.create(data);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error creating hallticket", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllHalltickets = async (req, res) => {
+  try {
+    const result = await HallticketModel.find().exec();
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error creating hallticket", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getHallticketsById = async (req, res) => {
+  try {
+    const result = await HallticketModel.findById(req.params.id).exec();
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error creating hallticket", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const hallticketFiltering = async (req, res) => {
+  const { term, academicYear, classSection } = req.body;
+  try {
+    const pipeline = [];
+
+    if (term) {
+      pipeline.push({ $match: { term: term } });
+    }
+    if (academicYear) {
+      pipeline.push({ $match: { academicYear: academicYear } });
+    }
+    if (classSection) {
+      pipeline.push({ $match: { classSection: classSection } });
+    }
+
+    const result = await HallticketModel.aggregate(pipeline);
+
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const deleteClasswiseHalltickets = async (req, res) => {
+  try {
+    const ticketId = req.params.id;
+    const result = await HallticketModel.findByIdAndDelete(ticketId);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error deleting hallticket", success: false });
+    res.status(201).json({ message: "Halltickets deleted", success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const addStudentHalltickets = async (req, res) => {
+  const ticketId = req.params.id;
+  const hallticketArray = req.body.halltickets;
+  try {
+    const result = await HallticketModel.findByIdAndUpdate(
+      ticketId,
+      { $addToSet: { halltickets: { $each: hallticketArray } } },
+      { new: true }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error updating hallticket", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   addMarks,
@@ -306,4 +327,10 @@ module.exports = {
   filterMarksSubwise,
   filterMarksClasswise,
   filterMarksStudentwise,
+  createClasswiseHalltickets,
+  deleteClasswiseHalltickets,
+  addStudentHalltickets,
+  getAllHalltickets,
+  getHallticketsById,
+  hallticketFiltering,
 };

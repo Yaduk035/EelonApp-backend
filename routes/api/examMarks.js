@@ -21,4 +21,16 @@ router
   .get(marksController.getMarksById)
   .delete(marksController.deleteMarks);
 
+/////////////////////////Hall tickets/////////////////////
+
+router.route("/halltickets/filtering").put(marksController.hallticketFiltering);
+router
+  .route("/halltickets")
+  .post(marksController.createClasswiseHalltickets)
+  .get(marksController.getAllHalltickets);
+router
+  .route("/halltickets/:id")
+  .put(marksController.addStudentHalltickets)
+  .delete(marksController.deleteClasswiseHalltickets);
+
 module.exports = router;
