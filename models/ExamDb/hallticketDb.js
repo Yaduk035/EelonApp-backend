@@ -8,6 +8,7 @@ const hallticketArray = new Schema(
     feeStatus: String,
     academicYear: String,
     term: String,
+    approved: Boolean,
   },
   { timestamps: true }
 );
