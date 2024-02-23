@@ -140,6 +140,41 @@ const filterMarksClasswise = async (req, res) => {
 //   }
 // };
 
+const getSubwiseTotalMarks = async (req, res) => {
+  try {
+    const { academicYear, classSection } = req.body;
+
+    const result = await examMarksModel.aggregate([
+      {
+        $match: {
+          academicYear: academicYear,
+          classSection: classSection,
+        },
+      },
+      {
+        $unwind: "$marksArray",
+      },
+      {
+        $group: {
+          _id: "$subject",
+          totalMarks: { $sum: "$marksArray.total" },
+          studentIdArray: { $addToSet: "$marksArray.studentId" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          totalMarks: 1,
+          totalStudents: { $size: "$studentIdArray" },
+        },
+      },
+    ]);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const filterMarksStudentwise = async (req, res) => {
   try {
     const studentId = req.params.id;
@@ -333,4 +368,5 @@ module.exports = {
   getAllHalltickets,
   getHallticketsById,
   hallticketFiltering,
+  getSubwiseTotalMarks,
 };

@@ -7,6 +7,9 @@ router
   .route("/exam/filter/classwise")
   .put(marksController.filterMarksClasswise);
 router
+  .route("/exam/filter/classwisetotal")
+  .put(marksController.getSubwiseTotalMarks);
+router
   .route("/exam/filter/studentwise/:id")
   .put(marksController.filterMarksStudentwise);
 
