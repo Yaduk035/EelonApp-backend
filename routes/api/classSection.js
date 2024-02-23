@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const classSectionController = require("../../controllers/classSectionController");
 
+////////'classsection/*' ///////////
+
 router.route("/dropdowns/std").get(classSectionController.getClassDropdowns);
 router
   .route("/dropdowns/")
