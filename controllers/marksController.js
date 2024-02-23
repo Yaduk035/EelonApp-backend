@@ -97,12 +97,54 @@ const filterMarksClasswise = async (req, res) => {
   }
 };
 
+// const filterMarksClasswise = async (req, res) => {
+//   try {
+//     const studentId = req.params.id;
+//     const { classSection, academicYear } = req.body;
+
+//     // const student = await studentModel.find;
+
+//     const pipeline = [
+//       // Match documents containing the specified studentId in marksArray
+//       {
+//         $match: {
+//           academicYear: academicYear,
+//           classSection: classSection,
+//         },
+//       },
+//       // Unwind marksArray to work with individual marks
+//       // { $unwind: "$subject" },
+//       { $unwind: "$marksArray" },
+//       {
+//         $group: {
+//           _id: "$marksArray.studentId",
+//           studentName: { $first: "$marksArray.studentName" },
+//           marks: {
+//             $push: {
+//               subject: "$subject",
+//               internal: "$marksArray.internal",
+//               external: "$marksArray.external",
+//               total: "$marksArray.total",
+//             },
+//           },
+//         },
+//       },
+//     ];
+
+//     const result = await examMarksModel.aggregate(pipeline);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Server error", success: false });
+//   }
+// };
+
 const filterMarksStudentwise = async (req, res) => {
   try {
     const studentId = req.params.id;
     const { classSection, academicYear } = req.body;
 
-    const student = await studentModel.find;
+    // const student = await studentModel.find;
 
     const pipeline = [
       // Match documents containing the specified studentId in marksArray
