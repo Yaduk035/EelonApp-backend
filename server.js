@@ -46,7 +46,8 @@ app.use("/api/images", require("./routes/api/imageUpload"));
 app.use("/api/timetable", require("./routes/api/timeTables"));
 app.use("/api/lessonplanning", require("./routes/api/lessonPlanning"));
 app.use("/api/marks", require("./routes/api/examMarks"));
-app.use("/api/accounts", require("./routes/api/accounts"));
+app.use("/api/accounts", require("./routes/api/Accounts/accounts"));
+app.use("/api/admission", require("./routes/api/Accounts/admissions"));
 
 app.use(errorHandler);
 
