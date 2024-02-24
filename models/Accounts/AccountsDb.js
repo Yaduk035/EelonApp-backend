@@ -1,0 +1,115 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const ExamFeeArray = new Schema(
+  {
+    term: String,
+    academicYear: String,
+    feeAmount: Number,
+    feeType: String,
+    classSection: String,
+    std: String,
+    date: Number,
+    description: String,
+    templateId: String,
+  },
+  { timestamps: true }
+);
+
+const competitionFeeArray = new Schema(
+  {
+    title: String,
+    description: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+  },
+  { timestamps: true }
+);
+
+const eventFeeArray = new Schema(
+  {
+    title: String,
+    description: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+  },
+  { timestamps: true }
+);
+
+const annualDayFeeArray = new Schema(
+  {
+    title: String,
+    description: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+  },
+  { timestamps: true }
+);
+
+const tourFeeArray = new Schema(
+  {
+    title: String,
+    description: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+  },
+  { timestamps: true }
+);
+
+const finesArray = new Schema(
+  {
+    title: String,
+    description: String,
+    fineType: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+  },
+  { timestamps: true }
+);
+
+const accountsSchema = new Schema(
+  {
+    classSection: String,
+    academicYear: String,
+    std: String,
+    studentName: String,
+    studentId: String,
+    admsnDbId: String,
+    rollNo: Number,
+    admissionFees: Object,
+    AcademicsFeesId: String,
+    Examfees: [ExamFeeArray],
+    T_C: Object,
+    transport: Object,
+    hostel: Object,
+    competition: [competitionFeeArray],
+    events: [eventFeeArray],
+    annualDay: [annualDayFeeArray],
+    tour: [tourFeeArray],
+    fine: [finesArray],
+  },
+  { timestamps: true }
+);
+
+const accounts = mongoose.model("AccountsDb", accountsSchema);
+module.exports = accounts;
