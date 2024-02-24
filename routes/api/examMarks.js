@@ -14,6 +14,9 @@ router
   .route("/exam/filter/studentwise/:id")
   .put(marksController.filterMarksStudentwise);
 
+////////////   get all subjects from a exam collection   /////////////
+router.route("/exam/subs").put(marksController.getAllSubjects);
+
 router
   .route("/exam")
   .post(marksController.addMarks)

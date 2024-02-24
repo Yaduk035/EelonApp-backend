@@ -129,6 +129,28 @@ const filterMarksClasswise = async (req, res) => {
               total: "$marksArray.total",
             },
           },
+          totalMarks: { $sum: "$marksArray.total" },
+        },
+      },
+      {
+        $addFields: {
+          totalMarksObject: {
+            // Add a new object with the total marks
+            subject: "Total",
+            total: "$totalMarks",
+          },
+        },
+      },
+      {
+        $addFields: {
+          marks: { $concatArrays: ["$marks", ["$totalMarksObject"]] }, // Concatenate the total marks object to the marks array
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          studentName: 1,
+          marks: 1,
         },
       },
     ];
@@ -244,6 +266,36 @@ const deleteMarks = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getAllSubjects = async (req, res) => {
+  try {
+    const { academicYear, classSection } = req.body;
+    const result = await examMarksModel.aggregate([
+      {
+        $match: {
+          academicYear: academicYear,
+          classSection: classSection,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          subjects: { $addToSet: "$subject" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          subjects: 1,
+        },
+      },
+    ]);
+    if (!result) res.status(400).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -547,4 +599,5 @@ module.exports = {
   filterScholasticMarksStudentwise,
   updateScholasticMarks,
   deleteScholasticMarks,
+  getAllSubjects,
 };
