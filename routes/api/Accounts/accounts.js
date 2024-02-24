@@ -2,6 +2,10 @@ const accountsController = require("../../../controllers/Accounts/AccountsContro
 const express = require("express");
 const router = express.Router();
 
+/////////////  '/accounts/*' ///////////
+
+router.route("/admissionfee").post(accountsController.addAdmissionfees);
+
 router
   .route("/")
   .get(accountsController.getAllAccounts)
