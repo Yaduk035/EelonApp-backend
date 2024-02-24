@@ -80,7 +80,7 @@ const getAccountsById = async (req, res) => {
 const addAdmissionfees = async (req, res) => {
   try {
     const {
-      studentId,
+      admnId,
       studentName,
       modeOfPay,
       transactionId,
@@ -91,13 +91,13 @@ const addAdmissionfees = async (req, res) => {
       board,
     } = req.body;
     const jsonData = {
-      studentId,
+      admnId,
       studentName,
       academicYear,
       std,
       board,
       admissionFees: {
-        studentId,
+        admnId,
         studentName,
         modeOfPay,
         transactionId,
@@ -108,16 +108,13 @@ const addAdmissionfees = async (req, res) => {
         board,
       },
     };
-    const result = await accountsModel.findOneAndUpdate(
-      { studentId },
-      jsonData,
-      { upsert: true },
-      { new: true }
-    );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding admission fee", success: false });
+    const result = await accountsModel.findOneAndUpdate({ admnId }, jsonData, {
+      upsert: true,
+    });
+    // if (!result)
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Error adding admission fee", success: false });
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
