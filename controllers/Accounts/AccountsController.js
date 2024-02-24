@@ -1,10 +1,10 @@
-const accounstModel = require("../../models/Accounts/AccountsDb");
+const accountsModel = require("../../models/Accounts/AccountsDb");
 
 const createAccounts = async (req, res) => {
   try {
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
-    const result = await accounstModel.create(data);
+    const result = await accountsModel.create(data);
     if (!result)
       return res
         .status(400)
@@ -19,7 +19,7 @@ const createAccounts = async (req, res) => {
 const deleteAccounts = async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await accounstModel.findByIdAndDelete(id);
+    const result = await accountsModel.findByIdAndDelete(id);
     if (!result)
       return res
         .status(400)
@@ -36,7 +36,7 @@ const updateAccounts = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
     if (!data) return res.status(400).json({ message: "No data sent" });
-    const result = await accounstModel.findByIdAndUpdate(id, data);
+    const result = await accountsModel.findByIdAndUpdate(id, data);
     if (!result)
       return res
         .status(400)
@@ -50,7 +50,7 @@ const updateAccounts = async (req, res) => {
 
 const getAllAccounts = async (req, res) => {
   try {
-    const result = await accounstModel.find().exec();
+    const result = await accountsModel.find().exec();
     if (!result)
       return res
         .status(400)
@@ -65,7 +65,7 @@ const getAllAccounts = async (req, res) => {
 const getAccountsById = async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await accounstModel.findById(id).exec();
+    const result = await accountsModel.findById(id).exec();
     if (!result)
       return res
         .status(400)
@@ -77,10 +77,58 @@ const getAccountsById = async (req, res) => {
   }
 };
 
+const addAdmissionfees = async (req, res) => {
+  try {
+    const {
+      studentId,
+      studentName,
+      modeOfPay,
+      transactionId,
+      amount,
+      status,
+      academicYear,
+      std,
+      board,
+    } = req.body;
+    const jsonData = {
+      studentId,
+      studentName,
+      academicYear,
+      std,
+      board,
+      admissionFees: {
+        studentId,
+        studentName,
+        modeOfPay,
+        transactionId,
+        amount,
+        status,
+        academicYear,
+        std,
+        board,
+      },
+    };
+    const result = await accountsModel.findOneAndUpdate(
+      { studentId },
+      jsonData,
+      { upsert: true },
+      { new: true }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding admission fee", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   createAccounts,
   deleteAccounts,
   updateAccounts,
   getAllAccounts,
   getAccountsById,
+  addAdmissionfees,
 };

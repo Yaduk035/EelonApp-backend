@@ -17,6 +17,7 @@ const ExamFeeArray = new Schema(
     modeOfPay: String,
     transactionId: String,
     status: String,
+    board: String,
   },
   { timestamps: true }
 );
@@ -36,6 +37,7 @@ const competitionFeeArray = new Schema(
     modeOfPay: String,
     transactionId: String,
     status: String,
+    board: String,
   },
   { timestamps: true }
 );
@@ -55,6 +57,7 @@ const eventFeeArray = new Schema(
     modeOfPay: String,
     transactionId: String,
     status: String,
+    board: String,
   },
   { timestamps: true }
 );
@@ -74,6 +77,7 @@ const annualDayFeeArray = new Schema(
     modeOfPay: String,
     transactionId: String,
     status: String,
+    board: String,
   },
   { timestamps: true }
 );
@@ -93,6 +97,7 @@ const tourFeeArray = new Schema(
     modeOfPay: String,
     transactionId: String,
     status: String,
+    board: String,
   },
   { timestamps: true }
 );
@@ -113,6 +118,7 @@ const finesArray = new Schema(
     modeOfPay: String,
     transactionId: String,
     status: String,
+    board: String,
   },
   { timestamps: true }
 );
@@ -126,6 +132,8 @@ const accountsSchema = new Schema(
     studentId: String,
     admsnDbId: String,
     rollNo: Number,
+    board: String,
+
     admissionFees: {
       studentId: String,
       studentName: String,
@@ -133,6 +141,8 @@ const accountsSchema = new Schema(
       transactionId: String,
       amount: Number,
       status: String,
+      std: String,
+      board: String,
     },
     AcademicsFeesId: String,
     Examfees: [ExamFeeArray],
