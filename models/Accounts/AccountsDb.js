@@ -12,6 +12,11 @@ const ExamFeeArray = new Schema(
     date: Number,
     description: String,
     templateId: String,
+    studentId: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
   },
   { timestamps: true }
 );
@@ -26,6 +31,11 @@ const competitionFeeArray = new Schema(
     classSection: String,
     std: String,
     templateId: String,
+    studentId: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
   },
   { timestamps: true }
 );
@@ -40,6 +50,11 @@ const eventFeeArray = new Schema(
     classSection: String,
     std: String,
     templateId: String,
+    studentId: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
   },
   { timestamps: true }
 );
@@ -54,6 +69,11 @@ const annualDayFeeArray = new Schema(
     classSection: String,
     std: String,
     templateId: String,
+    studentId: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
   },
   { timestamps: true }
 );
@@ -68,6 +88,11 @@ const tourFeeArray = new Schema(
     classSection: String,
     std: String,
     templateId: String,
+    studentId: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
   },
   { timestamps: true }
 );
@@ -83,6 +108,11 @@ const finesArray = new Schema(
     classSection: String,
     std: String,
     templateId: String,
+    studentId: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
   },
   { timestamps: true }
 );
@@ -96,7 +126,14 @@ const accountsSchema = new Schema(
     studentId: String,
     admsnDbId: String,
     rollNo: Number,
-    admissionFees: Object,
+    admissionFees: {
+      studentId: String,
+      studentName: String,
+      modeOfPay: String,
+      transactionId: String,
+      amount: Number,
+      status: String,
+    },
     AcademicsFeesId: String,
     Examfees: [ExamFeeArray],
     T_C: Object,

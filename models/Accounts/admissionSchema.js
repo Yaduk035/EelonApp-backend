@@ -6,6 +6,8 @@ const admissionStdSchema = new Schema(
     studentName: String,
     admnNo: Number,
     applicationNo: Number,
+    group: String,
+    board: String,
     date: String,
     nameTamil: String,
     roles: {
