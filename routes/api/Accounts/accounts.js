@@ -16,6 +16,8 @@ router
 
 router.route("/examfee/:id").delete(accountsController.removeExamfee);
 
+router.route("/filter").put(accountsController.filterAccountsDb);
+
 router
   .route("/")
   .get(accountsController.getAllAccounts)

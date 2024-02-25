@@ -77,6 +77,44 @@ const getAccountsById = async (req, res) => {
   }
 };
 
+const filterAccountsDb = async (req, res) => {
+  try {
+    const pipeline = [];
+    const {
+      id,
+      std,
+      classSection,
+      academicYear,
+      studentId,
+      studentName,
+      admnId,
+      admsnDbId,
+      rollNo,
+    } = req.body;
+
+    if (id) pipeline.push({ $match: { _id: id } });
+    if (std) pipeline.push({ $match: { std: std } });
+    if (classSection) pipeline.push({ $match: { classSection: classSection } });
+    if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+    if (studentId) pipeline.push({ $match: { studentId: studentId } });
+    if (studentName) pipeline.push({ $match: { studentName: studentName } });
+    if (admnId) pipeline.push({ $match: { admnId: admnId } });
+    if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
+    if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+
+    const result = await accountsModel.aggregate(pipeline);
+
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error fethching accounts data", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const addAdmissionfees = async (req, res) => {
   try {
     const {
@@ -313,4 +351,5 @@ module.exports = {
   removeExamfee,
   getAllExamFee,
   filterExamFee,
+  filterAccountsDb,
 };
