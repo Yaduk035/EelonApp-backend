@@ -5,6 +5,16 @@ const router = express.Router();
 /////////////  '/accounts/*' ///////////
 
 router.route("/admissionfee").post(accountsController.addAdmissionfees);
+router.route("/tcfee").post(accountsController.addTcfees);
+
+router.route("/examfee/filter/").put(accountsController.filterExamFee);
+
+router
+  .route("/examfee")
+  .post(accountsController.addExamFee)
+  .get(accountsController.getAllExamFee);
+
+router.route("/examfee/:id").delete(accountsController.removeExamfee);
 
 router
   .route("/")

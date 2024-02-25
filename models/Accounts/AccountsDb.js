@@ -9,12 +9,12 @@ const ExamFeeArray = new Schema(
     feeType: String,
     classSection: String,
     std: String,
-    date: Number,
+    date: String,
     description: String,
     templateId: String,
     studentId: String,
     admnId: String,
-
+    recieptNo: String,
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -36,7 +36,7 @@ const competitionFeeArray = new Schema(
     templateId: String,
     studentId: String,
     admnId: String,
-
+    recieptNo: String,
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -58,7 +58,7 @@ const eventFeeArray = new Schema(
     templateId: String,
     studentId: String,
     admnId: String,
-
+    recieptNo: String,
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -80,7 +80,7 @@ const annualDayFeeArray = new Schema(
     templateId: String,
     studentId: String,
     admnId: String,
-
+    recieptNo: String,
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -102,7 +102,7 @@ const tourFeeArray = new Schema(
     templateId: String,
     studentId: String,
     admnId: String,
-
+    recieptNo: String,
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -125,7 +125,7 @@ const finesArray = new Schema(
     templateId: String,
     studentId: String,
     admnId: String,
-
+    recieptNo: String,
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -148,9 +148,8 @@ const accountsSchema = new Schema(
     board: String,
 
     admissionFees: {
+      studentId: String,
       admnId: String,
-      admnId: String,
-
       studentName: String,
       modeOfPay: String,
       transactionId: String,
@@ -158,9 +157,10 @@ const accountsSchema = new Schema(
       status: String,
       std: String,
       board: String,
+      recieptNo: String,
     },
     AcademicsFeesId: String,
-    Examfees: [ExamFeeArray],
+    examfees: [ExamFeeArray],
     T_C: Object,
     transport: Object,
     hostel: Object,
