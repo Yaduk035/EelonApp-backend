@@ -212,6 +212,8 @@ const addTcfees = async (req, res) => {
   }
 };
 
+////////////////////  Exam fee  ////////////////////////
+
 const addExamFee = async (req, res) => {
   try {
     const examfees = req.body;
@@ -232,28 +234,6 @@ const addExamFee = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-// const removeExamFee = async (req, res) => {
-//   try {
-//     const studentId = req.params.id;
-//     const { examfeesId } = req.body;
-
-//     const result = await accountsModel.aggregate([
-//       { $match: { studentId: studentId } },
-//       {
-//         $pull: { examfees: { _id: examfeesId } },
-//       },
-//     ]);
-//     if (!result)
-//       return res
-//         .status(400)
-//         .json({ message: "Error deleting exam fee", success: false });
-//     res.status(201).json(result);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
 
 const getAllExamFee = async (req, res) => {
   try {
@@ -339,6 +319,120 @@ const removeExamfee = async (req, res) => {
   }
 };
 
+////////////////////  Annual day fee  ////////////////////////
+
+const addAnnualdayFee = async (req, res) => {
+  try {
+    const feeData = req.body;
+    if (!feeData)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const { studentId, admnId } = feeData;
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      {
+        $addToSet: { annualDay: feeData },
+      }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding exam fee", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllAnnualdayFee = async (req, res) => {
+  try {
+    const result = await accountsModel.aggregate([
+      {
+        $match: {
+          annualDay: { $exists: true, $not: { $size: 0 } },
+        },
+      },
+      {
+        $unwind: "$annualDay",
+      },
+      {
+        $replaceRoot: { newRoot: "$annualDay" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterAnnualdayFee = async (req, res) => {
+  const pipeline = [];
+  const {
+    id,
+    std,
+    classSection,
+    academicYear,
+    studentId,
+    studentName,
+    admnId,
+    admsnDbId,
+    rollNo,
+  } = req.body;
+
+  if (!req.body)
+    return res.status(400).json({ message: "No data sent", success: false });
+
+  if (id) pipeline.push({ $match: { _id: id } });
+  if (std) pipeline.push({ $match: { std: std } });
+  if (classSection) pipeline.push({ $match: { classSection: classSection } });
+  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+  if (studentId) pipeline.push({ $match: { studentId: studentId } });
+  if (studentName) pipeline.push({ $match: { studentName: studentName } });
+  if (admnId) pipeline.push({ $match: { admnId: admnId } });
+  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
+  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+
+  try {
+    const result = await accountsModel.aggregate([
+      ...pipeline,
+      {
+        $unwind: "$annualDay",
+      },
+      {
+        $replaceRoot: { newRoot: "$annualDay" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const removeAnnualdayfee = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { deleteId } = req.body;
+    if (!deleteId)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      { $pull: { annualDay: { _id: deleteId } } }
+    );
+    if (!result)
+      return res.status(400).json({ message: "Error deleting data" });
+    res.status(200).json({ message: "exam fee deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   createAccounts,
   deleteAccounts,
@@ -352,4 +446,8 @@ module.exports = {
   getAllExamFee,
   filterExamFee,
   filterAccountsDb,
+  addAnnualdayFee,
+  getAllAnnualdayFee,
+  removeAnnualdayfee,
+  filterAnnualdayFee,
 };
