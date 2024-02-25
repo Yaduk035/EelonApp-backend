@@ -564,4 +564,8 @@ module.exports = {
   getAllAnnualdayFee,
   removeAnnualdayfee,
   filterAnnualdayFee,
+  addCompetitionFee,
+  getAllCompetitionFee,
+  filterCompetitionFee,
+  removeCompetitionfee,
 };

@@ -7,6 +7,8 @@ const router = express.Router();
 router.route("/admissionfee").post(accountsController.addAdmissionfees);
 router.route("/tcfee").post(accountsController.addTcfees);
 
+///////////   Exam fee  //////////////
+
 router.route("/examfee/filter/").put(accountsController.filterExamFee);
 
 router
@@ -16,8 +18,36 @@ router
 
 router.route("/examfee/:id").delete(accountsController.removeExamfee);
 
-router.route("/filter").put(accountsController.filterAccountsDb);
+///////////   Annual day fee  //////////////
 
+router
+  .route("/annualdayfee/filter/")
+  .put(accountsController.filterAnnualdayFee);
+
+router
+  .route("/annualdayfee")
+  .post(accountsController.addAnnualdayFee)
+  .get(accountsController.getAllAnnualdayFee);
+
+router.route("/annualdayfee/:id").delete(accountsController.removeAnnualdayfee);
+
+///////////   competition fee  //////////////
+
+router
+  .route("/competitionfee/filter/")
+  .put(accountsController.filterCompetitionFee);
+
+router
+  .route("/competitionfee")
+  .post(accountsController.addCompetitionFee)
+  .get(accountsController.getAllCompetitionFee);
+
+router
+  .route("/competitionfee/:id")
+  .delete(accountsController.removeCompetitionfee);
+
+////////////////////////////////////////////////
+router.route("/filter").put(accountsController.filterAccountsDb);
 router
   .route("/")
   .get(accountsController.getAllAccounts)
