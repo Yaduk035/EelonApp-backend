@@ -9,6 +9,9 @@ const studentSchema = new Schema(
     admnNo: {
       type: Number,
     },
+    admnId: {
+      type: String,
+    },
     rollNo: {
       type: Number,
     },
