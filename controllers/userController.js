@@ -478,8 +478,15 @@ const issueLibCard = async (req, res) => {
 };
 
 const studentFiltering = async (req, res) => {
-  const { std, academicYear, email, classSection, admnNo, studentName } =
-    req.body;
+  const {
+    std,
+    academicYear,
+    email,
+    classSection,
+    admnNo,
+    studentName,
+    rollNo,
+  } = req.body;
   try {
     const pipeline = [];
 
@@ -502,6 +509,9 @@ const studentFiltering = async (req, res) => {
     }
     if (admnNo) {
       pipeline.push({ $match: { admnNo: admnNo } });
+    }
+    if (rollNo) {
+      pipeline.push({ $match: { rollNo: rollNo } });
     }
 
     const result = await StudentSchema.aggregate(pipeline);
