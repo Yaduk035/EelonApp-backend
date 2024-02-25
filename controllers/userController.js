@@ -2,6 +2,7 @@ const Admin = require("../models/adminModel");
 const Staff = require("../models/staffSchema");
 const StudentSchema = require("../models/studentSchema");
 const classSectionModel = require("../models/classSectionModel");
+const AccountModel = require("../models/Accounts/AccountsDb");
 
 const bcrypt = require("bcrypt");
 
@@ -277,8 +278,9 @@ const addStudent = async (req, res) => {
       ...userData,
       password: hashedPwd,
     };
-    console.log(reqData);
     const results = await StudentSchema.create(reqData);
+
+    await AccountModel.create(reqData);
 
     const classId = reqData?.classId;
 
