@@ -50,11 +50,9 @@ const admissionStdSchema = new Schema(
     FathersName: String,
     FathersNameTamil: String,
     FathersJob: String,
-    FathersPhoto: String,
     MothersName: String,
     MothersNameTamil: String,
     MothersJob: String,
-    MothersPhoto: String,
     guardianName: String,
     guardianNameTamil: String,
     guardiansJob: String,
@@ -67,6 +65,10 @@ const admissionStdSchema = new Schema(
     MarkDetailsPrevClass: String,
     enclosedDoc: String,
     Hostel: Boolean,
+    payStatus: {
+      type: "String",
+      default: "NotPaid",
+    },
   },
   { timestamps: true }
 );
