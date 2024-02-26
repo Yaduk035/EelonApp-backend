@@ -147,6 +147,7 @@ const addAdmissionfees = async (req, res) => {
         academicYear,
         std,
         board,
+        payStatus: "Paid",
       },
     };
     const result = await accountsModel.findOneAndUpdate({ admnId }, jsonData, {
