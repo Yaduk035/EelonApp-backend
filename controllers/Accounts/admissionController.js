@@ -1,8 +1,10 @@
 const admissionModel = require("../../models/Accounts/admissionSchema");
+const accountsModel = require("../../models/Accounts/AccountsDb");
 
 const addStudent = async (req, res) => {
   try {
     const userData = req.body;
+    const { admnId } = userData;
     if (!userData)
       return res.status(400).json({
         message: "No data sent",
@@ -17,6 +19,10 @@ const addStudent = async (req, res) => {
     //       .json({ message: "Student email already exists", success: false });
 
     const results = await admissionModel.create(userData);
+    await accountsModel.findByIdAndUpdate(admnId, {
+      ...userData,
+      payStatus: "Paid",
+    });
 
     if (!results)
       return res
