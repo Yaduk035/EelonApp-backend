@@ -433,7 +433,7 @@ const removeAnnualdayfee = async (req, res) => {
   }
 };
 
-////////////////////  Annual day fee  ////////////////////////
+////////////////////  Competition fee  ////////////////////////
 
 const addCompetitionFee = async (req, res) => {
   try {
@@ -547,6 +547,348 @@ const removeCompetitionfee = async (req, res) => {
   }
 };
 
+////////////////////  Events fee  ////////////////////////
+
+const addEventsFee = async (req, res) => {
+  try {
+    const feeData = req.body;
+    if (!feeData)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const { studentId, admnId } = feeData;
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      {
+        $addToSet: { events: feeData },
+      }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding fee", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllEventsFee = async (req, res) => {
+  try {
+    const result = await accountsModel.aggregate([
+      {
+        $match: {
+          events: { $exists: true, $not: { $size: 0 } },
+        },
+      },
+      {
+        $unwind: "$events",
+      },
+      {
+        $replaceRoot: { newRoot: "$events" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterEventsFee = async (req, res) => {
+  const pipeline = [];
+  const {
+    id,
+    std,
+    classSection,
+    academicYear,
+    studentId,
+    studentName,
+    admnId,
+    admsnDbId,
+    rollNo,
+  } = req.body;
+
+  if (!req.body)
+    return res.status(400).json({ message: "No data sent", success: false });
+
+  if (id) pipeline.push({ $match: { _id: id } });
+  if (std) pipeline.push({ $match: { std: std } });
+  if (classSection) pipeline.push({ $match: { classSection: classSection } });
+  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+  if (studentId) pipeline.push({ $match: { studentId: studentId } });
+  if (studentName) pipeline.push({ $match: { studentName: studentName } });
+  if (admnId) pipeline.push({ $match: { admnId: admnId } });
+  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
+  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+
+  try {
+    const result = await accountsModel.aggregate([
+      ...pipeline,
+      {
+        $unwind: "$events",
+      },
+      {
+        $replaceRoot: { newRoot: "$events" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const removeEventsfee = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { deleteId } = req.body;
+    if (!deleteId)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      { $pull: { events: { _id: deleteId } } }
+    );
+    if (!result)
+      return res.status(400).json({ message: "Error deleting data" });
+    res.status(200).json({ message: "Fee deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+////////////////////  Tour fee  ////////////////////////
+
+const addTourFee = async (req, res) => {
+  try {
+    const feeData = req.body;
+    if (!feeData)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const { studentId, admnId } = feeData;
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      {
+        $addToSet: { tour: feeData },
+      }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding fee", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllTourFee = async (req, res) => {
+  try {
+    const result = await accountsModel.aggregate([
+      {
+        $match: {
+          tour: { $exists: true, $not: { $size: 0 } },
+        },
+      },
+      {
+        $unwind: "$tour",
+      },
+      {
+        $replaceRoot: { newRoot: "$events" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterTourFee = async (req, res) => {
+  const pipeline = [];
+  const {
+    id,
+    std,
+    classSection,
+    academicYear,
+    studentId,
+    studentName,
+    admnId,
+    admsnDbId,
+    rollNo,
+  } = req.body;
+
+  if (!req.body)
+    return res.status(400).json({ message: "No data sent", success: false });
+
+  if (id) pipeline.push({ $match: { _id: id } });
+  if (std) pipeline.push({ $match: { std: std } });
+  if (classSection) pipeline.push({ $match: { classSection: classSection } });
+  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+  if (studentId) pipeline.push({ $match: { studentId: studentId } });
+  if (studentName) pipeline.push({ $match: { studentName: studentName } });
+  if (admnId) pipeline.push({ $match: { admnId: admnId } });
+  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
+  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+
+  try {
+    const result = await accountsModel.aggregate([
+      ...pipeline,
+      {
+        $unwind: "$tour",
+      },
+      {
+        $replaceRoot: { newRoot: "$tour" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const removeTourfee = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { deleteId } = req.body;
+    if (!deleteId)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      { $pull: { tour: { _id: deleteId } } }
+    );
+    if (!result)
+      return res.status(400).json({ message: "Error deleting data" });
+    res.status(200).json({ message: "Fee deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+////////////////////  Fines  ////////////////////////
+
+const addFines = async (req, res) => {
+  try {
+    const feeData = req.body;
+    if (!feeData)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const { studentId, admnId } = feeData;
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      {
+        $addToSet: { tour: feeData },
+      }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding fee", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllFines = async (req, res) => {
+  try {
+    const result = await accountsModel.aggregate([
+      {
+        $match: {
+          tour: { $exists: true, $not: { $size: 0 } },
+        },
+      },
+      {
+        $unwind: "$tour",
+      },
+      {
+        $replaceRoot: { newRoot: "$events" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterFines = async (req, res) => {
+  const pipeline = [];
+  const {
+    id,
+    std,
+    classSection,
+    academicYear,
+    studentId,
+    studentName,
+    admnId,
+    admsnDbId,
+    rollNo,
+  } = req.body;
+
+  if (!req.body)
+    return res.status(400).json({ message: "No data sent", success: false });
+
+  if (id) pipeline.push({ $match: { _id: id } });
+  if (std) pipeline.push({ $match: { std: std } });
+  if (classSection) pipeline.push({ $match: { classSection: classSection } });
+  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+  if (studentId) pipeline.push({ $match: { studentId: studentId } });
+  if (studentName) pipeline.push({ $match: { studentName: studentName } });
+  if (admnId) pipeline.push({ $match: { admnId: admnId } });
+  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
+  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+
+  try {
+    const result = await accountsModel.aggregate([
+      ...pipeline,
+      {
+        $unwind: "$tour",
+      },
+      {
+        $replaceRoot: { newRoot: "$tour" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const removeFines = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { deleteId } = req.body;
+    if (!deleteId)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      { $pull: { tour: { _id: deleteId } } }
+    );
+    if (!result)
+      return res.status(400).json({ message: "Error deleting data" });
+    res.status(200).json({ message: "Fee deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   createAccounts,
   deleteAccounts,
@@ -568,4 +910,16 @@ module.exports = {
   getAllCompetitionFee,
   filterCompetitionFee,
   removeCompetitionfee,
+  addEventsFee,
+  getAllEventsFee,
+  filterEventsFee,
+  removeEventsfee,
+  addTourFee,
+  getAllTourFee,
+  filterTourFee,
+  removeTourfee,
+  addFines,
+  getAllFines,
+  filterFines,
+  removeFines,
 };
