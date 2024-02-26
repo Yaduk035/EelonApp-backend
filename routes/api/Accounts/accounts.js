@@ -1,4 +1,5 @@
 const accountsController = require("../../../controllers/Accounts/AccountsController");
+const feeStructureController = require("../../../controllers/Accounts/feeSturctureController");
 const express = require("express");
 const router = express.Router();
 
@@ -79,6 +80,20 @@ router
 
 router.route("/fines/:id").delete(accountsController.removeFines);
 
+///////////   Fee structures  //////////////
+
+router
+  .route("/feestructure/filter")
+  .put(feeStructureController.filterFeeStructure);
+router
+  .route("/feestructure")
+  .post(feeStructureController.addFeeStructure)
+  .get(feeStructureController.getAllFeeStructures);
+router
+  .route("/feestructure/:id")
+  .put(feeStructureController.updateFeeStructure)
+  .delete(feeStructureController.deleteFeeStructure)
+  .get(feeStructureController.getFeeStructureById);
 ////////////////////////////////////////////////
 router.route("/filter").put(accountsController.filterAccountsDb);
 router
