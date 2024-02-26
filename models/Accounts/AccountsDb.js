@@ -158,6 +158,13 @@ const accountsSchema = new Schema(
       std: String,
       board: String,
       recieptNo: String,
+      academicYear: String,
+      admnNo: Number,
+      date: String,
+      payStatus: {
+        type: "String",
+        default: "NotPaid",
+      },
     },
     AcademicsFeesId: String,
     examfees: [ExamFeeArray],
