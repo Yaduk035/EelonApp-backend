@@ -46,6 +46,39 @@ router
   .route("/competitionfee/:id")
   .delete(accountsController.removeCompetitionfee);
 
+///////////   Events fee  //////////////
+
+router.route("/eventsfee/filter/").put(accountsController.filterEventsFee);
+
+router
+  .route("/eventsfee")
+  .post(accountsController.addEventsFee)
+  .get(accountsController.getAllEventsFee);
+
+router.route("/eventsfee/:id").delete(accountsController.removeEventsfee);
+
+///////////   Tour fee  //////////////
+
+router.route("/tourfee/filter/").put(accountsController.filterTourFee);
+
+router
+  .route("/tourfee")
+  .post(accountsController.addTourFee)
+  .get(accountsController.getAllTourFee);
+
+router.route("/tourfee/:id").delete(accountsController.removeTourfee);
+
+///////////   Fines  //////////////
+
+router.route("/fines/filter/").put(accountsController.filterFines);
+
+router
+  .route("/fines")
+  .post(accountsController.addFines)
+  .get(accountsController.getAllFines);
+
+router.route("/fines/:id").delete(accountsController.removeFines);
+
 ////////////////////////////////////////////////
 router.route("/filter").put(accountsController.filterAccountsDb);
 router
