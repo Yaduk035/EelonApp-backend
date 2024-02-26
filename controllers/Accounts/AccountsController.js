@@ -1,4 +1,5 @@
 const accountsModel = require("../../models/Accounts/AccountsDb");
+const admissionModel = require("../../models/Accounts/admissionSchema");
 
 const createAccounts = async (req, res) => {
   try {
@@ -157,6 +158,7 @@ const addAdmissionfees = async (req, res) => {
     //   return res
     //     .status(400)
     //     .json({ message: "Error adding admission fee", success: false });
+    await admissionModel.findByIdAndUpdate(admnId, { payStatus: "Paid" });
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
