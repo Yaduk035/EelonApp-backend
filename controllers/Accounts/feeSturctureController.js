@@ -2,7 +2,9 @@ const feeStructureModel = require("../../models/Accounts/FeeStrucureSchema");
 
 const addFeeStructure = async (req, res) => {
   try {
-    const data = req.data;
+    const data = req.body;
+    if (!data)
+      return res.status(400).json({ message: "No data sent", success: false });
     const result = await feeStructureModel.create(data);
     if (!result)
       return res

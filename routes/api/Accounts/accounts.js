@@ -94,6 +94,7 @@ router
   .put(feeStructureController.updateFeeStructure)
   .delete(feeStructureController.deleteFeeStructure)
   .get(feeStructureController.getFeeStructureById);
+
 ////////////////////////////////////////////////
 router.route("/filter").put(accountsController.filterAccountsDb);
 router
