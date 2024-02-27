@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 const feeTypeSchema = new Schema(
   {
     academicYear: {
-      type: Array,
+      type: String,
     },
     std: {
-      type: Array,
+      type: String,
     },
     type: {
       type: String,
@@ -16,7 +16,7 @@ const feeTypeSchema = new Schema(
       type: String,
     },
     amount: {
-      type: String,
+      type: Number,
     },
   },
   { timestamps: true }
