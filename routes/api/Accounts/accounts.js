@@ -86,6 +86,9 @@ router
   .route("/feestructure/filter")
   .put(feeStructureController.filterFeeStructure);
 router
+  .route("/feestructure/dropdowns")
+  .get(feeStructureController.getFeeStructureDropdowns);
+router
   .route("/feestructure")
   .post(feeStructureController.addFeeStructure)
   .get(feeStructureController.getAllFeeStructures);

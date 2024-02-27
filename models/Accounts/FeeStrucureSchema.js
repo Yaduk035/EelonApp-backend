@@ -9,7 +9,10 @@ const feeTypeSchema = new Schema(
     std: {
       type: String,
     },
-    type: {
+    othersType: {
+      type: String,
+    },
+    feeType: {
       type: String,
     },
     term: {

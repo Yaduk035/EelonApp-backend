@@ -138,6 +138,7 @@ const finesArray = new Schema(
 const otherFeesArray = new Schema(
   {
     type: String,
+    feeType: String,
     title: String,
     description: String,
     fineType: String,
