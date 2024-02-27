@@ -69,6 +69,10 @@ const admissionStdSchema = new Schema(
       type: "String",
       default: "NotPaid",
     },
+    admitted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

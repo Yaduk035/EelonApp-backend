@@ -135,6 +135,30 @@ const finesArray = new Schema(
   { timestamps: true }
 );
 
+const otherFeesArray = new Schema(
+  {
+    type: String,
+    title: String,
+    description: String,
+    fineType: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+    studentId: String,
+    admnId: String,
+    recieptNo: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
+    board: String,
+  },
+  { timestamps: true }
+);
+
 const accountsSchema = new Schema(
   {
     classSection: String,
@@ -176,6 +200,7 @@ const accountsSchema = new Schema(
     annualDay: [annualDayFeeArray],
     tour: [tourFeeArray],
     fine: [finesArray],
+    otherFee: [otherFeesArray],
   },
   { timestamps: true }
 );

@@ -3,6 +3,7 @@ const Staff = require("../models/staffSchema");
 const StudentSchema = require("../models/studentSchema");
 const classSectionModel = require("../models/classSectionModel");
 const AccountModel = require("../models/Accounts/AccountsDb");
+const AdmissionModel = require("../models/Accounts/admissionSchema");
 
 const bcrypt = require("bcrypt");
 
@@ -280,7 +281,9 @@ const addStudent = async (req, res) => {
     };
     const results = await StudentSchema.create(reqData);
 
-    await AccountModel.create(reqData);
+    await AdmissionModel.findByIdAndUpdate(reqData?.admnId, { admitted: true });
+
+    // await AccountModel.create(reqData);
 
     const classId = reqData?.classId;
 
