@@ -442,6 +442,7 @@ const studentFiltering = async (req, res) => {
     admnNo,
     studentName,
     rollNo,
+    classId,
   } = req.body;
   try {
     const pipeline = [];
@@ -462,6 +463,9 @@ const studentFiltering = async (req, res) => {
     }
     if (classSection) {
       pipeline.push({ $match: { classSection: classSection } });
+    }
+    if (classId) {
+      pipeline.push({ $match: { classId: classId } });
     }
     if (admnNo) {
       pipeline.push({ $match: { admnNo: admnNo } });
