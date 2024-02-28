@@ -22,7 +22,12 @@ const syllabusSchema = new Schema(
       type: String,
     },
     syllabusPdf: {
-      type: String,
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     status: {
       type: String,
