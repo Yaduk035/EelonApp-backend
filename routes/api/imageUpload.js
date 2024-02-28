@@ -8,6 +8,16 @@ router
   .post(cloudinaryController.addProfileImage)
   .delete(cloudinaryController.deleteStudentProfileImg);
 
+router
+  .route("/student/father/:id")
+  .post(cloudinaryController.addFatherProfileImage)
+  .delete(cloudinaryController.deleteFatherProfileImg);
+
+router
+  .route("/student/mother/:id")
+  .post(cloudinaryController.addMotherProfileImage)
+  .delete(cloudinaryController.deleteFatherProfileImg);
+
 router.route("/syllabus").post(cloudinaryController.addSyllabusPdf);
 
 module.exports = router;
