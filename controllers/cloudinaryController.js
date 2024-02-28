@@ -44,6 +44,92 @@ const deleteStudentProfileImg = async (req, res) => {
   }
 };
 
+const addFatherProfileImage = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { Image } = req.body;
+    // console.log(image);
+    if (!Image)
+      return res.status(400).json({ message: "No image sent", success: false });
+    const cloudImage = await cloudinary.uploader.upload(Image, {
+      folder: "eelonSchoolManagementApp/parents-images",
+    });
+    console.log(cloudImage);
+    const result = await studentModel.findByIdAndUpdate(studentId, {
+      FathersPhoto: {
+        public_id: cloudImage.public_id,
+        url: cloudImage.url,
+      },
+    });
+    if (!result || !cloudImage)
+      return res
+        .status(400)
+        .json({ message: "Error uploading image", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteFatherProfileImg = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const student = await studentModel.findByIdAndUpdate(studentId, {
+      FathersPhoto: null,
+    });
+    if (!student)
+      res.status(400).json({ message: "Error deleting file", success: false });
+    const cloudinaryPublicId = student.FathersPhoto.public_id;
+    const cloudImg = await cloudinary.uploader.destroy(cloudinaryPublicId);
+    res.status(201).json({ message: "Profile pic deleted", success: true });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const addMotherProfileImage = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { Image } = req.body;
+    // console.log(image);
+    if (!Image)
+      return res.status(400).json({ message: "No image sent", success: false });
+    const cloudImage = await cloudinary.uploader.upload(Image, {
+      folder: "eelonSchoolManagementApp/parents-images",
+    });
+    console.log(cloudImage);
+    const result = await studentModel.findByIdAndUpdate(studentId, {
+      MothersPhoto: {
+        public_id: cloudImage.public_id,
+        url: cloudImage.url,
+      },
+    });
+    if (!result || !cloudImage)
+      return res
+        .status(400)
+        .json({ message: "Error uploading image", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteMotherProfileImg = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const student = await studentModel.findByIdAndUpdate(studentId, {
+      MothersPhoto: null,
+    });
+    if (!student)
+      res.status(400).json({ message: "Error deleting file", success: false });
+    const cloudinaryPublicId = student.MothersPhoto.public_id;
+    const cloudImg = await cloudinary.uploader.destroy(cloudinaryPublicId);
+    res.status(201).json({ message: "Profile pic deleted", success: true });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const addSyllabusPdf = async (req, res) => {
   try {
     // console.log(req.file);
@@ -62,4 +148,8 @@ module.exports = {
   addProfileImage,
   deleteStudentProfileImg,
   addSyllabusPdf,
+  addFatherProfileImage,
+  deleteFatherProfileImg,
+  addMotherProfileImage,
+  deleteMotherProfileImg,
 };

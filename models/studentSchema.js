@@ -144,7 +144,12 @@ const studentSchema = new Schema(
       type: String,
     },
     FathersPhoto: {
-      type: String,
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     MothersName: {
       type: String,
@@ -156,7 +161,12 @@ const studentSchema = new Schema(
       type: String,
     },
     MothersPhoto: {
-      type: String,
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     guardianName: {
       type: String,
