@@ -111,7 +111,9 @@ const addStudentToClass = async (req, res) => {
     const bulkOps = studentData.students.map((studentId) => ({
       updateOne: {
         filter: { _id: studentId },
-        update: { $set: { classObjId: classObjId } },
+        update: {
+          $set: { classObjId: classObjId, classId: studentData?.classId },
+        },
         upsert: true,
       },
     }));
