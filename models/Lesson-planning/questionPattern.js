@@ -22,7 +22,12 @@ const questionPatternSchema = new Schema(
       type: String,
     },
     pdf: {
-      type: String,
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     status: {
       type: String,

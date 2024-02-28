@@ -2,11 +2,26 @@ const syllabusModel = require("../models/Lesson-planning/syllabusPlannningModel"
 const QBModel = require("../models/Lesson-planning/questionBankModel");
 const questionPatternModel = require("../models/Lesson-planning/questionPattern");
 const questionPaperModel = require("../models/Lesson-planning/questionPaperModel");
+const cloudinary = require("../config/cloudinary");
 
 const addSyllabus = async (req, res) => {
   try {
     const data = req.body;
-    const syllabus = await syllabusModel.create(data);
+    const cloudImage = await cloudinary.uploader.upload(data.pdfB64, {
+      resource_type: "auto", // Set the resource type to 'auto' to let Cloudinary determine the file type
+      folder: "eelonSchoolManagementApp/pdfs", // Optional: You can specify a folder in your Cloudinary account
+    });
+
+    // console.log(cloudImage.secure_url);
+    // console.log(cloudImage.public_id);
+    const cloudId = {
+      public_id: cloudImage.public_id,
+      url: cloudImage.secure_url,
+    };
+    const syllabus = await syllabusModel.create({
+      ...data,
+      syllabusPdf: cloudId,
+    });
     if (!syllabus)
       return res
         .status(400)
@@ -83,11 +98,13 @@ const syllabusFiltering = async (req, res) => {
 const removeSyllabus = async (req, res) => {
   try {
     const syllabusId = req.params.id;
+    const cloudPublicId = req.body.publicId;
     const syllabus = await syllabusModel.findByIdAndDelete(syllabusId);
     if (!syllabus)
       return res
         .status(400)
         .json({ message: "Error deleting syllabus", success: false });
+    await cloudinary.uploader.destroy(cloudPublicId);
     res.status(201).json({ message: "Syllabus deleted", success: true });
   } catch (error) {
     console.error(error);
@@ -118,7 +135,20 @@ const updateSyllabus = async (req, res) => {
 const addQBs = async (req, res) => {
   try {
     const data = req.body;
-    const result = await QBModel.create(data);
+    const cloudImage = await cloudinary.uploader.upload(data.pdfB64, {
+      resource_type: "auto", // Set the resource type to 'auto' to let Cloudinary determine the file type
+      folder: "eelonSchoolManagementApp/Qbanks/pdfs", // Optional: You can specify a folder in your Cloudinary account
+    });
+
+    const cloudId = {
+      public_id: cloudImage.public_id,
+      url: cloudImage.secure_url,
+    };
+
+    const result = await QBModel.create({
+      ...data,
+      pdf: cloudId,
+    });
     if (!result)
       return res
         .status(400)
@@ -133,7 +163,9 @@ const addQBs = async (req, res) => {
 const removeQB = async (req, res) => {
   try {
     const Id = req.params.id;
+    const cloudPublicId = req.body.publicId;
     const result = await QBModel.findByIdAndDelete(Id);
+    await cloudinary.uploader.destroy(cloudPublicId);
     if (!result)
       return res
         .status(400)
@@ -229,7 +261,21 @@ const QBFiltering = async (req, res) => {
 const addQuestionPattern = async (req, res) => {
   try {
     const data = req.body;
-    const result = await questionPatternModel.create(data);
+    const cloudImage = await cloudinary.uploader.upload(data.pdfB64, {
+      resource_type: "auto", // Set the resource type to 'auto' to let Cloudinary determine the file type
+      folder: "eelonSchoolManagementApp/Qpatterns/pdfs", // Optional: You can specify a folder in your Cloudinary account
+    });
+
+    const cloudId = {
+      public_id: cloudImage.public_id,
+      url: cloudImage.secure_url,
+    };
+
+    const result = await questionPatternModel.create({
+      ...data,
+      pdf: cloudId,
+    });
+
     if (!result)
       return res
         .status(400)
@@ -244,7 +290,10 @@ const addQuestionPattern = async (req, res) => {
 const removeQuestionPattern = async (req, res) => {
   try {
     const Id = req.params.id;
+    const cloudPublicId = req.body.publicId;
+
     const result = await questionPatternModel.findByIdAndDelete(Id);
+    await cloudinary.uploader.destroy(cloudPublicId);
     if (!result)
       return res
         .status(400)
@@ -343,7 +392,21 @@ const QuestionPatternFiltering = async (req, res) => {
 const addQuestionPaper = async (req, res) => {
   try {
     const data = req.body;
-    const result = await questionPaperModel.create(data);
+    const cloudImage = await cloudinary.uploader.upload(data.pdfB64, {
+      resource_type: "auto", // Set the resource type to 'auto' to let Cloudinary determine the file type
+      folder: "eelonSchoolManagementApp/Qpapers/pdfs", // Optional: You can specify a folder in your Cloudinary account
+    });
+
+    const cloudId = {
+      public_id: cloudImage.public_id,
+      url: cloudImage.secure_url,
+    };
+
+    const result = await questionPaperModel.create({
+      ...data,
+      pdf: cloudId,
+    });
+
     if (!result)
       return res
         .status(400)
@@ -358,7 +421,11 @@ const addQuestionPaper = async (req, res) => {
 const removeQuestionPaper = async (req, res) => {
   try {
     const Id = req.params.id;
+    const cloudPublicId = req.body.publicId;
+
     const result = await questionPaperModel.findByIdAndDelete(Id);
+    await cloudinary.uploader.destroy(cloudPublicId);
+
     if (!result)
       return res
         .status(400)
