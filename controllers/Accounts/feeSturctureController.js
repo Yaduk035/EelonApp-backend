@@ -78,13 +78,15 @@ const getFeeStructureById = async (req, res) => {
 const filterFeeStructure = async (req, res) => {
   try {
     const pipeline = [];
-    const { type, std, academicYear, amount, term } = req.body;
+    // const { type, std, academicYear, amount, term } = req.body;
+    const { id, std, academicYear, othersType, feeType, term } = req.body;
 
-    if (type) pipeline.push({ $match: { _id: id } });
+    if (id) pipeline.push({ $match: { _id: id } });
     if (std) pipeline.push({ $match: { std: std } });
-    if (amount) pipeline.push({ $match: { classSection: classSection } });
     if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-    if (term) pipeline.push({ $match: { studentId: studentId } });
+    if (othersType) pipeline.push({ $match: { othersType: othersType } });
+    if (feeType) pipeline.push({ $match: { feeType: feeType } });
+    if (term) pipeline.push({ $match: { term: term } });
 
     const result = await feeStructureModel.aggregate(pipeline);
     if (!result)
@@ -110,6 +112,39 @@ const getFeeStructureDropdowns = async (req, res) => {
     res.status(500).json({ message: "Server error", success: false });
   }
 };
+
+// const filterFeestructure = async (req, res) => {
+//   const pipeline = [];
+//   const { id, std, academicYear, othersType, feeType, term } = req.body;
+
+//   if (!req.body)
+//     return res.status(400).json({ message: "No data sent", success: false });
+
+//   if (id) pipeline.push({ $match: { _id: id } });
+//   if (std) pipeline.push({ $match: { std: std } });
+//   if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+//   if (othersType) pipeline.push({ $match: { othersType: othersType } });
+//   if (feeType) pipeline.push({ $match: { feeType: feeType } });
+//   if (term) pipeline.push({ $match: { term: term } });
+
+//   try {
+//     const result = await feeStructureModel.aggregate([
+//       ...pipeline,
+//       // {
+//       //   $unwind: "$annualDay",
+//       // },
+//       // {
+//       //   $replaceRoot: { newRoot: "$annualDay" },
+//       // },
+//     ]);
+//     if (!result)
+//       res.status(404).json({ message: "No data found", success: false });
+//     res.status(200).json(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 module.exports = {
   addFeeStructure,
