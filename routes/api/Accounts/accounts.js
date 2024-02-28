@@ -80,11 +80,25 @@ router
 
 router.route("/fines/:id").delete(accountsController.removeFines);
 
+///////////   Academic fee  //////////////
+
+router.route("/academicfee/filter/").put(accountsController.filterAcademicFee);
+
+router
+  .route("/academicfee")
+  .post(accountsController.addAcademicFee)
+  .get(accountsController.getAllAcademicFee);
+
+router.route("/academicfee/:id").delete(accountsController.removeAcademicFee);
+
 ///////////   Fee structures  //////////////
 
 router
   .route("/feestructure/filter")
   .put(feeStructureController.filterFeeStructure);
+router
+  .route("/feestructure/dropdowns")
+  .get(feeStructureController.getFeeStructureDropdowns);
 router
   .route("/feestructure")
   .post(feeStructureController.addFeeStructure)

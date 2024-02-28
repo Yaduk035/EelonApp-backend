@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const instTermArray = new Schema({
+  index: Number,
+  amount: Number,
+  feeInterval: String,
+  feeIntervalType: String,
+});
+
 const feeTypeSchema = new Schema(
   {
     academicYear: {
@@ -9,7 +16,10 @@ const feeTypeSchema = new Schema(
     std: {
       type: String,
     },
-    type: {
+    othersType: {
+      type: String,
+    },
+    feeType: {
       type: String,
     },
     term: {
@@ -18,6 +28,7 @@ const feeTypeSchema = new Schema(
     amount: {
       type: Number,
     },
+    installmentArray: [instTermArray],
   },
   { timestamps: true }
 );

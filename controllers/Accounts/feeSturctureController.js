@@ -96,6 +96,21 @@ const filterFeeStructure = async (req, res) => {
   }
 };
 
+const getFeeStructureDropdowns = async (req, res) => {
+  try {
+    const result = await feeStructureModel.aggregate([
+      { $match: { feeType: "Others" } },
+      { $group: { _id: "$feeType" } },
+      { $project: { _id: 0, feeType: "$_id" } },
+    ]);
+    if (!result) return res.status(400).json({ message: "No dropdowns found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 module.exports = {
   addFeeStructure,
   deleteFeeStructure,
@@ -103,4 +118,5 @@ module.exports = {
   getAllFeeStructures,
   getFeeStructureById,
   filterFeeStructure,
+  getFeeStructureDropdowns,
 };

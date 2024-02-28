@@ -138,6 +138,7 @@ const finesArray = new Schema(
 const otherFeesArray = new Schema(
   {
     type: String,
+    feeType: String,
     title: String,
     description: String,
     fineType: String,
@@ -159,6 +160,32 @@ const otherFeesArray = new Schema(
   { timestamps: true }
 );
 
+const academicFeesArray = new Schema(
+  {
+    type: String,
+    feeType: String,
+    title: String,
+    description: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+    studentId: String,
+    admnId: String,
+    recieptNo: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
+    board: String,
+    installmentType: String,
+    feeInterval: String,
+  },
+  { timestamps: true }
+);
+
 const accountsSchema = new Schema(
   {
     classSection: String,
@@ -170,6 +197,8 @@ const accountsSchema = new Schema(
     admsnDbId: String,
     rollNo: Number,
     board: String,
+    totalAmountPaid: Number,
+    debt: Number,
 
     admissionFees: {
       studentId: String,
@@ -190,7 +219,7 @@ const accountsSchema = new Schema(
         default: "NotPaid",
       },
     },
-    AcademicsFeesId: String,
+    AcademicFee: [academicFeesArray],
     examfees: [ExamFeeArray],
     T_C: Object,
     transport: Object,
