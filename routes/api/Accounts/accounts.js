@@ -80,6 +80,17 @@ router
 
 router.route("/fines/:id").delete(accountsController.removeFines);
 
+///////////   Academic fee  //////////////
+
+router.route("/academicfee/filter/").put(accountsController.filterAcademicFee);
+
+router
+  .route("/academicfee")
+  .post(accountsController.addAcademicFee)
+  .get(accountsController.getAllAcademicFee);
+
+router.route("/academicfee/:id").delete(accountsController.removeAcademicFee);
+
 ///////////   Fee structures  //////////////
 
 router

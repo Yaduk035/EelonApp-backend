@@ -892,6 +892,125 @@ const removeFines = async (req, res) => {
   }
 };
 
+////////////////////  Academic fee  ////////////////////////
+
+const addAcademicFee = async (req, res) => {
+  try {
+    const feeData = req.body;
+    if (!feeData)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const { studentId, admnId } = feeData;
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      {
+        $addToSet: { AcademicFee: feeData },
+      }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding fee", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllAcademicFee = async (req, res) => {
+  try {
+    const result = await accountsModel.aggregate([
+      {
+        $match: {
+          AcademicFee: { $exists: true, $not: { $size: 0 } },
+        },
+      },
+      {
+        $unwind: "$AcademicFee",
+      },
+      {
+        $replaceRoot: { newRoot: "$AcademicFee" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterAcademicFee = async (req, res) => {
+  const pipeline = [];
+  const {
+    id,
+    std,
+    classSection,
+    academicYear,
+    studentId,
+    studentName,
+    admnId,
+    admsnDbId,
+    rollNo,
+    installmentType,
+    feeInterval,
+  } = req.body;
+
+  if (!req.body)
+    return res.status(400).json({ message: "No data sent", success: false });
+
+  if (id) pipeline.push({ $match: { _id: id } });
+  if (std) pipeline.push({ $match: { std: std } });
+  if (classSection) pipeline.push({ $match: { classSection: classSection } });
+  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+  if (studentId) pipeline.push({ $match: { studentId: studentId } });
+  if (studentName) pipeline.push({ $match: { studentName: studentName } });
+  if (admnId) pipeline.push({ $match: { admnId: admnId } });
+  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
+  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (installmentType)
+    pipeline.push({ $match: { installmentType: installmentType } });
+  if (feeInterval) pipeline.push({ $match: { feeInterval: feeInterval } });
+
+  try {
+    const result = await accountsModel.aggregate([
+      ...pipeline,
+      {
+        $unwind: "$AcademicFee",
+      },
+      {
+        $replaceRoot: { newRoot: "$AcademicFee" },
+      },
+    ]);
+    if (!result)
+      res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const removeAcademicFee = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { deleteId } = req.body;
+    if (!deleteId)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const result = await accountsModel.updateOne(
+      { studentId: studentId },
+      { $pull: { AcademicFee: { _id: deleteId } } }
+    );
+    if (!result)
+      return res.status(400).json({ message: "Error deleting data" });
+    res.status(200).json({ message: "Fee deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   createAccounts,
   deleteAccounts,
@@ -925,4 +1044,8 @@ module.exports = {
   getAllFines,
   filterFines,
   removeFines,
+  addAcademicFee,
+  getAllAcademicFee,
+  filterAcademicFee,
+  removeAcademicFee,
 };
