@@ -349,7 +349,6 @@ const getScholasticMarksById = async (req, res) => {
 
 const filterScholasticMarksClasswise = async (req, res) => {
   try {
-    const studentId = req.params.id;
     const { classSection, academicYear } = req.body;
 
     // const student = await studentModel.find;
@@ -369,12 +368,14 @@ const filterScholasticMarksClasswise = async (req, res) => {
         $group: {
           _id: "$marksArray.studentId",
           studentName: { $first: "$marksArray.studentName" },
+          rollNo: { $first: "$marksArray.rollNo" },
           marks: {
             $push: {
-              subject: "$subject",
-              internal: "$marksArray.internal",
-              external: "$marksArray.external",
-              total: "$marksArray.total",
+              art_craft: "$marksArray.art_craft",
+              mentalAttitudes: "$marksArray.mentalAttitudes",
+              activitiesLs: "$marksArray.activitiesLs",
+              physicalExcs: "$marksArray.physicalExcs",
+              lifeSkills: "$marksArray.lifeSkills",
             },
           },
         },
@@ -413,17 +414,12 @@ const filterScholasticMarksStudentwise = async (req, res) => {
       // Group by subject to accumulate marks for each subject
       {
         $group: {
-          _id: "$subject",
-          internal: { $sum: "$marksArray.internal" },
-          external: { $sum: "$marksArray.external" },
-          total: { $sum: "$marksArray.total" },
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          totalMarks: 1,
-          totalStudents: { $size: "$studentIdArray" },
+          _id: "$marksArray._id",
+          art_craft: { $first: "$marksArray.art_craft" },
+          mentalAttitudes: { $first: "$marksArray.mentalAttitudes" },
+          activitiesLs: { $first: "$marksArray.activitiesLs" },
+          physicalExcs: { $first: "$marksArray.physicalExcs" },
+          lifeSkills: { $first: "$marksArray.lifeSkills" },
         },
       },
     ];
