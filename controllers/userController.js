@@ -152,6 +152,7 @@ const updateStaff = async (req, res) => {
       return res
         .status(204)
         .json({ message: `User with id ${id} deleted`, success: true });
+    res.status(201).json({ message: "Staff updated", success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", success: false });
