@@ -20,7 +20,7 @@ const addSyllabus = async (req, res) => {
     };
     const syllabus = await syllabusModel.create({
       ...data,
-      syllabusPdf: cloudId,
+      pdf: cloudId,
     });
     if (!syllabus)
       return res

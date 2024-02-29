@@ -21,7 +21,7 @@ const syllabusSchema = new Schema(
     termName: {
       type: String,
     },
-    syllabusPdf: {
+    pdf: {
       public_id: {
         type: String,
       },
