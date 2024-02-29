@@ -74,13 +74,13 @@ const addFatherProfileImage = async (req, res) => {
 const deleteFatherProfileImg = async (req, res) => {
   try {
     const studentId = req.params.id;
+    const { public_id } = req.body;
     const student = await studentModel.findByIdAndUpdate(studentId, {
       FathersPhoto: null,
     });
     if (!student)
       res.status(400).json({ message: "Error deleting file", success: false });
-    const cloudinaryPublicId = student.FathersPhoto.public_id;
-    const cloudImg = await cloudinary.uploader.destroy(cloudinaryPublicId);
+    await cloudinary.uploader.destroy(public_id);
     res.status(201).json({ message: "Profile pic deleted", success: true });
   } catch (error) {
     console.error(error);
@@ -117,13 +117,13 @@ const addMotherProfileImage = async (req, res) => {
 const deleteMotherProfileImg = async (req, res) => {
   try {
     const studentId = req.params.id;
+    const { public_id } = req.body;
     const student = await studentModel.findByIdAndUpdate(studentId, {
       MothersPhoto: null,
     });
     if (!student)
       res.status(400).json({ message: "Error deleting file", success: false });
-    const cloudinaryPublicId = student.MothersPhoto.public_id;
-    const cloudImg = await cloudinary.uploader.destroy(cloudinaryPublicId);
+    await cloudinary.uploader.destroy(public_id);
     res.status(201).json({ message: "Profile pic deleted", success: true });
   } catch (error) {
     console.error(error);

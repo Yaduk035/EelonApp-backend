@@ -9,7 +9,7 @@ const addSyllabus = async (req, res) => {
     const data = req.body;
     const cloudImage = await cloudinary.uploader.upload(data.pdfB64, {
       resource_type: "auto", // Set the resource type to 'auto' to let Cloudinary determine the file type
-      folder: "eelonSchoolManagementApp/pdfs", // Optional: You can specify a folder in your Cloudinary account
+      folder: "eelonSchoolManagementApp/syllabus/pdfs", // Optional: You can specify a folder in your Cloudinary account
     });
 
     // console.log(cloudImage.secure_url);
