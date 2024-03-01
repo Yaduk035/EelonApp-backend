@@ -1,4 +1,5 @@
 const studentModel = require("../models/studentSchema");
+const staffModel = require("../models/staffSchema");
 const cloudinary = require("../config/cloudinary");
 
 const addProfileImage = async (req, res) => {
@@ -130,15 +131,45 @@ const deleteMotherProfileImg = async (req, res) => {
   }
 };
 
-const addSyllabusPdf = async (req, res) => {
+/////////////////////////////////////
+
+const addStaffProfileImage = async (req, res) => {
   try {
-    // console.log(req.file);
-    // const result = await cloudinary.uploader.upload(req.file, {
-    //   resource_type: "auto",
-    //   folder: "pdf_uploads",
-    // });
-    // console.log(result);
-    // res.json(result);
+    const studentId = req.params.id;
+    const { Image } = req.body;
+    // console.log(image);
+    if (!Image)
+      return res.status(400).json({ message: "No image sent", success: false });
+    const cloudImage = await cloudinary.uploader.upload(Image, {
+      folder: "eelonSchoolManagementApp/staffProfilePhotos",
+    });
+    const result = await staffModel.findByIdAndUpdate(studentId, {
+      profilePic: {
+        public_id: cloudImage.public_id,
+        url: cloudImage.url,
+      },
+    });
+    if (!result || !cloudImage)
+      return res
+        .status(400)
+        .json({ message: "Error uploading image", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteStaffProfileImg = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { public_id } = req.body;
+    const staff = await studentModel.findByIdAndUpdate(studentId, {
+      profilePic: null,
+    });
+    if (!staff)
+      res.status(400).json({ message: "Error deleting file", success: false });
+    await cloudinary.uploader.destroy(public_id);
+    res.status(201).json({ message: "Profile pic deleted", success: true });
   } catch (error) {
     console.error(error);
   }
@@ -147,9 +178,10 @@ const addSyllabusPdf = async (req, res) => {
 module.exports = {
   addProfileImage,
   deleteStudentProfileImg,
-  addSyllabusPdf,
   addFatherProfileImage,
   deleteFatherProfileImg,
   addMotherProfileImage,
   deleteMotherProfileImg,
+  addStaffProfileImage,
+  deleteStaffProfileImg,
 };

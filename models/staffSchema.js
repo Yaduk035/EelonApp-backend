@@ -21,6 +21,15 @@ const staffSchema = new Schema(
     password: {
       type: String,
     },
+    profilePic: {
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
+    },
+
     refreshToken: {
       type: String,
     },

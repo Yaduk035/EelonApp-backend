@@ -9,6 +9,11 @@ router
   .delete(cloudinaryController.deleteStudentProfileImg);
 
 router
+  .route("/staff/profilepic/:id")
+  .post(cloudinaryController.addStaffProfileImage)
+  .delete(cloudinaryController.deleteStaffProfileImg);
+
+router
   .route("/student/father/:id")
   .post(cloudinaryController.addFatherProfileImage)
   .delete(cloudinaryController.deleteFatherProfileImg);
@@ -17,7 +22,5 @@ router
   .route("/student/mother/:id")
   .post(cloudinaryController.addMotherProfileImage)
   .delete(cloudinaryController.deleteMotherProfileImg);
-
-router.route("/syllabus").post(cloudinaryController.addSyllabusPdf);
 
 module.exports = router;
