@@ -34,7 +34,6 @@ const addExperiencePdfs = async (req, res) => {
         .status(400)
         .json({ message: "Error uploading data", success: false });
     res.status(201).json({ message: "Upload successfull", success: true });
-    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
@@ -74,7 +73,6 @@ const addEducationPdfs = async (req, res) => {
         .status(400)
         .json({ message: "Error uploading data", success: false });
     res.status(201).json({ message: "Upload successfull", success: true });
-    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
