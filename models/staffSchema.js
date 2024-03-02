@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const workExperienceSchema = new Schema({
   jobRole: String,
+  jobRoleIn: String,
   expFrom: String,
   expTo: String,
   pdf: {

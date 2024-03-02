@@ -109,6 +109,24 @@ router
   .delete(feeStructureController.deleteFeeStructure)
   .get(feeStructureController.getFeeStructureById);
 
+///////////   Concession structures  //////////////
+
+router
+  .route("/concession/filter")
+  .put(feeStructureController.filterConcessionStructure);
+// router
+//   .route("/concession/dropdowns")
+//   .get(feeStructureController.getFeeStructureDropdowns);
+router
+  .route("/concession/:id")
+  .put(feeStructureController.updateConcessionStructure)
+  .delete(feeStructureController.deleteConcessionStructure)
+  .get(feeStructureController.getConcessionStructureById);
+router
+  .route("/concession")
+  .post(feeStructureController.addConcessionStructure)
+  .get(feeStructureController.getAllConcessionStructures);
+
 ////////////////////////////////////////////////
 router.route("/filter").put(accountsController.filterAccountsDb);
 router

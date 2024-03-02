@@ -114,12 +114,14 @@ const getFeeStructureDropdowns = async (req, res) => {
   }
 };
 
+///////////////////////////////////////////////////////////////
+
 const addConcessionStructure = async (req, res) => {
   try {
     const data = req.body;
     if (!data)
       return res.status(400).json({ message: "No data sent", success: false });
-    const result = await feeStructureModel.create(data);
+    const result = await ConcessionModel.create(data);
     if (!result)
       return res
         .status(400)
@@ -134,7 +136,7 @@ const addConcessionStructure = async (req, res) => {
 const deleteConcessionStructure = async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await feeStructureModel.findByIdAndDelete(id);
+    const result = await ConcessionModel.findByIdAndDelete(id);
     if (!result)
       return res
         .status(400)
@@ -150,7 +152,7 @@ const updateConcessionStructure = async (req, res) => {
   try {
     const data = req.data;
     const id = req.params.id;
-    const result = await feeStructureModel.findByIdAndUpdate(id, data, {
+    const result = await ConcessionModel.findByIdAndUpdate(id, data, {
       new: true,
     });
     if (!result)
@@ -166,7 +168,7 @@ const updateConcessionStructure = async (req, res) => {
 
 const getAllConcessionStructures = async (req, res) => {
   try {
-    const result = await feeStructureModel.find().exec();
+    const result = await ConcessionModel.find().exec();
     if (!result)
       return res.status(400).json({ message: "No data found", success: false });
     res.status(200).json(result);
@@ -179,7 +181,7 @@ const getAllConcessionStructures = async (req, res) => {
 const getConcessionStructureById = async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await feeStructureModel.findById(id).exec();
+    const result = await ConcessionModel.findById(id).exec();
     if (!result)
       return res.status(400).json({ message: "No data found", success: false });
     res.status(200).json(result);
@@ -193,16 +195,28 @@ const filterConcessionStructure = async (req, res) => {
   try {
     const pipeline = [];
     // const { type, std, academicYear, amount, term } = req.body;
-    const { id, std, academicYear, othersType, feeType, term } = req.body;
+    const {
+      id,
+      concessionName,
+      reductionType,
+      reductionAmount,
+      reductionPercentage,
+      concessionReason,
+    } = req.body;
 
     if (id) pipeline.push({ $match: { _id: id } });
-    if (std) pipeline.push({ $match: { std: std } });
-    if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-    if (othersType) pipeline.push({ $match: { othersType: othersType } });
-    if (feeType) pipeline.push({ $match: { feeType: feeType } });
-    if (term) pipeline.push({ $match: { term: term } });
+    if (concessionName)
+      pipeline.push({ $match: { concessionName: concessionName } });
+    if (reductionType)
+      pipeline.push({ $match: { reductionType: reductionType } });
+    if (reductionAmount)
+      pipeline.push({ $match: { reductionAmount: reductionAmount } });
+    if (reductionPercentage)
+      pipeline.push({ $match: { reductionPercentage: reductionPercentage } });
+    if (concessionReason)
+      pipeline.push({ $match: { concessionReason: concessionReason } });
 
-    const result = await feeStructureModel.aggregate(pipeline);
+    const result = await ConcessionModel.aggregate(pipeline);
     if (!result)
       return res.status(400).json({ message: "No data found", success: false });
     res.status(200).json(result);
@@ -214,7 +228,7 @@ const filterConcessionStructure = async (req, res) => {
 
 const getStructureDropdowns = async (req, res) => {
   try {
-    const result = await feeStructureModel.aggregate([
+    const result = await ConcessionModel.aggregate([
       { $match: { feeType: "Others" } },
       { $group: { _id: "$feeType" } },
       { $project: { _id: 0, feeType: "$_id" } },
@@ -226,39 +240,6 @@ const getStructureDropdowns = async (req, res) => {
     res.status(500).json({ message: "Server error", success: false });
   }
 };
-
-// const filterFeestructure = async (req, res) => {
-//   const pipeline = [];
-//   const { id, std, academicYear, othersType, feeType, term } = req.body;
-
-//   if (!req.body)
-//     return res.status(400).json({ message: "No data sent", success: false });
-
-//   if (id) pipeline.push({ $match: { _id: id } });
-//   if (std) pipeline.push({ $match: { std: std } });
-//   if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-//   if (othersType) pipeline.push({ $match: { othersType: othersType } });
-//   if (feeType) pipeline.push({ $match: { feeType: feeType } });
-//   if (term) pipeline.push({ $match: { term: term } });
-
-//   try {
-//     const result = await feeStructureModel.aggregate([
-//       ...pipeline,
-//       // {
-//       //   $unwind: "$annualDay",
-//       // },
-//       // {
-//       //   $replaceRoot: { newRoot: "$annualDay" },
-//       // },
-//     ]);
-//     if (!result)
-//       res.status(404).json({ message: "No data found", success: false });
-//     res.status(200).json(result);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
 
 module.exports = {
   addFeeStructure,
