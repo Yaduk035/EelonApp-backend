@@ -1,6 +1,27 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const workExperienceSchema = new Schema({
+  jobRole: String,
+  expFrom: String,
+  expTo: String,
+  pdf: {
+    public_id: String,
+    url: String,
+  },
+});
+
+const educationSchema = new Schema({
+  qualification: String,
+  uni: String,
+  expFrom: String,
+  expTo: String,
+  pdf: {
+    public_id: String,
+    url: String,
+  },
+});
+
 const staffSchema = new Schema(
   {
     name: {
@@ -71,6 +92,8 @@ const staffSchema = new Schema(
     epfno: String,
     esi: String,
     otherAllowance: String,
+    workExperienceArray: [workExperienceSchema],
+    educationArray: [educationSchema],
   },
   { timestamps: true }
 );
