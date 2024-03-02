@@ -48,6 +48,7 @@ app.use("/api/lessonplanning", require("./routes/api/lessonPlanning"));
 app.use("/api/marks", require("./routes/api/examMarks"));
 app.use("/api/accounts", require("./routes/api/Accounts/accounts"));
 app.use("/api/admission", require("./routes/api/Accounts/admissions"));
+app.use("/api/certificates", require("./routes/api/PDFs/pdfRoutes"));
 
 app.use(errorHandler);
 

@@ -186,6 +186,32 @@ const academicFeesArray = new Schema(
   { timestamps: true }
 );
 
+const feeConcessionArray = new Schema(
+  {
+    type: String,
+    feeType: String,
+    title: String,
+    description: String,
+    feeAmount: Number,
+    date: String,
+    academicYear: String,
+    classSection: String,
+    std: String,
+    templateId: String,
+    studentId: String,
+    admnId: String,
+    recieptNo: String,
+    studentName: String,
+    modeOfPay: String,
+    transactionId: String,
+    status: String,
+    board: String,
+    installmentType: String,
+    feeInterval: String,
+  },
+  { timestamps: true }
+);
+
 const accountsSchema = new Schema(
   {
     classSection: String,
