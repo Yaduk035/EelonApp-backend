@@ -8,8 +8,8 @@ const concessionSchema = new Schema(
     },
     concessionName: String,
     reductionType: String,
-    reductionAmount: String,
-    reductionPercentage: String,
+    reductionAmount: Number,
+    reductionPercentage: Number,
     concessionReason: String,
   },
   { timestamps: true }
