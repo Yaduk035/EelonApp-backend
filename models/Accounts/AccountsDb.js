@@ -190,7 +190,7 @@ const feeConcessionArray = new Schema(
   {
     type: String,
     feeType: String,
-    title: String,
+    concessionName: String,
     description: String,
     feeAmount: Number,
     date: String,
@@ -202,12 +202,11 @@ const feeConcessionArray = new Schema(
     admnId: String,
     recieptNo: String,
     studentName: String,
-    modeOfPay: String,
-    transactionId: String,
     status: String,
-    board: String,
-    installmentType: String,
-    feeInterval: String,
+    reductionType: String,
+    reductionAmount: Number,
+    reductionPercentage: Number,
+    concessionReason: String,
   },
   { timestamps: true }
 );
@@ -256,6 +255,7 @@ const accountsSchema = new Schema(
     tour: [tourFeeArray],
     fine: [finesArray],
     otherFee: [otherFeesArray],
+    feeConcessions: [feeConcessionArray],
   },
   { timestamps: true }
 );

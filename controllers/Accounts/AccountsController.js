@@ -1011,6 +1011,81 @@ const removeAcademicFee = async (req, res) => {
   }
 };
 
+/////////////////////  Fee concessions  //////////////////
+
+const addConcessionStudents = async (req, res) => {
+  try {
+    const studentData = req.body;
+    const { studentArray } = studentData;
+
+    const bulkOps = studentArray.map((Id) => ({
+      updateOne: {
+        filter: { studentId: Id },
+        update: { $addToSet: { feeConcessions: studentData } },
+      },
+    }));
+    const result = await accountsModel.bulkWrite(bulkOps);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding student concessions", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterFeeConcessions = async (req, res) => {
+  const pipeline = [];
+  const {
+    id,
+    std,
+    classSection,
+    academicYear,
+    studentId,
+    studentName,
+    admnId,
+    admsnDbId,
+    rollNo,
+  } = req.body;
+
+  if (!req.body)
+    return res.status(400).json({ message: "No data sent", success: false });
+
+  if (id) pipeline.push({ $match: { _id: id } });
+  if (std) pipeline.push({ $match: { std: std } });
+  if (classSection) pipeline.push({ $match: { classSection: classSection } });
+  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
+  if (studentId) pipeline.push({ $match: { studentId: studentId } });
+  if (studentName) pipeline.push({ $match: { studentName: studentName } });
+  if (admnId) pipeline.push({ $match: { admnId: admnId } });
+  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
+  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+
+  try {
+    const result = await accountsModel.aggregate([
+      ...pipeline,
+      {
+        $unwind: "$feeConcessions",
+      },
+      {
+        $replaceRoot: { newRoot: "$feeConcessions" },
+      },
+      // {
+      //   $match: { status: "claimed" },
+      // },
+    ]);
+    const templateId = result;
+    if (result?.length === 0)
+      return res.status(404).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   createAccounts,
   deleteAccounts,
@@ -1048,4 +1123,6 @@ module.exports = {
   getAllAcademicFee,
   filterAcademicFee,
   removeAcademicFee,
+  addConcessionStudents,
+  filterFeeConcessions,
 };

@@ -91,6 +91,19 @@ router
 
 router.route("/academicfee/:id").delete(accountsController.removeAcademicFee);
 
+///////////   Concession fee  //////////////
+
+router
+  .route("/concession/filter/")
+  .put(accountsController.filterFeeConcessions);
+
+router
+  .route("/concession")
+  .post(accountsController.addConcessionStudents)
+  .get(accountsController.getAllAcademicFee);
+
+router.route("/concession/:id").delete(accountsController.removeAcademicFee);
+
 ///////////   Fee structures  //////////////
 
 router
@@ -112,18 +125,18 @@ router
 ///////////   Concession structures  //////////////
 
 router
-  .route("/concession/filter")
+  .route("/concessionstructure/filter")
   .put(feeStructureController.filterConcessionStructure);
 // router
 //   .route("/concession/dropdowns")
 //   .get(feeStructureController.getFeeStructureDropdowns);
 router
-  .route("/concession/:id")
+  .route("/concessionstructure/:id")
   .put(feeStructureController.updateConcessionStructure)
   .delete(feeStructureController.deleteConcessionStructure)
   .get(feeStructureController.getConcessionStructureById);
 router
-  .route("/concession")
+  .route("/concessionstructure")
   .post(feeStructureController.addConcessionStructure)
   .get(feeStructureController.getAllConcessionStructures);
 
