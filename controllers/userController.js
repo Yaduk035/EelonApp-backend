@@ -299,6 +299,9 @@ const addStudent = async (req, res) => {
       { $addToSet: { students: { $each: studentId } } },
       { new: true }
     );
+    await AccountModel.findByIdAndUpdate(userData?.admnId, {
+      studentId: studentId,
+    });
 
     res
       .status(201)
