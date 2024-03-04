@@ -15,6 +15,8 @@ const ExamFeeArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -37,6 +39,8 @@ const competitionFeeArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -59,6 +63,8 @@ const eventFeeArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -81,6 +87,8 @@ const annualDayFeeArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -103,6 +111,8 @@ const tourFeeArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -126,6 +136,8 @@ const finesArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -151,6 +163,8 @@ const otherFeesArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -175,6 +189,8 @@ const academicFeesArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     modeOfPay: String,
     transactionId: String,
@@ -201,6 +217,8 @@ const feeConcessionArray = new Schema(
     studentId: String,
     admnId: String,
     recieptNo: String,
+    invoiceNo: Number,
+
     studentName: String,
     status: String,
     reductionType: String,
@@ -236,6 +254,8 @@ const accountsSchema = new Schema(
       std: String,
       board: String,
       recieptNo: String,
+      invoiceNo: Number,
+
       academicYear: String,
       admnNo: Number,
       date: String,

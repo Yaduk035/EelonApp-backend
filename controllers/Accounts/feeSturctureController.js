@@ -80,7 +80,15 @@ const filterFeeStructure = async (req, res) => {
   try {
     const pipeline = [];
     // const { type, std, academicYear, amount, term } = req.body;
-    const { id, std, academicYear, othersType, feeType, term } = req.body;
+    const {
+      id,
+      std,
+      academicYear,
+      othersType,
+      feeType,
+      term,
+      feeIntervalType,
+    } = req.body;
 
     if (id) pipeline.push({ $match: { _id: id } });
     if (std) pipeline.push({ $match: { std: std } });
@@ -88,6 +96,8 @@ const filterFeeStructure = async (req, res) => {
     if (othersType) pipeline.push({ $match: { othersType: othersType } });
     if (feeType) pipeline.push({ $match: { feeType: feeType } });
     if (term) pipeline.push({ $match: { term: term } });
+    if (feeIntervalType)
+      pipeline.push({ $match: { installmentArray: feeIntervalType } });
 
     const result = await feeStructureModel.aggregate(pipeline);
     if (!result)

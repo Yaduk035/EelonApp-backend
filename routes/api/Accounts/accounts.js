@@ -1,10 +1,22 @@
 const accountsController = require("../../../controllers/Accounts/AccountsController");
 const feeStructureController = require("../../../controllers/Accounts/feeSturctureController");
+const feeCollectionController = require("../../../controllers/Accounts/FeecollectionController");
 const express = require("express");
 const router = express.Router();
 
 /////////////  '/accounts/*' ///////////
 
+////////////   Fee collection  ///////////
+
+router
+  .route("/feecollection")
+  .post(feeCollectionController.addFee)
+  .get(feeCollectionController.getAllFeeCollections);
+router
+  .route("/feecollection/:id")
+  .get(feeCollectionController.getFeeCollection);
+
+//////////////////////////////////////////////
 router.route("/admissionfee").post(accountsController.addAdmissionfees);
 router.route("/tcfee").post(accountsController.addTcfees);
 
