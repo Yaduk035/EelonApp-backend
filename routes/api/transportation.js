@@ -2,6 +2,10 @@ const busController = require("../../controllers/Transportation/busController");
 const express = require("express");
 const router = express.Router();
 
+///////// 'transportation/*'  /////////////
+
+router.route("/bus/filter").put(busController.busFiltering);
+
 router
   .route("/bus")
   .post(busController.addBusDetails)
