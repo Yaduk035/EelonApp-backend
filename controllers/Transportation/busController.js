@@ -64,10 +64,44 @@ const updateBusDetails = async (req, res) => {
   }
 };
 
+const busFiltering = async (req, res) => {
+  const { busNo, rgNo, vehicleModel, driverName, status } = req.body;
+  try {
+    const pipeline = [];
+
+    if (busNo) {
+      pipeline.push({
+        $match: { busNo: { $regex: new RegExp(busNo, "i") } },
+      });
+    }
+    if (rgNo) {
+      pipeline.push({ $match: { rgNo: rgNo } });
+    }
+    if (vehicleModel) {
+      pipeline.push({ $match: { vehicleModel: vehicleModel } });
+    }
+    if (driverName) {
+      pipeline.push({ $match: { driverName: driverName } });
+    }
+    if (status) {
+      pipeline.push({ $match: { status: status } });
+    }
+
+    const result = await busModel.aggregate(pipeline);
+
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 module.exports = {
   addBusDetails,
   getAllBusDetails,
   getBusDetails,
   deleteBusDetails,
   updateBusDetails,
+  busFiltering,
 };

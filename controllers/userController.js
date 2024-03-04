@@ -488,6 +488,46 @@ const studentFiltering = async (req, res) => {
   }
 };
 
+const staffFiltering = async (req, res) => {
+  const { name, userName, email, jobType, jobRole, userType, contactEmail } =
+    req.body;
+  try {
+    const pipeline = [];
+
+    if (name) {
+      pipeline.push({
+        $match: { name: { $regex: new RegExp(name, "i") } },
+      });
+    }
+    if (userName) {
+      pipeline.push({ $match: { userName: userName } });
+    }
+    if (email) {
+      pipeline.push({ $match: { email: email } });
+    }
+    if (jobType) {
+      pipeline.push({ $match: { jobType: jobType } });
+    }
+    if (jobRole) {
+      pipeline.push({ $match: { jobRole: jobRole } });
+    }
+    if (userType) {
+      pipeline.push({ $match: { userType: userType } });
+    }
+    if (contactEmail) {
+      pipeline.push({ $match: { contactEmail: contactEmail } });
+    }
+
+    const result = await Staff.aggregate(pipeline);
+
+    if (!result) return res.status(404).json({ message: "No data found" });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 module.exports = {
   getUsers,
   addStaff,
@@ -508,4 +548,5 @@ module.exports = {
   updateStaff,
   filterStudentsByclass,
   studentFiltering,
+  staffFiltering,
 };

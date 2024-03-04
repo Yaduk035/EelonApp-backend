@@ -42,6 +42,8 @@ router
   .get(notificationController.getNotificationsByClass)
   .delete(notificationController.deleteNotification);
 
+router.route("/staff/filter").put(userController.staffFiltering);
+
 router
   .route("/staff")
   .get(userController.getUsers)

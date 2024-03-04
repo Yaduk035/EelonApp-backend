@@ -196,6 +196,9 @@ const studentSchema = new Schema(
     classRooms: {
       type: Array,
     },
+    busNo: String,
+    busStop: String,
+    transportationType: String,
   },
   { timestamps: true }
 );
