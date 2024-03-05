@@ -8,4 +8,8 @@ router
   .route("/student")
   .post(upload.single("file"), bulkUploadController.addStudents);
 
+router
+  .route("/staff")
+  .post(upload.single("file"), bulkUploadController.addStaff);
+
 module.exports = router;
