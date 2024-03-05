@@ -326,18 +326,18 @@ const updateStudent = async (req, res) => {
         .status(404)
         .json({ message: `User with id${req.params.id} not found` });
 
-    const classId = data?.classId;
-    const studenId = [req.params.id];
+    // const classId = data?.classId;
+    // const studenId = [req.params.id];
 
-    if (!classId)
-      return res
-        .status(200)
-        .json({ message: "Student created without classId", success: true });
-    await classSectionModel.updateOne(
-      { classId: classId },
-      { $addToSet: { students: { $each: studenId } } },
-      { new: true }
-    );
+    // if (!classId)
+    //   return res
+    //     .status(200)
+    //     .json({ message: "Student created without classId", success: true });
+    // await classSectionModel.updateOne(
+    //   { classId: classId },
+    //   { $addToSet: { students: { $each: studenId } } },
+    //   { new: true }
+    // );
 
     res.status(201).json(studentData);
   } catch (error) {
