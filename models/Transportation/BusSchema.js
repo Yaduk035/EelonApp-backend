@@ -10,6 +10,7 @@ const busSchema = new Schema({
   mileage: String,
   yearOfMade: String,
   driverName: String,
+  helper: String,
   status: {
     default: "Active",
     type: String,

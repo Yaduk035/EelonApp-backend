@@ -350,7 +350,7 @@ const deleteStudent = async (req, res) => {
   if (!id)
     return res.status(400).json({ message: "No id sent", success: false });
   try {
-    const user = await StudentSchema.findOneAndDelete(id);
+    const user = await StudentSchema.findByIdAndDelete(id);
     if (!user)
       return res.status(404).json({ message: `No user with id ${id} found` });
     res.status(201).json({ message: `Student with id ${id} deleted` });
