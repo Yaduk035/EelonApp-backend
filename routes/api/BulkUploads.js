@@ -12,4 +12,8 @@ router
   .route("/staff")
   .post(upload.single("file"), bulkUploadController.addStaff);
 
+router
+  .route("/library")
+  .post(upload.single("file"), bulkUploadController.addBooks);
+
 module.exports = router;
