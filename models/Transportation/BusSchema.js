@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 const busSchema = new Schema({
   busNo: String,
-  rgNo: String,
+  rgNo: {
+    type: String,
+    trim: true,
+  },
   vehicleType: String,
   vehicleModel: String,
   seatNo: String,
