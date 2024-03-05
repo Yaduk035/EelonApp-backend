@@ -129,6 +129,22 @@ const busStudentFiltering = async (req, res) => {
   }
 };
 
+const addComplaints = async (req, res) => {
+  try {
+    const { complaintsArray } = req.body;
+    const result = await studentModel.findByIdAndUpdate(req.params.id, {
+      $addToSet: { complaints: complaintsArray },
+    });
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding complaints", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   addBusDetails,
   getAllBusDetails,
@@ -137,4 +153,5 @@ module.exports = {
   updateBusDetails,
   busFiltering,
   busStudentFiltering,
+  addComplaints,
 };

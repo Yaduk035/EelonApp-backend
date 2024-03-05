@@ -7,6 +7,8 @@ const router = express.Router();
 router.route("/bus/filter").put(busController.busFiltering);
 router.route("/bus/filter-students").put(busController.busStudentFiltering);
 
+router.route("/bus/complaints/:id").put(busController.addComplaints);
+
 router
   .route("/bus")
   .post(busController.addBusDetails)
