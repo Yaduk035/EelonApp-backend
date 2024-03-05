@@ -7,16 +7,10 @@ const bookSchema = new Schema(
       type: String,
       required: true,
     },
-    rentAmount: {
-      type: Number,
-    },
     author: {
       type: String,
     },
     genre: {
-      type: String,
-    },
-    rentPeriod: {
       type: String,
     },
     language: {
@@ -30,9 +24,6 @@ const bookSchema = new Schema(
     },
     refSubject: {
       type: String,
-    },
-    rentData: {
-      type: Number,
     },
     availabilityStatus: {
       type: String,

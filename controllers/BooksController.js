@@ -44,47 +44,14 @@ const deleteBook = async (req, res) => {
 
 const addBook = async (req, res) => {
   try {
-    const {
-      bookName,
-      rentAmount,
-      author,
-      genre,
-      language,
-      rentPeriod,
-      rentData,
-      availabilityStatus,
-      IsbnNo,
-      year,
-      description,
-      bookId,
-      barcode,
-      refSubject,
-      refNo,
-    } = req.body;
+    const data = req.body;
 
-    if (!bookName)
+    if (!data?.bookName)
       return res
         .status(400)
         .json({ error: "Some inputs fields are left empty." });
 
-    const book = await Books.create({
-      bookName: bookName,
-      rentAmount,
-      author,
-      genre: genre,
-      language,
-      rentPeriod,
-      rentData,
-      availabilityStatus,
-      IsbnNo,
-      year,
-      description,
-      bookId,
-      barcode,
-      refSubject,
-      refNo,
-      createdAt: Date.now(),
-    });
+    const book = await Books.create(data);
     res.status(201).json(book);
     console.log(book);
   } catch (error) {
