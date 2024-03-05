@@ -1,4 +1,5 @@
 const busModel = require("../../models/Transportation/BusSchema");
+const studentModel = require("../../models/studentSchema");
 
 const addBusDetails = async (req, res) => {
   try {
@@ -97,6 +98,36 @@ const busFiltering = async (req, res) => {
   }
 };
 
+const busStudentFiltering = async (req, res) => {
+  const { rgNo } = req.body;
+  try {
+    const pipeline = [];
+
+    if (rgNo) {
+      pipeline.push({ $match: { rgNo: rgNo } });
+    }
+
+    const result = await busModel.aggregate([
+      {
+        $match: { rgNo: rgNo },
+      },
+    ]);
+    if (!result) return res.status(404).json({ message: "No data found" });
+    const busId = result[0]?._id.toString();
+
+    const students = await studentModel.aggregate([
+      {
+        $match: { busId: busId },
+      },
+    ]);
+
+    res.status(200).json({ busData: result, students });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
 module.exports = {
   addBusDetails,
   getAllBusDetails,
@@ -104,4 +135,5 @@ module.exports = {
   deleteBusDetails,
   updateBusDetails,
   busFiltering,
+  busStudentFiltering,
 };

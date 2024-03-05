@@ -5,6 +5,7 @@ const router = express.Router();
 ///////// 'transportation/*'  /////////////
 
 router.route("/bus/filter").put(busController.busFiltering);
+router.route("/bus/filter-students").put(busController.busStudentFiltering);
 
 router
   .route("/bus")
