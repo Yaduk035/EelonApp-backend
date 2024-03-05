@@ -196,7 +196,7 @@ const studentSchema = new Schema(
     classRooms: {
       type: Array,
     },
-    busNo: String,
+    busId: String,
     busStop: String,
     transportationType: String,
   },
