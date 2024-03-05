@@ -112,7 +112,8 @@ const busStudentFiltering = async (req, res) => {
         $match: { rgNo: rgNo },
       },
     ]);
-    if (!result) return res.status(404).json({ message: "No data found" });
+    if (result.length === 0)
+      return res.status(404).json({ message: "No data found", success: false });
     const busId = result[0]?._id.toString();
 
     const students = await studentModel.aggregate([
