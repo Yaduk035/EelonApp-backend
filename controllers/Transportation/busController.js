@@ -206,6 +206,26 @@ const updateComplaints = async (req, res) => {
   }
 };
 
+const busDropdowns = async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $project: {
+          _id: 1,
+          busNo: 1,
+          rgNo: 1,
+        },
+      },
+    ];
+    const result = await busModel.aggregate(pipeline);
+    if (!result)
+      return res.status(400).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   addBusDetails,
   getAllBusDetails,
@@ -217,4 +237,5 @@ module.exports = {
   addComplaints,
   updateComplaints,
   updateComplaints,
+  busDropdowns,
 };

@@ -12,6 +12,8 @@ router
   .post(busController.addComplaints)
   .put(busController.updateComplaints);
 
+router.route("/bus/dropdowns").get(busController.busDropdowns);
+
 router
   .route("/bus")
   .post(busController.addBusDetails)
