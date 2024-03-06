@@ -48,9 +48,6 @@ const addEducationPdfs = async (req, res) => {
       resource_type: "auto",
       folder: "eelonSchoolManagementApp/Staff-education/pdfs",
     });
-
-    // console.log(cloudImage.secure_url);
-    // console.log(cloudImage.public_id);
     const cloudId = {
       public_id: cloudImage.public_id,
       url: cloudImage.secure_url,
