@@ -1,10 +1,39 @@
 const busModel = require("../../models/Transportation/BusSchema");
 const studentModel = require("../../models/studentSchema");
+const cloudinary = require("../../config/cloudinary");
 
 const addBusDetails = async (req, res) => {
   try {
     const data = req.body;
-    const result = await busModel.create(data);
+    const { FC, RC } = data;
+    let cloudFCId = {};
+    let cloudRCId = {};
+    if (FC) {
+      const cloudFCImage = await cloudinary.uploader.upload(data.FC, {
+        resource_type: "auto",
+        folder: "eelonSchoolManagementApp/School-Bus/FCpdfs",
+      });
+      cloudFCId = {
+        public_id: cloudFCImage.public_id,
+        url: cloudFCImage.secure_url,
+      };
+    }
+    if (RC) {
+      const cloudRCImage = await cloudinary.uploader.upload(data.RC, {
+        resource_type: "auto",
+        folder: "eelonSchoolManagementApp/School-Bus/RCpdfs",
+      });
+      cloudRCId = {
+        public_id: cloudRCImage.public_id,
+        url: cloudRCImage.secure_url,
+      };
+    }
+
+    const result = await busModel.create({
+      ...data,
+      FC: cloudFCId,
+      RC: cloudRCId,
+    });
     if (!result)
       return res
         .status(400)
@@ -156,19 +185,13 @@ const updateComplaints = async (req, res) => {
     const { complaintsArray, complaintId } = req.body;
     if (!complaintsArray || !complaintId)
       return res.status(400).json({ message: "No data sent", success: false });
-    const result = await busModel.findById(
-      { _id: req.params.id, "complaints._id": complaintId },
+    const result = await busModel.aggregate([
       {
-        $set: {
-          "complaints.$": {
-            title: complaintsArray?.title,
-            description: complaintsArray?.description,
-            status: complaintsArray?.status,
-          },
+        $match: {
+          _id: req.params.id,
         },
       },
-      { new: true }
-    );
+    ]);
     if (!result)
       return res
         .status(400)
