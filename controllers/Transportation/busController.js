@@ -132,9 +132,43 @@ const busStudentFiltering = async (req, res) => {
 const addComplaints = async (req, res) => {
   try {
     const { complaintsArray } = req.body;
-    const result = await studentModel.findByIdAndUpdate(req.params.id, {
-      $addToSet: { complaints: complaintsArray },
-    });
+    if (!complaintsArray)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const result = await busModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: { complaints: complaintsArray },
+      },
+      { new: true }
+    );
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding complaints", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const updateComplaints = async (req, res) => {
+  try {
+    const { complaintsArray, complaintId } = req.body;
+    if (!complaintsArray || !complaintId)
+      return res.status(400).json({ message: "No data sent", success: false });
+    const result = await busModel.findById(
+      { _id: req.params.id, "complaints._id": complaintId },
+      {
+        $set: {
+          "complaints.$": {
+            title: complaintsArray?.title,
+            description: complaintsArray?.description,
+            status: complaintsArray?.status,
+          },
+        },
+      },
+      { new: true }
+    );
     if (!result)
       return res
         .status(400)
@@ -154,4 +188,6 @@ module.exports = {
   busFiltering,
   busStudentFiltering,
   addComplaints,
+  updateComplaints,
+  updateComplaints,
 };
