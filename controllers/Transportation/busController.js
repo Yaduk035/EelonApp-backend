@@ -71,6 +71,10 @@ const getBusDetails = async (req, res) => {
 
 const deleteBusDetails = async (req, res) => {
   try {
+    const { publicIds } = req.body;
+    if (publicIds.length === 0) {
+      await cloudinary.api.delete_resources(publicIds);
+    }
     const result = await busModel.findByIdAndDelete(req.params.id);
     if (!result)
       return res.status(400).json({ message: "No data found", success: false });
