@@ -1,6 +1,8 @@
 const busModel = require("../../models/Transportation/BusSchema");
 const studentModel = require("../../models/studentSchema");
 const cloudinary = require("../../config/cloudinary");
+const stopsModel = require("../../models/Transportation/StopsSchema");
+const KmPriceModel = require("../../models/Transportation/KmPriceSchema");
 
 const addBusDetails = async (req, res) => {
   try {
@@ -181,6 +183,7 @@ const addComplaints = async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
   }
 };
 
@@ -203,6 +206,174 @@ const updateComplaints = async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const busDropdowns = async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $project: {
+          _id: 1,
+          busNo: 1,
+          rgNo: 1,
+        },
+      },
+    ];
+    const result = await busModel.aggregate(pipeline);
+    if (!result)
+      return res.status(400).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const addStops = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await stopsModel.create(data);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding data", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getAllStops = async (req, res) => {
+  try {
+    const result = await stopsModel.find();
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding data", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getStop = async (req, res) => {
+  try {
+    const result = await stopsModel.findById(req.params.id);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding data", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const updateStop = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await stopsModel.findByIdAndUpdate(req.params.id, data);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding data", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+////////////////// KM price  ///////////////////////
+const deleteStop = async (req, res) => {
+  try {
+    const result = await stopsModel.findByIdAndDelete(req.params.id);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error adding data", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const addPrice = async (req, res) => {
+  try {
+    const data = req.body;
+    if (!req?.body?.priceId) {
+      const result = await KmPriceModel.create(data);
+      if (!result)
+        return res
+          .status(400)
+          .json({ message: "Error adding data", success: false });
+      res.status(201).json(result);
+    } else {
+      const result = await KmPriceModel.findByIdAndUpdate(req.params.id, data);
+      if (!result)
+        return res
+          .status(400)
+          .json({ message: "Error adding data", success: false });
+      res.status(201).json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const deletePrice = async (req, res) => {
+  try {
+    const result = await KmPriceModel.findByIdAndDelete(req.params.id);
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error deleting data", success: false });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const getPrice = async (req, res) => {
+  try {
+    const result = await KmPriceModel.find();
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: "Error fetching data", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const stopsDropdowns = async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $project: {
+          _id: 1,
+          stopName: 1,
+          distance: 1,
+        },
+      },
+    ];
+    const result = await stopsModel.aggregate(pipeline);
+    if (!result)
+      return res.status(400).json({ message: "No data found", success: false });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", success: false });
   }
 };
 
@@ -217,4 +388,14 @@ module.exports = {
   addComplaints,
   updateComplaints,
   updateComplaints,
+  busDropdowns,
+  addStops,
+  getAllStops,
+  getStop,
+  updateStop,
+  deleteStop,
+  addPrice,
+  deletePrice,
+  getPrice,
+  stopsDropdowns,
 };
