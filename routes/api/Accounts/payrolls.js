@@ -1,17 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const payRollController = require("../../../controllers/PayRoll/payRollController");
+const payRollController = require('../../../controllers/PayRoll/payRollController');
 
 /////////////  '/payroll/*'  //////////////
-router
-  .route("/staff")
-  .post(payRollController.createPayroll)
-  .get(payRollController.getAllPayrolls);
 
-router
-  .route("/staff/:id")
-  .get(payRollController.getPayrollById)
-  .put(payRollController.updatePayroll)
-  .delete(payRollController.deletePayroll);
+router.route('/staff/filter').put(payRollController.filterPayroll);
+
+router.route('/staff').post(payRollController.createPayroll).get(payRollController.getAllPayrolls);
+
+router.route('/staff/:id').get(payRollController.getPayrollById).put(payRollController.updatePayroll).delete(payRollController.deletePayroll);
 
 module.exports = router;
