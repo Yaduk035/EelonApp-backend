@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const workExperienceSchema = new Schema({
@@ -88,7 +88,7 @@ const staffSchema = new Schema(
     bankBranchName: String,
     bankIFSCcode: String,
     otherBankdetails: String,
-    basicSalary: String,
+    baseSalary: Number,
     pf: String,
     epfno: String,
     esi: String,
@@ -96,8 +96,8 @@ const staffSchema = new Schema(
     workExperienceArray: [workExperienceSchema],
     educationArray: [educationSchema],
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const Staff = mongoose.model("Staff", staffSchema);
+const Staff = mongoose.model('Staff', staffSchema);
 module.exports = Staff;
