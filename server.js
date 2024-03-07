@@ -51,6 +51,7 @@ app.use("/api/admission", require("./routes/api/Accounts/admissions"));
 app.use("/api/certificates", require("./routes/api/PDFs/pdfRoutes"));
 app.use("/api/transportation", require("./routes/api/transportation"));
 app.use("/api/bulkuploads", require("./routes/api/BulkUploads"));
+app.use("/api/payroll", require("./routes/api/Accounts/payrolls"));
 
 app.use(errorHandler);
 
