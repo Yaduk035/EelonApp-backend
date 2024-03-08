@@ -32,6 +32,7 @@ const syllabusSchema = new Schema(
     term: String,
     academicYear: String,
     teacherId: String,
+    studyRoomId: String,
     subject: String,
     std: String,
     unitName: String,
