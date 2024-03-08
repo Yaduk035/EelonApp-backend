@@ -28,14 +28,12 @@ const updateSyllabus = async (req, res) => {
 
 const deleteSyllabus = async (req, res) => {
   try {
-    const data = req.body;
-    const {pdfPublicId, pptPublicId} = data;
-    if (pdfPublicId) {
-      await cloudinary.uploader.destroy(pdfPublicId);
+    const {publicIdArray} = req.body;
+
+    if (publicIdArray) {
+      await cloudinary.api.delete_resources(publicIdArray);
     }
-    if (pptPublicId) {
-      await cloudinary.uploader.destroy(pptPublicId);
-    }
+
     const result = await syllabusModel.findByIdAndDelete(req.params.id);
     if (!result) return res.status(400).json({message: 'Error deleting data', success: false});
     res.status(201).json({message: 'Syllabus deleted', success: true});
