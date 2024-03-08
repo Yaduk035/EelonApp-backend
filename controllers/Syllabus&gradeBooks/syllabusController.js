@@ -183,6 +183,9 @@ const syllabusDropdown = async (req, res) => {
   try {
     const result = await syllabusModel.aggregate([
       {
+        $match: {studyRoomId: req.params.id},
+      },
+      {
         $project: {
           _id: 1,
           unitName: 1,
