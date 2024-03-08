@@ -8,7 +8,7 @@ const gradebookController = require('../../controllers/Syllabus&gradeBooks/grade
 //////////////   Syllabus  ///////////////
 router.route('/syllabus/filter/').put(syllabusController.syllabusFiltering);
 
-router.route('/syllabus/dropdowns').get(syllabusController.syllabusDropdown);
+router.route('/syllabus/dropdowns/:id').get(syllabusController.syllabusDropdown);
 
 router.route('/syllabus/contents/:id').post(syllabusController.addSyllabusContent).delete(syllabusController.removeSyllabusContent);
 

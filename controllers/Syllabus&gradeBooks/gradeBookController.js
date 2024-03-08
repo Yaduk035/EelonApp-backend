@@ -1,10 +1,33 @@
 const gradeBookModel = require('../../models/Lesson-planning/gradeBookModel');
+const cloudinary = require('../../config/cloudinary');
 
 const addGradebook = async (req, res) => {
   try {
     const data = req.body;
+    const {base64gradeBook, coverPage} = data;
+    let gradeBookCloudRes = {};
+    let coverPageCloudRes = {};
+    if (base64gradeBook) {
+      const cloudImage = await cloudinary.uploader.upload(base64gradeBook, {
+        folder: 'eelonSchoolManagementApp/Class-Materials/grade-books',
+      });
+      gradeBookCloudRes = {
+        public_id: cloudImage?.public_id,
+        url: cloudImage?.url,
+      };
+    }
+    if (coverPage) {
+      const cloudImage = await cloudinary.uploader.upload(coverPage, {
+        folder: 'eelonSchoolManagementApp/Class-Materials/cover-images',
+      });
+      coverPageCloudRes = {
+        public_id: cloudImage?.public_id,
+        url: cloudImage?.url,
+      };
+    }
+
     if (!data) return res.status(400).json({message: 'No data sent', success: false});
-    const result = await gradeBookModel.create(data);
+    const result = await gradeBookModel.create({...data, pdf: gradeBookCloudRes, coverPage: coverPageCloudRes});
     if (!result) return res.status(400).json({message: 'Error creating data', success: false});
     res.status(201).json(result);
   } catch (error) {
