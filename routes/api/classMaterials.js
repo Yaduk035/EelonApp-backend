@@ -5,6 +5,8 @@ const router = express.Router();
 /////////////   'classmaterials/*'   /////////
 router.route('/syllabus/filter/').put(syllabusController.syllabusFiltering);
 
+router.route('/syllabus/dropdowns').get(syllabusController.syllabusDropdown);
+
 router.route('/syllabus/contents/:id').post(syllabusController.addSyllabusContent).delete(syllabusController.removeSyllabusContent);
 
 router.route('/syllabus').get(syllabusController.getAllSyllabus).post(syllabusController.addSyllabus);

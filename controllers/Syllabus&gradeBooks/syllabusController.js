@@ -179,4 +179,35 @@ const syllabusFiltering = async (req, res) => {
   }
 };
 
-module.exports = {addSyllabus, updateSyllabus, deleteSyllabus, getAllSyllabus, getSyllabus, addSyllabusContent, removeSyllabusContent, syllabusFiltering};
+const syllabusDropdown = async (req, res) => {
+  try {
+    const result = await syllabusModel.aggregate([
+      {
+        $project: {
+          _id: 1,
+          unitName: 1,
+          pageNo: 1,
+          term: 1,
+          teacherId: 1,
+        },
+      },
+    ]);
+    if (result.length === 0) return res.status(400).json({message: 'No data found', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+module.exports = {
+  addSyllabus,
+  updateSyllabus,
+  deleteSyllabus,
+  getAllSyllabus,
+  getSyllabus,
+  addSyllabusContent,
+  removeSyllabusContent,
+  syllabusFiltering,
+  syllabusDropdown,
+};
