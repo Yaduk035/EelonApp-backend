@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const studentSchema = new Schema(
@@ -30,7 +30,7 @@ const studentSchema = new Schema(
     gender: {
       type: String,
     },
-    studentProfilePic: {
+    profilePic: {
       public_id: {
         type: String,
       },
@@ -201,8 +201,8 @@ const studentSchema = new Schema(
     busStop: String,
     transportationType: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const student = mongoose.model("studentSchema", studentSchema);
+const student = mongoose.model('studentSchema', studentSchema);
 module.exports = student;
