@@ -46,7 +46,18 @@ const deleteHostel = async (req, res) => {
 
 const getAllHostels = async (req, res) => {
   try {
-    const result = await schoolModel.find();
+    const result = await schoolModel.aggregate([
+      {
+        $project: {
+          _id: 1,
+          schoolName: 1,
+          schoolId: 1,
+          hostelName: 1,
+          hostelRoomNo: 1,
+          hostelRoomTypes: 1,
+        },
+      },
+    ]);
 
     if (!result) return res.status(400).json({message: 'Error fetching hostel details', success: false});
     res.status(201).json(result);

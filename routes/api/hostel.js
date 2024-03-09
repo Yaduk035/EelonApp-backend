@@ -9,3 +9,5 @@ router.route('/filter').put(hostelController.filterHostel);
 router.route('/').get(hostelController.getAllHostels);
 
 router.route('/:id').post(hostelController.addHostelDetails).delete(hostelController.deleteHostel);
+
+module.exports = router;

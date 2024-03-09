@@ -52,6 +52,7 @@ app.use('/api/bulkuploads', require('./routes/api/BulkUploads'));
 app.use('/api/payroll', require('./routes/api/Accounts/payrolls'));
 app.use('/api/classmaterials', require('./routes/api/classMaterials'));
 app.use('/api/school', require('./routes/api/School'));
+app.use('/api/hostel', require('./routes/api/hostel'));
 
 app.use(errorHandler);
 
