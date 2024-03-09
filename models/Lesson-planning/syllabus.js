@@ -30,6 +30,8 @@ const contentArray = new Schema(
 const syllabusSchema = new Schema(
   {
     term: String,
+    month: String,
+    week: String,
     academicYear: String,
     teacherId: String,
     studyRoomId: String,
