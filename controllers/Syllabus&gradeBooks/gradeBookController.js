@@ -52,8 +52,8 @@ const updateGradebook = async (req, res) => {
 const deleteGradebook = async (req, res) => {
   try {
     const {publicIdArray} = req.body;
-
-    if (publicIdArray.length !== 0) {
+    console.log(publicIdArray);
+    if (publicIdArray?.length !== 0) {
       await cloudinary.api.delete_resources(publicIdArray);
     }
 
