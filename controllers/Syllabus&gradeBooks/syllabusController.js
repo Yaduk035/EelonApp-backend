@@ -92,7 +92,8 @@ const addSyllabusContent = async (req, res) => {
         public_id: cloudImage.public_id,
         url: cloudImage.secure_url,
       };
-      data = {...data, pdf: cloudId};contentType
+      data = {...data, pdf: cloudId};
+      contentType;
     }
 
     const result = await syllabusModel.findByIdAndUpdate(
@@ -192,6 +193,8 @@ const syllabusDropdown = async (req, res) => {
           pageNo: 1,
           term: 1,
           teacherId: 1,
+          month: 1,
+          week: 1,
         },
       },
     ]);
