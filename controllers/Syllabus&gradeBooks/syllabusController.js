@@ -31,7 +31,7 @@ const deleteSyllabus = async (req, res) => {
   try {
     const {publicIdArray} = req.body;
 
-    if (publicIdArray.length !== 0) {
+    if (publicIdArray?.length !== 0) {
       await cloudinary.api.delete_resources(publicIdArray);
     }
 
