@@ -1,4 +1,5 @@
 const syllabusModel = require('../../models/Lesson-planning/syllabus');
+const cloudinary = require('../../config/cloudinary');
 
 const addSyllabus = async (req, res) => {
   try {
@@ -30,7 +31,7 @@ const deleteSyllabus = async (req, res) => {
   try {
     const {publicIdArray} = req.body;
 
-    if (publicIdArray) {
+    if (publicIdArray.length !== 0) {
       await cloudinary.api.delete_resources(publicIdArray);
     }
 
