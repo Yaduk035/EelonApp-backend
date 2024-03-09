@@ -92,7 +92,7 @@ const addSyllabusContent = async (req, res) => {
         public_id: cloudImage.public_id,
         url: cloudImage.secure_url,
       };
-      data = {...data, pdf: cloudId};
+      data = {...data, pdf: cloudId};contentType
     }
 
     const result = await syllabusModel.findByIdAndUpdate(
