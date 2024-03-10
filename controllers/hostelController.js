@@ -22,6 +22,26 @@ const addHostelDetails = async (req, res) => {
   }
 };
 
+const removeHostelRoomType = async (req, res) => {
+  try {
+    const schoolDbId = req.params.id;
+    const {roomTypeId} = req.body;
+    const result = await schoolModel.findByIdAndUpdate(
+      schoolDbId,
+      {
+        $pull: {hostelRoomTypes: _id},
+      },
+      {new: true}
+    );
+
+    if (!result) return res.status(400).json({message: 'Error adding hostel details', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
 const deleteHostel = async (req, res) => {
   try {
     const schoolDbId = req.params.id;
@@ -120,4 +140,133 @@ const addHostelRoom = async (req, res) => {
   }
 };
 
-module.exports = {addHostelDetails, deleteHostel, getAllHostels, filterHostel};
+const getAllHostelRooms = async (req, res) => {
+  try {
+    const result = await hostelModel.find();
+    if (!result) return res.status(400).json({message: 'Error fetching data', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const getHostelRoomById = async (req, res) => {
+  try {
+    const result = await hostelModel.findById(req.params.id);
+    if (!result) return res.status(400).json({message: 'Error fetching data', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const deleteHostelRoom = async (req, res) => {
+  try {
+    const result = await hostelModel.findByIdAndDelete(req.params.id);
+    if (!result) return res.status(400).json({message: 'Error deleting data', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const updateHostelRoom = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await hostelModel.findByIdAndUpdate(req.params.id, data);
+    if (!result) return res.status(400).json({message: 'Error updating data', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const addOccupantsHostelRoom = async (req, res) => {
+  try {
+    const {occupantsData} = req.body;
+    const result = await hostelModel.findByIdAndUpdate(req.params.id, {
+      $addToSet: {
+        occupantsArray: occupantsData,
+      },
+    });
+    if (!result) return res.status(400).json({message: 'Error updating data', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const removeOccupantsHostelRoom = async (req, res) => {
+  try {
+    const {occupantsId} = req.body;
+    const result = await hostelModel.findByIdAndUpdate(req.params.id, {
+      $pull: {
+        occupantsArray: occupantsId,
+      },
+    });
+    if (!result) return res.status(400).json({message: 'Error updating data', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const filterHostelRoom = async (req, res) => {
+  try {
+    const {type, occupantsNo, rentPerMonth, rentPerWeek, rentPerDay} = req.body;
+    const pipeline = [];
+
+    // if (schoolName) {
+    //   pipeline.push({
+    //     $match: {schoolName: {$regex: new RegExp(schoolName, 'i')}},
+    //   });
+    // }
+    if (type) {
+      pipeline.push({$match: {type: type}});
+    }
+    if (occupantsNo) {
+      pipeline.push({$match: {occupantsNo: occupantsNo}});
+    }
+    if (rentPerMonth) {
+      pipeline.push({$match: {rentPerMonth: rentPerMonth}});
+    }
+    if (rentPerWeek) {
+      pipeline.push({$match: {rentPerWeek: rentPerWeek}});
+    }
+    if (rentPerDay) {
+      pipeline.push({$match: {rentPerDay: rentPerDay}});
+    }
+
+    if (pipeline?.length === 0) return res.status(400).json({message: 'No filtering query sent', success: false});
+
+    const result = await hostelModel.aggregate(pipeline);
+
+    if (!result) return res.status(400).json({message: 'Error deleting hostel details', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+module.exports = {
+  addHostelDetails,
+  deleteHostel,
+  getAllHostels,
+  filterHostel,
+  removeHostelRoomType,
+  addHostelRoom,
+  getAllHostelRooms,
+  getHostelRoomById,
+  deleteHostelRoom,
+  updateHostelRoom,
+  addOccupantsHostelRoom,
+  removeOccupantsHostelRoom,
+  filterHostelRoom,
+};
