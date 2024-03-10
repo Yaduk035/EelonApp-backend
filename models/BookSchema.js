@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const bookSchema = new Schema(
@@ -45,7 +45,10 @@ const bookSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    image: String,
+    coverImage: {
+      public_id: String,
+      url: String,
+    },
     imageId: {
       type: String,
     },
@@ -54,8 +57,8 @@ const bookSchema = new Schema(
       default: Date.now,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const book = mongoose.model("Book", bookSchema);
+const book = mongoose.model('Book', bookSchema);
 module.exports = book;

@@ -4,6 +4,7 @@ const StudentSchema = require('../models/studentSchema');
 const classSectionModel = require('../models/classSectionModel');
 const AccountModel = require('../models/Accounts/AccountsDb');
 const AdmissionModel = require('../models/Accounts/admissionSchema');
+const superAdminModel = require('../models/superAdminModel');
 
 const bcrypt = require('bcrypt');
 
@@ -447,6 +448,60 @@ const staffFiltering = async (req, res) => {
   }
 };
 
+/////////////////////////////////////////////////////////
+
+const addSuperAdmin = async (req, res) => {
+  try {
+    const userData = req.body;
+    if (!userData)
+      return res.status(400).json({
+        message: 'Username and password must not be empty',
+        success: false,
+      });
+    const duplicateUser = await superAdminModel.findOne({email: userData.email}).exec();
+    if (duplicateUser) return res.status(409).json({message: 'Username already exists', success: false});
+
+    const hashedPwd = await bcrypt.hash(userData.password, 10);
+
+    const reqData = {
+      ...userData,
+      password: hashedPwd,
+    };
+    console.log(reqData);
+    const results = await superAdminModel.create(reqData);
+    console.log(results);
+    res.status(201).json({results, message: 'Staff created', success: true});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const deleteSuperAdmin = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await superAdminModel.findByIdAndDelete(id);
+    if (!user) return res.status(204).json({message: `User with id ${id} deleted`, success: true});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const updateSuperAdmin = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    if (!data) return res.status(400).json({message: 'No data send with body', success: false});
+    const user = await superAdminModel.findByIdAndUpdate(id, data);
+    if (!user) return res.status(204).json({message: `User with id ${id} deleted`, success: true});
+    res.status(201).json({message: 'Staff updated', success: true});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
 module.exports = {
   getUsers,
   addStaff,
@@ -468,4 +523,7 @@ module.exports = {
   filterStudentsByclass,
   studentFiltering,
   staffFiltering,
+  addSuperAdmin,
+  deleteSuperAdmin,
+  updateSuperAdmin,
 };
