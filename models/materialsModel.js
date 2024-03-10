@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const materialsSchema = new Schema(
   {
+    schoolId: String,
     topic: {
       type: String,
     },
@@ -13,8 +14,8 @@ const materialsSchema = new Schema(
       type: Object,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const materials = mongoose.model("materials", materialsSchema);
+const materials = mongoose.model('materials', materialsSchema);
 module.exports = materials;

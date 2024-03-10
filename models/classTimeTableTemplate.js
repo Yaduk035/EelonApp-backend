@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const perDaySchema = new Schema(
   {
+    schoolId: String,
+    schoolId: String,
     day: {
       type: String,
     },
@@ -19,11 +21,13 @@ const perDaySchema = new Schema(
       type: Object,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const timeTableTemplateSchema = new Schema(
   {
+    schoolId: String,
+    schoolId: String,
     templateId: {
       type: String,
     },
@@ -32,11 +36,8 @@ const timeTableTemplateSchema = new Schema(
     },
     timeTableArray: [perDaySchema],
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const timeTableTemplate = mongoose.model(
-  "TimeTableTemplate",
-  timeTableTemplateSchema
-);
+const timeTableTemplate = mongoose.model('TimeTableTemplate', timeTableTemplateSchema);
 module.exports = timeTableTemplate;

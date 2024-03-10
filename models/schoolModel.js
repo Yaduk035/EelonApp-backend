@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const roomTypes = new Schema({
+  schoolId: String,
   type: String,
   occupantsNo: Number,
   rentPerMonth: Number,
@@ -11,6 +12,7 @@ const roomTypes = new Schema({
 
 const schoolSchema = new Schema(
   {
+    schoolId: String,
     schoolId: String,
     shoolName: String,
     address: String,

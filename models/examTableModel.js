@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const examArraySchema = new Schema(
   {
+    schoolId: String,
     id: {
       type: String,
     },
@@ -43,11 +44,12 @@ const examArraySchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const examTableSchema = new Schema(
   {
+    schoolId: String,
     templateId: {
       type: String,
     },
@@ -75,8 +77,8 @@ const examTableSchema = new Schema(
     exam2EndTime: String,
     timeTableArray: [examArraySchema],
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const examTable = mongoose.model("ExamTimeTable", examTableSchema);
+const examTable = mongoose.model('ExamTimeTable', examTableSchema);
 module.exports = examTable;

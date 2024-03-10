@@ -2,20 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const occupantsArr = new Schema(
-  {
-    schoolId: String,
-    occupantName: String,
-    occupantId: String,
-    occupantType: String,
-    fromDate: String,
-    toDate: String,
-    addedBy: String,
-  },
+  {schoolId: String, schoolId: String, occupantName: String, occupantId: String, occupantType: String, fromDate: String, toDate: String, addedBy: String},
   {timestamps: true}
 );
 
 const hostelRoomSchema = new Schema(
   {
+    schoolId: String,
     schoolId: String,
     type: String,
     roomNo: Number,

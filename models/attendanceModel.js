@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const attendanceStudentSchema = new Schema(
   {
+    schoolId: String,
     studentName: {
       type: String,
     },
@@ -19,7 +20,7 @@ const attendanceStudentSchema = new Schema(
       type: Object,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const attendanceSchema = new Schema(
@@ -32,8 +33,8 @@ const attendanceSchema = new Schema(
     date: String,
     attendance: [attendanceStudentSchema],
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const attendance = mongoose.model("attendance", attendanceSchema);
+const attendance = mongoose.model('attendance', attendanceSchema);
 module.exports = attendance;

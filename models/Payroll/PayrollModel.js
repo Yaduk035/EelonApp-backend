@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const payrollSchema = new Schema(
   {
+    schoolId: String,
     staffName: String,
     staffId: String,
     staffRole: String,

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const workExperienceSchema = new Schema({
+  schoolId: String,
   jobRole: String,
   jobRoleIn: String,
   expFrom: String,
@@ -13,6 +14,7 @@ const workExperienceSchema = new Schema({
 });
 
 const educationSchema = new Schema({
+  schoolId: String,
   qualification: String,
   uni: String,
   expFrom: String,

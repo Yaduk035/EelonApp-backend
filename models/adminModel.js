@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const adminSchema = new Schema(
   {
+    schoolId: String,
     name: {
       type: String,
     },
@@ -34,8 +35,8 @@ const adminSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const Admin = mongoose.model("Admin", adminSchema);
+const Admin = mongoose.model('Admin', adminSchema);
 module.exports = Admin;

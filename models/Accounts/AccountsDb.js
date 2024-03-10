@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ExamFeeArray = new Schema(
   {
+    schoolId: String,
     term: String,
     academicYear: String,
     feeAmount: Number,
@@ -23,11 +24,12 @@ const ExamFeeArray = new Schema(
     status: String,
     board: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const competitionFeeArray = new Schema(
   {
+    schoolId: String,
     title: String,
     description: String,
     feeAmount: Number,
@@ -47,11 +49,12 @@ const competitionFeeArray = new Schema(
     status: String,
     board: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const eventFeeArray = new Schema(
   {
+    schoolId: String,
     title: String,
     description: String,
     feeAmount: Number,
@@ -71,11 +74,12 @@ const eventFeeArray = new Schema(
     status: String,
     board: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const annualDayFeeArray = new Schema(
   {
+    schoolId: String,
     title: String,
     description: String,
     feeAmount: Number,
@@ -95,11 +99,12 @@ const annualDayFeeArray = new Schema(
     status: String,
     board: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const tourFeeArray = new Schema(
   {
+    schoolId: String,
     title: String,
     description: String,
     feeAmount: Number,
@@ -119,11 +124,12 @@ const tourFeeArray = new Schema(
     status: String,
     board: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const finesArray = new Schema(
   {
+    schoolId: String,
     title: String,
     description: String,
     fineType: String,
@@ -144,11 +150,12 @@ const finesArray = new Schema(
     status: String,
     board: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const otherFeesArray = new Schema(
   {
+    schoolId: String,
     type: String,
     feeType: String,
     title: String,
@@ -171,11 +178,12 @@ const otherFeesArray = new Schema(
     status: String,
     board: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const academicFeesArray = new Schema(
   {
+    schoolId: String,
     type: String,
     feeType: String,
     title: String,
@@ -199,11 +207,12 @@ const academicFeesArray = new Schema(
     installmentType: String,
     feeInterval: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const feeConcessionArray = new Schema(
   {
+    schoolId: String,
     type: String,
     feeType: String,
     concessionName: String,
@@ -226,11 +235,12 @@ const feeConcessionArray = new Schema(
     reductionPercentage: Number,
     concessionReason: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const accountsSchema = new Schema(
   {
+    schoolId: String,
     classSection: String,
     academicYear: String,
     std: String,
@@ -244,6 +254,7 @@ const accountsSchema = new Schema(
     debt: Number,
 
     admissionFees: {
+      schoolId: String,
       studentId: String,
       admnId: String,
       studentName: String,
@@ -260,8 +271,8 @@ const accountsSchema = new Schema(
       admnNo: Number,
       date: String,
       payStatus: {
-        type: "String",
-        default: "NotPaid",
+        type: 'String',
+        default: 'NotPaid',
       },
     },
     AcademicFee: [academicFeesArray],
@@ -277,8 +288,8 @@ const accountsSchema = new Schema(
     otherFee: [otherFeesArray],
     feeConcessions: [feeConcessionArray],
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const accounts = mongoose.model("AccountsDb", accountsSchema);
+const accounts = mongoose.model('AccountsDb', accountsSchema);
 module.exports = accounts;

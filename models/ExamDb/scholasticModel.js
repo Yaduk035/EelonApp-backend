@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const subjects = new Schema(
   {
+    schoolId: String,
+    schoolId: String,
     art_craft: String,
     mentalAttitudes: String,
     activitiesLs: String,
@@ -12,11 +14,13 @@ const subjects = new Schema(
     studentId: String,
     rollNo: Number,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const scholasticSchema = new Schema(
   {
+    schoolId: String,
+    schoolId: String,
     classSection: {
       type: String,
     },
@@ -40,8 +44,8 @@ const scholasticSchema = new Schema(
     },
     marksArray: [subjects],
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const scholasticMarks = mongoose.model("ScholasticMarks", scholasticSchema);
+const scholasticMarks = mongoose.model('ScholasticMarks', scholasticSchema);
 module.exports = scholasticMarks;
