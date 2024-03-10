@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const upcomingTasksSchema = new Schema(
   {
+    schoolId: String,
     topic: {
       type: String,
     },
@@ -10,8 +11,8 @@ const upcomingTasksSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const upcomingTasks = mongoose.model("upcomingTasks", upcomingTasksSchema);
+const upcomingTasks = mongoose.model('upcomingTasks', upcomingTasksSchema);
 module.exports = upcomingTasks;

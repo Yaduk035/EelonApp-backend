@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const contentArray = new Schema(
   {
+    schoolId: String,
     title: String,
     description: String,
     contentType: String,
@@ -29,6 +30,7 @@ const contentArray = new Schema(
 
 const syllabusSchema = new Schema(
   {
+    schoolId: String,
     term: String,
     month: String,
     week: String,

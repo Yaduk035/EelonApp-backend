@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const questionPatternSchema = new Schema(
   {
+    schoolId: String,
     year: {
       type: String,
     },
@@ -31,17 +32,14 @@ const questionPatternSchema = new Schema(
     },
     status: {
       type: String,
-      default: "Pending",
+      default: 'Pending',
     },
     remarks: {
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const questionPattern = mongoose.model(
-  "questionPattern",
-  questionPatternSchema
-);
+const questionPattern = mongoose.model('questionPattern', questionPatternSchema);
 module.exports = questionPattern;

@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const assignmentsSchema = new Schema(
   {
+    schoolId: String,
     topic: {
       type: String,
     },
@@ -19,8 +20,8 @@ const assignmentsSchema = new Schema(
       type: Array,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const assignments = mongoose.model("assignmentsCollection", assignmentsSchema);
+const assignments = mongoose.model('assignmentsCollection', assignmentsSchema);
 module.exports = assignments;

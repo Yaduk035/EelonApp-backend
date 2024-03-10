@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const classSectionDropdownSchema = new Schema(
   {
+    schoolId: String,
     academicYear: {
       type: Array,
     },
@@ -13,11 +14,8 @@ const classSectionDropdownSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const classSectionDropdown = mongoose.model(
-  "classSectionDropdown",
-  classSectionDropdownSchema
-);
+const classSectionDropdown = mongoose.model('classSectionDropdown', classSectionDropdownSchema);
 module.exports = classSectionDropdown;

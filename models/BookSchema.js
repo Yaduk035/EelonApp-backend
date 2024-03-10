@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const bookSchema = new Schema(
   {
+    schoolId: String,
     bookName: {
       type: String,
       required: true,

@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const QBSchema = new Schema(
   {
+    schoolId: String,
     year: {
       type: String,
     },
@@ -31,14 +32,14 @@ const QBSchema = new Schema(
     },
     status: {
       type: String,
-      default: "Pending",
+      default: 'Pending',
     },
     remarks: {
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const questionBank = mongoose.model("questionBank", QBSchema);
+const questionBank = mongoose.model('questionBank', QBSchema);
 module.exports = questionBank;

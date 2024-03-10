@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const gradeBookSchema = new Schema(
   {
+    schoolId: String,
     term: String,
     academicYear: String,
     teacherId: String,

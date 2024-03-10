@@ -1,20 +1,22 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const complaintsArray = new Schema(
   {
+    schoolId: String,
     title: String,
     description: String,
     status: {
-      default: "not resolved",
+      default: 'not resolved',
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 const busSchema = new Schema(
   {
+    schoolId: String,
     busNo: String,
     rgNo: {
       type: String,
@@ -45,12 +47,12 @@ const busSchema = new Schema(
       },
     },
     status: {
-      default: "Active",
+      default: 'Active',
       type: String,
     },
     complaints: [complaintsArray],
   },
-  { timestamps: true }
+  {timestamps: true}
 );
-const bus = mongoose.model("BusData", busSchema);
+const bus = mongoose.model('BusData', busSchema);
 module.exports = bus;

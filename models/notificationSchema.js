@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const notificationSchema = new Schema(
   {
+    schoolId: String,
     staffEmail: {
       type: String,
     },
@@ -19,8 +20,8 @@ const notificationSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const Notification = mongoose.model("notifications", notificationSchema);
+const Notification = mongoose.model('notifications', notificationSchema);
 module.exports = Notification;

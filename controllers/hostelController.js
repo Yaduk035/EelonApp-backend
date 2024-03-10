@@ -219,7 +219,7 @@ const removeOccupantsHostelRoom = async (req, res) => {
 
 const filterHostelRoom = async (req, res) => {
   try {
-    const {type, occupantsNo, rentPerMonth, rentPerWeek, rentPerDay} = req.body;
+    const {type, occupantsNo, rentPerMonth, rentPerWeek, rentPerDay, schoolId, roomNo} = req.body;
     const pipeline = [];
 
     // if (schoolName) {
@@ -241,6 +241,12 @@ const filterHostelRoom = async (req, res) => {
     }
     if (rentPerDay) {
       pipeline.push({$match: {rentPerDay: rentPerDay}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
+    if (roomNo) {
+      pipeline.push({$match: {roomNo: roomNo}});
     }
 
     if (pipeline?.length === 0) return res.status(400).json({message: 'No filtering query sent', success: false});

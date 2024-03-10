@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const classSchema = new Schema(
   {
+    schoolId: String,
     std: {
       type: String,
     },
@@ -31,8 +32,8 @@ const classSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const classSection = mongoose.model("class-section", classSchema);
+const classSection = mongoose.model('class-section', classSchema);
 module.exports = classSection;

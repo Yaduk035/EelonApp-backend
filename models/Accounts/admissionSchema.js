@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const admissionStdSchema = new Schema(
   {
+    schoolId: String,
     studentName: String,
     admnNo: Number,
     applicationNo: Number,
@@ -66,16 +67,16 @@ const admissionStdSchema = new Schema(
     enclosedDoc: String,
     Hostel: Boolean,
     payStatus: {
-      type: "String",
-      default: "NotPaid",
+      type: 'String',
+      default: 'NotPaid',
     },
     admitted: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const student = mongoose.model("admissionStudentDb", admissionStdSchema);
+const student = mongoose.model('admissionStudentDb', admissionStdSchema);
 module.exports = student;

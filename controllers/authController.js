@@ -19,6 +19,8 @@ const handleAdminLogin = async (req, res) => {
     const userId = foundUser?._id;
     const email = foundUser?.email;
     const profilePic = foundUser?.profilePic?.url;
+    const schoolId = foundUser?.schoolId;
+
     const accessToken = jwt.sign(
       {
         UserInfo: {
@@ -26,6 +28,7 @@ const handleAdminLogin = async (req, res) => {
           roles: roles,
           userId: foundUser._id,
           profilePic: foundUser?.profilePic?.url,
+          schoolId: foundUser?.schoolId,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -46,7 +49,7 @@ const handleAdminLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({roles, accessToken, userId, email, profilePic});
+    res.json({roles, accessToken, userId, email, profilePic, schoolId});
   } else {
     res.status(401).json({error: 'Error'});
   }
@@ -67,6 +70,7 @@ const handleStaffLogin = async (req, res) => {
     const userId = foundUser?._id;
     const email = foundUser?.email;
     const profilePic = foundUser?.profilePic?.url;
+    const schoolId = foundUser?.schoolId;
 
     const accessToken = jwt.sign(
       {
@@ -75,6 +79,7 @@ const handleStaffLogin = async (req, res) => {
           roles: roles,
           userId: foundUser._id,
           profilePic: foundUser?.profilePic?.url,
+          schoolId: foundUser?.schoolId,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -95,7 +100,7 @@ const handleStaffLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({roles, accessToken, userId, email, profilePic});
+    res.json({roles, accessToken, userId, email, profilePic, schoolId});
   } else {
     res.status(401).json({error: 'Error'});
   }
@@ -117,6 +122,8 @@ const handleStudentLogin = async (req, res) => {
     const userId = foundUser?._id;
     const email = foundUser?.email;
     const profilePic = foundUser?.profilePic?.url;
+    const schoolId = foundUser?.schoolId;
+
     const accessToken = jwt.sign(
       {
         UserInfo: {
@@ -124,6 +131,7 @@ const handleStudentLogin = async (req, res) => {
           roles: roles,
           userId: foundUser._id,
           profilePic: foundUser?.profilePic?.url,
+          schoolId: foundUser?.schoolId,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -144,7 +152,7 @@ const handleStudentLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({roles, accessToken, userId, email, profilePic});
+    res.json({roles, accessToken, userId, email, profilePic, schoolId});
   } else {
     res.status(401).json({error: 'Error'});
   }

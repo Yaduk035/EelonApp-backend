@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const libraryDropdownSchema = new Schema(
   {
+    schoolId: String,
     settingType: {
       type: String,
     },
@@ -10,11 +11,8 @@ const libraryDropdownSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const libraryDropdown = mongoose.model(
-  "libraryDropdown",
-  libraryDropdownSchema
-);
+const libraryDropdown = mongoose.model('libraryDropdown', libraryDropdownSchema);
 module.exports = libraryDropdown;

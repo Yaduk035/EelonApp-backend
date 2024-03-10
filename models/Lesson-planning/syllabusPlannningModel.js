@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const syllabusSchema = new Schema(
   {
+    schoolId: String,
     year: {
       type: String,
     },
@@ -31,14 +32,14 @@ const syllabusSchema = new Schema(
     },
     status: {
       type: String,
-      default: "Pending",
+      default: 'Pending',
     },
     remarks: {
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const syllabus = mongoose.model("syllabusDb", syllabusSchema);
+const syllabus = mongoose.model('syllabusDb', syllabusSchema);
 module.exports = syllabus;

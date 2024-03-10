@@ -17,6 +17,8 @@ const verifyJwt = (req, res, nxt) => {
     req.email = decoded?.email;
     req.roles = decoded?.roles;
     req.userId = decoded?.userId;
+    req.schoolId = decoded?.schoolId;
+
     nxt();
   });
 };

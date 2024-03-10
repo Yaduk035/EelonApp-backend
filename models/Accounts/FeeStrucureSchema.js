@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const instTermArray = new Schema({
@@ -10,6 +10,7 @@ const instTermArray = new Schema({
 
 const feeTypeSchema = new Schema(
   {
+    schoolId: String,
     academicYear: {
       type: String,
     },
@@ -34,8 +35,8 @@ const feeTypeSchema = new Schema(
     reductionAmount: String,
     reductionPercentage: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const feeStructure = mongoose.model("feeStructure", feeTypeSchema);
+const feeStructure = mongoose.model('feeStructure', feeTypeSchema);
 module.exports = feeStructure;

@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const classroomSchema = new Schema(
   {
+    schoolId: String,
     teachers: {
       type: Array,
     },
@@ -49,8 +50,8 @@ const classroomSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
-const classroom = mongoose.model("classroom", classroomSchema);
+const classroom = mongoose.model('classroom', classroomSchema);
 module.exports = classroom;
