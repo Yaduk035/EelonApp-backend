@@ -17,6 +17,7 @@ const occupantsArr = new Schema(
 const hostelRoomSchema = new Schema(
   {
     type: String,
+    roomNo: Number,
     occupantsNo: Number,
     rentPerMonth: Number,
     rentPerWeek: Number,
