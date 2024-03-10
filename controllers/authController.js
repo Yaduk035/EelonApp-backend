@@ -11,7 +11,7 @@ const handleAdminLogin = async (req, res) => {
 
   const foundUser = await Admin.findOne({email: email}).exec();
   if (!foundUser) return res.status(404).json({message: `username ${email} not found`, success: false});
-  console.log(foundUser);
+  console.log('Admin loggedIn');
 
   const pwdMatch = await bcrypt.compare(password, foundUser.password);
   if (pwdMatch) {
@@ -59,7 +59,7 @@ const handleStaffLogin = async (req, res) => {
 
   const foundUser = await Staff.findOne({email: email}).exec();
   if (!foundUser) return res.status(404).json({message: `username ${email} not found`, success: false});
-  console.log(foundUser);
+  console.log('Staff loggedIn');
 
   const pwdMatch = await bcrypt.compare(password, foundUser.password);
   if (pwdMatch) {
@@ -78,7 +78,7 @@ const handleStaffLogin = async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      {expiresIn: '15m'}
+      {expiresIn: '1m'}
     );
 
     const refreshToken = jwt.sign({email: foundUser.email}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
@@ -109,7 +109,7 @@ const handleStudentLogin = async (req, res) => {
 
   const foundUser = await Student.findOne({email: email}).exec();
   if (!foundUser) return res.status(404).json({message: `username ${email} not found`, success: false});
-  console.log(foundUser);
+  console.log('Student loggedIn');
 
   const pwdMatch = await bcrypt.compare(password, foundUser.password);
   if (pwdMatch) {
@@ -158,7 +158,7 @@ const handleSuperAdminLogin = async (req, res) => {
 
   const foundUser = await superAdmin.findOne({email: email}).exec();
   if (!foundUser) return res.status(404).json({message: `username ${email} not found`, success: false});
-  console.log(foundUser);
+  console.log('Super admin loggedIn');
 
   const pwdMatch = await bcrypt.compare(password, foundUser.password);
   if (pwdMatch) {
