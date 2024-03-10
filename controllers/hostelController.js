@@ -1,4 +1,5 @@
 const schoolModel = require('../models/schoolModel');
+const hostelModel = require('../models/hostelRoomModel');
 
 const addHostelDetails = async (req, res) => {
   try {
@@ -8,9 +9,7 @@ const addHostelDetails = async (req, res) => {
     const result = await schoolModel.findByIdAndUpdate(
       schoolDbId,
       {
-        hostelName,
-        hostelRoomNo,
-        hostelRoomTypes,
+        $addToSet: {hostelRoomTypes: hostelRoomTypes},
       },
       {new: true}
     );
@@ -81,7 +80,7 @@ const filterHostel = async (req, res) => {
       pipeline.push({$match: {adminId: adminId}});
     }
     if (schoolId) {
-      pipeline.push({$match: {schoolId: schoolId}});
+      pipeline.push({$match: {id: schoolId}});
     }
     if (id) {
       pipeline.push({$match: {id: id}});
@@ -102,6 +101,18 @@ const filterHostel = async (req, res) => {
     ]);
 
     if (!result) return res.status(400).json({message: 'Error deleting hostel details', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const addHostelRoom = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await hostelModel.create(data);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
