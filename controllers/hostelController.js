@@ -281,11 +281,6 @@ const getAllHostelStudents = async (req, res) => {
       {
         $match: {schoolId: schoolId, hostelRoomObjId: {$ne: null}},
       },
-      // {
-      //   $match: {
-      //     hostelRoomObjId: {$ne: null},
-      //   },
-      // },
     ]);
 
     if (!result) return res.status(400).json({message: 'Error deleting hostel details', success: false});

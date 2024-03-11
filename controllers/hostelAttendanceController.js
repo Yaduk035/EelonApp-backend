@@ -74,7 +74,7 @@ const filterHostelAttendance = async (req, res) => {
 
     const result = await attendanceModel.aggregate(pipeline);
 
-    if (!result) return res.status(400).json({message: 'Error deleting hostel details', success: false});
+    if (result?.length === 0) return res.status(404).json({message: 'Error deleting hostel details', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
