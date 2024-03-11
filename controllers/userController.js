@@ -206,7 +206,7 @@ const getStudentsByLimit = async (req, res) => {
 
 const filterStudentsByclass = async (req, res) => {
   try {
-    const {classSection, std, classId} = req.body;
+    const {classSection, std, classId, schoolId} = req.body;
     const pipeline = [];
 
     if (classSection) {
@@ -217,6 +217,9 @@ const filterStudentsByclass = async (req, res) => {
     }
     if (classId) {
       pipeline.push({$match: {classId: classId}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
     }
 
     const response = await StudentSchema.aggregate(pipeline);
@@ -365,7 +368,7 @@ const issueLibCard = async (req, res) => {
 };
 
 const studentFiltering = async (req, res) => {
-  const {std, academicYear, email, classSection, admnNo, studentName, rollNo, classId} = req.body;
+  const {std, academicYear, email, classSection, admnNo, studentName, rollNo, classId, schoolId} = req.body;
   try {
     const pipeline = [];
 
@@ -395,6 +398,9 @@ const studentFiltering = async (req, res) => {
     if (rollNo) {
       pipeline.push({$match: {rollNo: rollNo}});
     }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
 
     const result = await StudentSchema.aggregate(pipeline);
 
@@ -407,7 +413,7 @@ const studentFiltering = async (req, res) => {
 };
 
 const staffFiltering = async (req, res) => {
-  const {name, userName, email, jobType, jobRole, userType, contactEmail, staffId} = req.body;
+  const {name, userName, email, jobType, jobRole, userType, contactEmail, staffId, schoolId} = req.body;
   try {
     const pipeline = [];
 
@@ -436,6 +442,9 @@ const staffFiltering = async (req, res) => {
     }
     if (staffId) {
       pipeline.push({$match: {staffId: staffId}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
     }
 
     const result = await Staff.aggregate(pipeline);

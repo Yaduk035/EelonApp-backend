@@ -39,8 +39,6 @@ const handleAdminLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    console.log(result);
-    console.log(roles);
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
@@ -90,8 +88,6 @@ const handleStaffLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    console.log(result);
-    console.log(roles);
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
@@ -142,8 +138,6 @@ const handleStudentLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    console.log(result);
-    console.log(roles);
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
@@ -189,8 +183,6 @@ const handleSuperAdminLogin = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    console.log(result);
-    console.log(roles);
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
