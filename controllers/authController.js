@@ -24,18 +24,18 @@ const handleAdminLogin = async (req, res) => {
     const accessToken = jwt.sign(
       {
         UserInfo: {
-          email: foundUser.email,
+          email: email,
           roles: roles,
-          userId: foundUser._id,
-          profilePic: foundUser?.profilePic?.url,
-          schoolId: foundUser?.schoolId,
+          userId: userId,
+          profilePic: profilePic,
+          schoolId: schoolId,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
       {expiresIn: '15m'}
     );
 
-    const refreshToken = jwt.sign({email: foundUser.email}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
+    const refreshToken = jwt.sign({email: email, roles: roles, userId: userId, schoolId: schoolId}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
@@ -75,18 +75,18 @@ const handleStaffLogin = async (req, res) => {
     const accessToken = jwt.sign(
       {
         UserInfo: {
-          email: foundUser.email,
+          email: email,
           roles: roles,
-          userId: foundUser._id,
-          profilePic: foundUser?.profilePic?.url,
-          schoolId: foundUser?.schoolId,
+          userId: userId,
+          profilePic: profilePic,
+          schoolId: schoolId,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
       {expiresIn: '15m'}
     );
 
-    const refreshToken = jwt.sign({email: foundUser.email}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
+    const refreshToken = jwt.sign({email: email, roles: roles, userId: userId, schoolId: schoolId}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
@@ -127,18 +127,18 @@ const handleStudentLogin = async (req, res) => {
     const accessToken = jwt.sign(
       {
         UserInfo: {
-          email: foundUser.email,
+          email: email,
           roles: roles,
-          userId: foundUser._id,
-          profilePic: foundUser?.profilePic?.url,
-          schoolId: foundUser?.schoolId,
+          userId: userId,
+          profilePic: profilePic,
+          schoolId: schoolId,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
       {expiresIn: '15m'}
     );
 
-    const refreshToken = jwt.sign({email: foundUser.email}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
+    const refreshToken = jwt.sign({email: email, roles: roles, userId: userId, schoolId: schoolId}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
@@ -176,16 +176,16 @@ const handleSuperAdminLogin = async (req, res) => {
     const accessToken = jwt.sign(
       {
         UserInfo: {
-          email: foundUser.email,
+          email: email,
           roles: roles,
-          userId: foundUser._id,
+          userId: userId,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
       {expiresIn: '15m'}
     );
 
-    const refreshToken = jwt.sign({email: foundUser.email}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
+    const refreshToken = jwt.sign({email: email, roles: roles, userId: userId}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '15d'});
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
