@@ -97,6 +97,8 @@ const staffSchema = new Schema(
     otherAllowance: String,
     workExperienceArray: [workExperienceSchema],
     educationArray: [educationSchema],
+    hostelRoomNo: Number,
+    hostelRoomType: String,
   },
   {timestamps: true}
 );

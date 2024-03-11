@@ -1,5 +1,7 @@
 const schoolModel = require('../models/schoolModel');
 const hostelModel = require('../models/hostelRoomModel');
+const studentModel = require('../models/studentSchema');
+const staffModel = require('../models/staffSchema');
 
 const addHostelDetails = async (req, res) => {
   try {
@@ -187,12 +189,21 @@ const updateHostelRoom = async (req, res) => {
 
 const addOccupantsHostelRoom = async (req, res) => {
   try {
-    const {occupantsData} = req.body;
+    const {occupantsData, roomNo, type} = req.body;
+
+    if (!occupantsData || !roomNo || !type) return res.status(400).json({message: 'No data sent', success: false});
+
     const result = await hostelModel.findByIdAndUpdate(req.params.id, {
       $addToSet: {
         occupantsArray: occupantsData,
       },
     });
+
+    if (occupantsData?.occupantType === 'staff') await staffModel.findByIdAndUpdate(occupantsData?.occupantId, {hostelRoomNo: roomNo, hostelRoomType: type});
+
+    if (occupantsData?.occupantType === 'student')
+      await studentModel.findByIdAndUpdate(occupantsData?.occupantId, {hostelRoomNo: roomNo, hostelRoomType: type});
+
     if (!result) return res.status(400).json({message: 'Error updating data', success: false});
     res.status(200).json(result);
   } catch (error) {
