@@ -189,7 +189,7 @@ const updateHostelRoom = async (req, res) => {
 
 const addOccupantsHostelRoom = async (req, res) => {
   try {
-    const {occupantsData, roomNo, type} = req.body;
+    const {occupantsData, roomNo, type, hostelRoomObjId} = req.body;
 
     if (!occupantsData || !roomNo || !type) return res.status(400).json({message: 'No data sent', success: false});
 
@@ -199,10 +199,11 @@ const addOccupantsHostelRoom = async (req, res) => {
       },
     });
 
-    if (occupantsData?.occupantType === 'staff') await staffModel.findByIdAndUpdate(occupantsData?.occupantId, {hostelRoomNo: roomNo, hostelRoomType: type});
+    if (occupantsData?.occupantType === 'staff')
+      await staffModel.findByIdAndUpdate(occupantsData?.occupantId, {hostelRoomNo: roomNo, hostelRoomType: type, hostelRoomObjId});
 
     if (occupantsData?.occupantType === 'student')
-      await studentModel.findByIdAndUpdate(occupantsData?.occupantId, {hostelRoomNo: roomNo, hostelRoomType: type});
+      await studentModel.findByIdAndUpdate(occupantsData?.occupantId, {hostelRoomNo: roomNo, hostelRoomType: type, hostelRoomObjId});
 
     if (!result) return res.status(400).json({message: 'Error updating data', success: false});
     res.status(200).json(result);
@@ -272,6 +273,24 @@ const filterHostelRoom = async (req, res) => {
   }
 };
 
+const getAllHostelStudents = async (req, res) => {
+  try {
+    const {schoolId} = req.body;
+
+    const result = await studentModel.aggregate([
+      {
+        $match: {schoolId: schoolId, hostelRoomObjId: {$ne: null}},
+      },
+    ]);
+
+    if (!result) return res.status(400).json({message: 'Error deleting hostel details', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
 module.exports = {
   addHostelDetails,
   deleteHostel,
@@ -286,4 +305,5 @@ module.exports = {
   addOccupantsHostelRoom,
   removeOccupantsHostelRoom,
   filterHostelRoom,
+  getAllHostelStudents,
 };

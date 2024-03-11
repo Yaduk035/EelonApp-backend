@@ -99,6 +99,7 @@ const staffSchema = new Schema(
     educationArray: [educationSchema],
     hostelRoomNo: Number,
     hostelRoomType: String,
+    hosterlRoomObjId: String,
   },
   {timestamps: true}
 );

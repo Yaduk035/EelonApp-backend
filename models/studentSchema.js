@@ -203,6 +203,7 @@ const studentSchema = new Schema(
     transportationType: String,
     hostelRoomNo: Number,
     hostelRoomType: String,
+    hostelRoomObjId: String,
   },
   {timestamps: true}
 );
