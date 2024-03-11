@@ -9,7 +9,6 @@ const occupantsArr = new Schema(
 const hostelRoomSchema = new Schema(
   {
     schoolId: String,
-    schoolId: String,
     type: String,
     roomNo: Number,
     occupantsNo: Number,
