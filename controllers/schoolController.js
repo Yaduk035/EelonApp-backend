@@ -1,4 +1,5 @@
 const schoolModel = require('../models/schoolModel');
+const adminModel = require('../models/adminModel');
 
 const addSchool = async (req, res) => {
   try {
@@ -88,6 +89,18 @@ const schoolFiltering = async (req, res) => {
     if (result?.length === 0) return res.status(404).json({message: 'No data found'});
 
     res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const allocateAdminToSchool = async (req, res) => {
+  try {
+    const {schoolId, adminId} = req.body;
+    const school = await schoolModel.findByIdAndUpdate(schoolId, {
+      $addToSet: {admin: adminId},
+    });
+    const admin = await adminModel.findByIdAndUpdate(adminId, {schoolId});
   } catch (error) {
     console.error(error);
     res.status(500).json({message: 'Server error', success: false});
