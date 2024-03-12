@@ -31,4 +31,9 @@ router.route('/staff').get(userController.getUsers).post(userController.addStaff
 router.route('/staff/:id').delete(userController.deleteStaff).get(userController.getIndividualStaff).put(userController.updateStaff);
 // router.route('/staff')
 
+///////////////    Super-Admin routes   /////////////
+router.route('/etsa').post(userController.addSuperAdmin).get(userController.getAllSuperAdmins);
+
+router.route('/etsa/:id').put(userController.updateSuperAdmin).delete(userController.deleteSuperAdmin).get(userController.getSuperAdmin);
+
 module.exports = router;

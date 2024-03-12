@@ -479,7 +479,7 @@ const addSuperAdmin = async (req, res) => {
     console.log(reqData);
     const results = await superAdminModel.create(reqData);
     console.log(results);
-    res.status(201).json({results, message: 'Staff created', success: true});
+    res.status(201).json({results, message: 'User created', success: true});
   } catch (error) {
     console.log(error);
     res.status(500).json({message: 'Server error', success: false});
@@ -504,7 +504,30 @@ const updateSuperAdmin = async (req, res) => {
     if (!data) return res.status(400).json({message: 'No data send with body', success: false});
     const user = await superAdminModel.findByIdAndUpdate(id, data);
     if (!user) return res.status(204).json({message: `User with id ${id} deleted`, success: true});
-    res.status(201).json({message: 'Staff updated', success: true});
+    res.status(201).json({message: 'user updated', success: true});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const getAllSuperAdmins = async (req, res) => {
+  try {
+    const user = await superAdminModel.find();
+    if (!user) return res.status(204).json({message: `User with id ${id} deleted`, success: true});
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const getSuperAdmin = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await superAdminModel.findById(id);
+    if (!user) return res.status(204).json({message: `User with id ${id} deleted`, success: true});
+    res.status(200).json(user);
   } catch (error) {
     console.log(error);
     res.status(500).json({message: 'Server error', success: false});
@@ -535,4 +558,6 @@ module.exports = {
   addSuperAdmin,
   deleteSuperAdmin,
   updateSuperAdmin,
+  getAllSuperAdmins,
+  getSuperAdmin,
 };
