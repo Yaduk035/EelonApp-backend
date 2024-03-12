@@ -12,7 +12,7 @@ const roomTypes = new Schema({
 
 const schoolSchema = new Schema(
   {
-    schoolId: String,
+    schoolIndexNo: String,
     shoolName: String,
     address: String,
     admin: Array,
