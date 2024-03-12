@@ -1,7 +1,8 @@
 const schoolModel = require('../models/schoolModel');
-const hostelModel = require('../models/hostelRoomModel');
+const hostelModel = require('../models/Hostel/hostelRoomModel');
 const studentModel = require('../models/studentSchema');
 const staffModel = require('../models/staffSchema');
+const visitorsModel = require('../models/Hostel/HostelVisitorsModel');
 
 const addHostelDetails = async (req, res) => {
   try {
@@ -31,7 +32,7 @@ const removeHostelRoomType = async (req, res) => {
     const result = await schoolModel.findByIdAndUpdate(
       schoolDbId,
       {
-        $pull: {hostelRoomTypes: _id},
+        $pull: {hostelRoomTypes: roomTypeId},
       },
       {new: true}
     );
@@ -265,7 +266,7 @@ const filterHostelRoom = async (req, res) => {
 
     const result = await hostelModel.aggregate(pipeline);
 
-    if (!result) return res.status(400).json({message: 'Error deleting hostel details', success: false});
+    if (result?.length === 0) return res.status(404).json({message: 'No data found', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -291,6 +292,116 @@ const getAllHostelStudents = async (req, res) => {
   }
 };
 
+/////////////////////    Hostel visitors   ////////////////////
+
+const addVisitor = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await visitorsModel.create(data);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const deleteVisitor = async (req, res) => {
+  try {
+    const result = await visitorsModel.findByIdAndDelete(req.params.id);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const updateVisitor = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await visitorsModel.findByIdAndUpdate(req.params.id, data);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const getAllVisitors = async (req, res) => {
+  try {
+    const result = await visitorsModel.find();
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const getVisitorsById = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await visitorsModel.findById(req.params.id);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const filterHostelVisitor = async (req, res) => {
+  try {
+    const {schoolId, occupantId, occupantName, occupantType, roomId, date, time, roomNo, visitorName, visitorPhNo} = req.body;
+    const pipeline = [];
+
+    if (visitorName) {
+      pipeline.push({
+        $match: {visitorName: {$regex: new RegExp(visitorName, 'i')}},
+      });
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
+    if (occupantId) {
+      pipeline.push({$match: {occupantId: occupantId}});
+    }
+    if (occupantName) {
+      pipeline.push({$match: {occupantName: occupantName}});
+    }
+    if (occupantType) {
+      pipeline.push({$match: {occupantType: occupantType}});
+    }
+    if (roomId) {
+      pipeline.push({$match: {roomId: roomId}});
+    }
+    if (date) {
+      pipeline.push({$match: {date: date}});
+    }
+    if (time) {
+      pipeline.push({$match: {time: time}});
+    }
+    if (roomNo) {
+      pipeline.push({$match: {roomNo: roomNo}});
+    }
+    if (visitorPhNo) {
+      pipeline.push({$match: {visitorPhNo: visitorPhNo}});
+    }
+
+    if (pipeline?.length === 0) return res.status(400).json({message: 'No filtering query sent', success: false});
+
+    const result = await visitorsModel.aggregate(pipeline);
+
+    if (result?.length === 0) return res.status(404).json({message: 'No data found', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
 module.exports = {
   addHostelDetails,
   deleteHostel,
@@ -306,4 +417,10 @@ module.exports = {
   removeOccupantsHostelRoom,
   filterHostelRoom,
   getAllHostelStudents,
+  addVisitor,
+  updateVisitor,
+  deleteVisitor,
+  getAllVisitors,
+  getVisitorsById,
+  filterHostelVisitor,
 };

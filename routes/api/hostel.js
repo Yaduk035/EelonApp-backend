@@ -5,6 +5,12 @@ const attendanceController = require('../../controllers/hostelAttendanceControll
 
 //////// '/hostel/*'  ///////
 
+///////  Visitors  ///////
+router.route('/visitors/filter').put(hostelController.filterHostelVisitor);
+
+router.route('/visitors').post(hostelController.addVisitor).get(hostelController.getAllVisitors);
+router.route('/visitors/:id').put(hostelController.updateVisitor).get(hostelController.getVisitorsById).delete(hostelController.deleteVisitor);
+
 ///////  occupants  //////
 
 router.route('/occupants').put(hostelController.getAllHostelStudents);

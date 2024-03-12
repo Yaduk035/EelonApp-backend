@@ -1,4 +1,4 @@
-const attendanceModel = require('../models/HostelAttendanceModal');
+const attendanceModel = require('../models/Hostel/HostelAttendanceModal');
 
 const addHostelAttendance = async (req, res) => {
   try {
