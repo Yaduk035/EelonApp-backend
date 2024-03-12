@@ -5,6 +5,7 @@ const classSectionModel = require('../models/classSectionModel');
 const AccountModel = require('../models/Accounts/AccountsDb');
 const AdmissionModel = require('../models/Accounts/admissionSchema');
 const superAdminModel = require('../models/superAdminModel');
+const schoolModel = require('../models/adminModel');
 
 const bcrypt = require('bcrypt');
 
@@ -44,6 +45,7 @@ const getAdmins = async (req, res) => {
 const addAdmin = async (req, res) => {
   try {
     const userData = req.body;
+    const {schoolId} = userData;
     if (!userData)
       return res.status(400).json({
         message: 'Username and password must not be empty',
@@ -60,7 +62,10 @@ const addAdmin = async (req, res) => {
     };
     console.log(reqData);
     const results = await Admin.create(reqData);
-    console.log(results);
+    if (!results) return res.status(400).json({message: 'Error adding admin', success: false});
+    const adminId = results?._id;
+    await schoolModel.findByIdAndUpdate(schoolId, {$addToSet: {admin: adminId}});
+
     res.status(201).json({results, message: 'Admin created', success: true});
   } catch (error) {
     console.log(error);
