@@ -58,6 +58,7 @@ app.use('/api/payroll', require('./routes/api/Accounts/payrolls'));
 app.use('/api/classmaterials', require('./routes/api/classMaterials'));
 app.use('/api/school', require('./routes/api/School'));
 app.use('/api/hostel', require('./routes/api/hostel'));
+app.use('/api/messages', require('./routes/api/Notifications/notifications'));
 
 app.use(errorHandler);
 
