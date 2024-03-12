@@ -13,7 +13,6 @@ const roomTypes = new Schema({
 const schoolSchema = new Schema(
   {
     schoolId: String,
-    schoolId: String,
     shoolName: String,
     address: String,
     admin: Array,
@@ -27,6 +26,8 @@ const schoolSchema = new Schema(
     hostelRoomNo: Number,
     hostelRoomTypes: [roomTypes],
     status: String,
+    contactNo: String,
+    email: String,
   },
   {timestamps: true}
 );
