@@ -3,6 +3,7 @@ const hostelModel = require('../models/Hostel/hostelRoomModel');
 const studentModel = require('../models/studentSchema');
 const staffModel = require('../models/staffSchema');
 const visitorsModel = require('../models/Hostel/HostelVisitorsModel');
+const hostelInOutModel = require('../models/Hostel/HostelInOutmodel');
 
 const addHostelDetails = async (req, res) => {
   try {
@@ -402,6 +403,113 @@ const filterHostelVisitor = async (req, res) => {
   }
 };
 
+/////////////////////    Hostel in-out   ////////////////////
+
+const addInOutData = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await hostelInOutModel.create(data);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const deleteInOutData = async (req, res) => {
+  try {
+    const result = await hostelInOutModel.findByIdAndDelete(req.params.id);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const updateInOutData = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await hostelInOutModel.findByIdAndUpdate(req.params.id, data);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const getAllInOutData = async (req, res) => {
+  try {
+    const result = await hostelInOutModel.find();
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const getInOutDataById = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await hostelInOutModel.findById(req.params.id);
+    if (!result) return res.status(400).json({message: 'Error creating data', success: false});
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
+const filterInOutData = async (req, res) => {
+  try {
+    const {schoolId, occupantId, occupantName, occupantType, roomId, date, inTime, outTime} = req.body;
+    const pipeline = [];
+
+    if (visitorName) {
+      pipeline.push({
+        $match: {visitorName: {$regex: new RegExp(visitorName, 'i')}},
+      });
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
+    if (occupantId) {
+      pipeline.push({$match: {occupantId: occupantId}});
+    }
+    if (occupantName) {
+      pipeline.push({$match: {occupantName: occupantName}});
+    }
+    if (occupantType) {
+      pipeline.push({$match: {occupantType: occupantType}});
+    }
+    if (roomId) {
+      pipeline.push({$match: {roomId: roomId}});
+    }
+    if (date) {
+      pipeline.push({$match: {date: date}});
+    }
+    if (inTime) {
+      pipeline.push({$match: {inTime: inTime}});
+    }
+    if (outTime) {
+      pipeline.push({$match: {outTime: outTime}});
+    }
+
+    if (pipeline?.length === 0) return res.status(400).json({message: 'No filtering query sent', success: false});
+
+    const result = await hostelInOutModel.aggregate(pipeline);
+
+    if (result?.length === 0) return res.status(404).json({message: 'No data found', success: false});
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
 module.exports = {
   addHostelDetails,
   deleteHostel,
@@ -423,4 +531,10 @@ module.exports = {
   getAllVisitors,
   getVisitorsById,
   filterHostelVisitor,
+  addInOutData,
+  updateInOutData,
+  deleteInOutData,
+  getInOutDataById,
+  getAllInOutData,
+  filterInOutData,
 };

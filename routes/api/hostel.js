@@ -11,6 +11,12 @@ router.route('/visitors/filter').put(hostelController.filterHostelVisitor);
 router.route('/visitors').post(hostelController.addVisitor).get(hostelController.getAllVisitors);
 router.route('/visitors/:id').put(hostelController.updateVisitor).get(hostelController.getVisitorsById).delete(hostelController.deleteVisitor);
 
+///////  In-out  ///////
+router.route('/in_out/filter').put(hostelController.filterInOutData);
+
+router.route('/in_out').post(hostelController.addInOutData).get(hostelController.getAllInOutData);
+router.route('/in_out/:id').put(hostelController.updateInOutData).get(hostelController.getVisitorsById).delete(hostelController.deleteInOutData);
+
 ///////  occupants  //////
 
 router.route('/occupants').put(hostelController.getAllHostelStudents);
