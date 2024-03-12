@@ -3,9 +3,9 @@ const schoolModel = require('../models/schoolModel');
 const addSchool = async (req, res) => {
   try {
     const data = req.body;
-    const {schoolId} = data;
-    if (!schoolId) return res.status(400).json({message: 'No school id sent', success: false});
-    const duplicate = await schoolModel.findOne({schoolId: data.schoolId});
+    const {schoolIndexNo} = data;
+    if (!schoolIndexNo) return res.status(400).json({message: 'No school index id sent', success: false});
+    const duplicate = await schoolModel.findOne({schoolIndexNo: schoolIndexNo});
     if (duplicate) return res.status(409).json({message: 'SchoolId already exists', success: false});
     const result = await schoolModel.create(data);
     if (!result) return res.status(400).json({message: 'Error creating school', success: false});
