@@ -22,6 +22,7 @@ router
   .put(classSectionController.getSubjectsDropdowns)
   .delete(classSectionController.removeDropdownSub);
 
+router.route('/filter').put(classSectionController.filterClasses);
 router.route('/').post(classSectionController.addClass).get(classSectionController.getAllClasses);
 
 router.route('/:id').delete(classSectionController.deleteClass).put(classSectionController.updateClass).get(classSectionController.getAClassroom);

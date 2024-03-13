@@ -67,6 +67,37 @@ const getAllClasses = async (req, res) => {
   }
 };
 
+const filterClasses = async (req, res) => {
+  try {
+    const {classId, schoolId, std, academicYear} = req.body;
+    const pipeline = [];
+
+    if (classId) {
+      pipeline.push({$match: {classId: classId}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
+    if (std) {
+      pipeline.push({$match: {std: std}});
+    }
+    if (academicYear) {
+      pipeline.push({$match: {academicYear: academicYear}});
+    }
+
+    const response = await classSectionModel.aggregate(pipeline);
+
+    if (response.length === 0) return res.status(400).json({message: 'No users found.', success: false});
+    res.status(200).json(response);
+    // const classes = await classSectionModel.find().exec();
+    // if (!classes) return res.status(404).json({message: 'No class rooms found', success: false});
+    // res.status(200).json(classes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'No server response', success: false});
+  }
+};
+
 const getAClassroom = async (req, res) => {
   try {
     const id = req.params.id;
@@ -277,4 +308,5 @@ module.exports = {
   addDropdownSubs,
   removeDropdownSub,
   getClassSectionManageClsDD,
+  filterClasses,
 };

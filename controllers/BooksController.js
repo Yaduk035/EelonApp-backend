@@ -13,6 +13,31 @@ const getAllBooks = async (req, res) => {
   }
 };
 
+const filterBooks = async (req, res) => {
+  try {
+    const {bookName, schoolId, year} = req.body;
+    const pipeline = [];
+
+    if (bookName) {
+      pipeline.push({$match: {bookName: bookName}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
+    if (year) {
+      pipeline.push({$match: {year: year}});
+    }
+
+    const response = await Books.aggregate(pipeline);
+
+    if (response.length === 0) return res.status(400).json({message: 'No users found.', success: false});
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error: 'Server error'});
+  }
+};
+
 const getBook = async (req, res) => {
   try {
     if (!req.params.id) return res.status(400).json({error: 'No id sent'});
@@ -303,6 +328,68 @@ const getBooksByLimit = async (req, res) => {
   }
 };
 
+const getBooksByLimitFilter = async (req, res) => {
+  try {
+    const {schoolId} = req.body;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const pipeline = [
+      {
+        $match: {schoolId: schoolId},
+      },
+      {
+        $facet: {
+          metadata: [
+            {$count: 'totalBooks'},
+            {
+              $addFields: {
+                totalPages: {$ceil: {$divide: ['$totalBooks', limit]}},
+              },
+            },
+          ],
+          books: [{$skip: startIndex}, {$limit: limit}],
+        },
+      },
+      {
+        $project: {
+          books: 1,
+          pagination: {
+            totalPages: {$arrayElemAt: ['$metadata.totalPages', 0]},
+            currentPage: page,
+          },
+        },
+      },
+    ];
+
+    const result = await Books.aggregate(pipeline).exec();
+    const {books, pagination} = result[0];
+
+    if (!books || books.length === 0) return res.status(204).json('No books found');
+
+    if (endIndex < pagination.totalBooks) {
+      pagination.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      pagination.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+
+    res.status(200).json({books, pagination});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error: 'Server error'});
+  }
+};
+
 module.exports = {
   getBook,
   getAllBooks,
@@ -317,4 +404,6 @@ module.exports = {
   getIssuedCount,
   genreCount,
   getBooksByLimit,
+  getBooksByLimitFilter,
+  filterBooks,
 };
