@@ -37,6 +37,43 @@ const getAllMarks = async (req, res) => {
   }
 };
 
+const filterMarks = async (req, res) => {
+  try {
+    const {academicYear, schoolId, classSection, subject, std, examType, term} = req.body;
+    const pipeline = [];
+
+    if (academicYear) {
+      pipeline.push({$match: {academicYear: academicYear}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
+    if (classSection) {
+      pipeline.push({$match: {classSection: classSection}});
+    }
+    if (subject) {
+      pipeline.push({$match: {subject: subject}});
+    }
+    if (std) {
+      pipeline.push({$match: {std: std}});
+    }
+    if (examType) {
+      pipeline.push({$match: {examType: examType}});
+    }
+    if (term) {
+      pipeline.push({$match: {term: term}});
+    }
+
+    const response = await examMarksModel.aggregate(pipeline);
+
+    if (response.length === 0) return res.status(400).json({message: 'No data found.', success: false});
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', success: false});
+  }
+};
+
 const getMarksById = async (req, res) => {
   try {
     const result = await examMarksModel.findById(req.params.id).exec();
@@ -50,7 +87,7 @@ const getMarksById = async (req, res) => {
 
 const filterMarksSubwise = async (req, res) => {
   try {
-    const {classSection, academicYear, subject} = req.body;
+    const {classSection, academicYear, subject, schoolId} = req.body;
     if (!req.body) return res.status(400).json({message: 'No data sent with body', success: false});
 
     const result = await examMarksModel.aggregate([
@@ -59,6 +96,7 @@ const filterMarksSubwise = async (req, res) => {
           academicYear: academicYear,
           subject: subject,
           classSection: classSection,
+          schoolId,
         },
       },
     ]);
@@ -526,7 +564,7 @@ const getHallticketsById = async (req, res) => {
 };
 
 const hallticketFiltering = async (req, res) => {
-  const {term, academicYear, classSection} = req.body;
+  const {term, academicYear, classSection, schoolId} = req.body;
   try {
     const pipeline = [];
 
@@ -538,6 +576,9 @@ const hallticketFiltering = async (req, res) => {
     }
     if (classSection) {
       pipeline.push({$match: {classSection: classSection}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
     }
 
     const result = await HallticketModel.aggregate(pipeline);
@@ -600,4 +641,5 @@ module.exports = {
   deleteScholasticMarks,
   getAllSubjects,
   filterScholasticMarks,
+  filterMarks,
 };

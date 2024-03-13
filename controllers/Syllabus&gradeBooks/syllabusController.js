@@ -143,7 +143,7 @@ const removeSyllabusContent = async (req, res) => {
 };
 
 const syllabusFiltering = async (req, res) => {
-  const {term, academicYear, teacherId, studyRoomId, subject, std, unitName} = req.body;
+  const {term, academicYear, teacherId, studyRoomId, subject, std, unitName, schoolId} = req.body;
   try {
     const pipeline = [];
 
@@ -169,6 +169,9 @@ const syllabusFiltering = async (req, res) => {
     }
     if (std) {
       pipeline.push({$match: {std: std}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
     }
 
     const result = await syllabusModel.aggregate(pipeline);

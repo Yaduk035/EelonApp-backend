@@ -89,7 +89,7 @@ const getGradebook = async (req, res) => {
 };
 
 const gradebookFiltering = async (req, res) => {
-  const {term, academicYear, teacherId, studyRoomId, subject, std} = req.body;
+  const {term, academicYear, teacherId, studyRoomId, subject, std, schoolId} = req.body;
   try {
     const pipeline = [];
 
@@ -110,6 +110,9 @@ const gradebookFiltering = async (req, res) => {
     }
     if (std) {
       pipeline.push({$match: {std: std}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
     }
 
     const result = await gradeBookModel.aggregate(pipeline);

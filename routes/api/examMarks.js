@@ -11,6 +11,7 @@ router.route('/exam/filter/studentwise/:id').put(marksController.filterMarksStud
 ////////////   get all subjects from a exam collection   /////////////
 router.route('/exam/subs').put(marksController.getAllSubjects);
 
+router.route('exam/filter').put(marksController.filterMarks);
 router.route('/exam').post(marksController.addMarks).get(marksController.getAllMarks);
 
 router.route('/exam/:id').put(marksController.updateMarks).get(marksController.getMarksById).delete(marksController.deleteMarks);

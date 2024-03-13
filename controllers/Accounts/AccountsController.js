@@ -1,19 +1,16 @@
-const accountsModel = require("../../models/Accounts/AccountsDb");
-const admissionModel = require("../../models/Accounts/admissionSchema");
+const accountsModel = require('../../models/Accounts/AccountsDb');
+const admissionModel = require('../../models/Accounts/admissionSchema');
 
 const createAccounts = async (req, res) => {
   try {
     const data = req.body;
-    if (!data) return res.status(400).json({ message: "No data sent" });
+    if (!data) return res.status(400).json({message: 'No data sent'});
     const result = await accountsModel.create(data);
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error creating account", success: false });
+    if (!result) return res.status(400).json({message: 'Error creating account', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -21,14 +18,11 @@ const deleteAccounts = async (req, res) => {
   try {
     const id = req.params.id;
     const result = await accountsModel.findByIdAndDelete(id);
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error deleting account", success: false });
-    res.status(201).json({ message: "Account data deleted" });
+    if (!result) return res.status(400).json({message: 'Error deleting account', success: false});
+    res.status(201).json({message: 'Account data deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -36,30 +30,24 @@ const updateAccounts = async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
-    if (!data) return res.status(400).json({ message: "No data sent" });
+    if (!data) return res.status(400).json({message: 'No data sent'});
     const result = await accountsModel.findByIdAndUpdate(id, data);
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error updatind account", success: false });
+    if (!result) return res.status(400).json({message: 'Error updatind account', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const getAllAccounts = async (req, res) => {
   try {
     const result = await accountsModel.find().exec();
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error fethching accounts data", success: false });
+    if (!result) return res.status(400).json({message: 'Error fethching accounts data', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -67,69 +55,42 @@ const getAccountsById = async (req, res) => {
   try {
     const id = req.params.id;
     const result = await accountsModel.findById(id).exec();
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error fethching accounts data", success: false });
+    if (!result) return res.status(400).json({message: 'Error fethching accounts data', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterAccountsDb = async (req, res) => {
   try {
     const pipeline = [];
-    const {
-      id,
-      std,
-      classSection,
-      academicYear,
-      studentId,
-      studentName,
-      admnId,
-      admsnDbId,
-      rollNo,
-    } = req.body;
+    const {id, std, classSection, academicYear, studentId, studentName, admnId, admsnDbId, rollNo} = req.body;
 
-    if (id) pipeline.push({ $match: { _id: id } });
-    if (std) pipeline.push({ $match: { std: std } });
-    if (classSection) pipeline.push({ $match: { classSection: classSection } });
-    if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-    if (studentId) pipeline.push({ $match: { studentId: studentId } });
-    if (studentName) pipeline.push({ $match: { studentName: studentName } });
-    if (admnId) pipeline.push({ $match: { admnId: admnId } });
-    if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-    if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+    if (id) pipeline.push({$match: {_id: id}});
+    if (std) pipeline.push({$match: {std: std}});
+    if (classSection) pipeline.push({$match: {classSection: classSection}});
+    if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+    if (studentId) pipeline.push({$match: {studentId: studentId}});
+    if (studentName) pipeline.push({$match: {studentName: studentName}});
+    if (admnId) pipeline.push({$match: {admnId: admnId}});
+    if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+    if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
 
     const result = await accountsModel.aggregate(pipeline);
 
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error fethching accounts data", success: false });
+    if (!result) return res.status(400).json({message: 'Error fethching accounts data', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const addAdmissionfees = async (req, res) => {
   try {
-    const {
-      studentId,
-      admnId,
-      studentName,
-      modeOfPay,
-      transactionId,
-      amount,
-      status,
-      academicYear,
-      std,
-      board,
-    } = req.body;
+    const {studentId, admnId, studentName, modeOfPay, transactionId, amount, status, academicYear, std, board} = req.body;
     const jsonData = {
       studentId,
       admnId,
@@ -148,37 +109,27 @@ const addAdmissionfees = async (req, res) => {
         academicYear,
         std,
         board,
-        payStatus: "Paid",
+        payStatus: 'Paid',
       },
     };
-    const result = await accountsModel.findOneAndUpdate({ admnId }, jsonData, {
+    const result = await accountsModel.findOneAndUpdate({admnId}, jsonData, {
       upsert: true,
     });
     // if (!result)
     //   return res
     //     .status(400)
     //     .json({ message: "Error adding admission fee", success: false });
-    await admissionModel.findByIdAndUpdate(admnId, { payStatus: "Paid" });
+    await admissionModel.findByIdAndUpdate(admnId, {payStatus: 'Paid'});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const addTcfees = async (req, res) => {
   try {
-    const {
-      studentId,
-      studentName,
-      modeOfPay,
-      transactionId,
-      amount,
-      status,
-      academicYear,
-      std,
-      board,
-    } = req.body;
+    const {studentId, studentName, modeOfPay, transactionId, amount, status, academicYear, std, board} = req.body;
     const jsonData = {
       studentId,
       studentName,
@@ -197,13 +148,9 @@ const addTcfees = async (req, res) => {
         board,
       },
     };
-    const result = await accountsModel.findOneAndUpdate(
-      { studentId },
-      jsonData,
-      {
-        upsert: true,
-      }
-    );
+    const result = await accountsModel.findOneAndUpdate({studentId}, jsonData, {
+      upsert: true,
+    });
     // if (!result)
     //   return res
     //     .status(400)
@@ -211,7 +158,7 @@ const addTcfees = async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -220,21 +167,18 @@ const addTcfees = async (req, res) => {
 const addExamFee = async (req, res) => {
   try {
     const examfees = req.body;
-    const { studentId, admnId } = examfees;
+    const {studentId, admnId} = examfees;
     const result = await accountsModel.updateOne(
-      { studentId: studentId },
+      {studentId: studentId},
       {
-        $addToSet: { examfees: examfees },
+        $addToSet: {examfees: examfees},
       }
     );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding exam fee", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding exam fee', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -243,82 +187,67 @@ const getAllExamFee = async (req, res) => {
     const result = await accountsModel.aggregate([
       {
         $match: {
-          examfees: { $exists: true, $not: { $size: 0 } },
+          examfees: {$exists: true, $not: {$size: 0}},
         },
       },
       {
-        $unwind: "$examfees",
+        $unwind: '$examfees',
       },
       {
-        $replaceRoot: { newRoot: "$examfees" },
+        $replaceRoot: {newRoot: '$examfees'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterExamFee = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, studentName, admnId, admsnDbId, rollNo, schoolId} = req.body;
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$examfees",
+        $unwind: '$examfees',
       },
       {
-        $replaceRoot: { newRoot: "$examfees" },
+        $replaceRoot: {newRoot: '$examfees'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const removeExamfee = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { deleteId } = req.body;
-    const result = await accountsModel.updateOne(
-      { studentId: studentId },
-      { $pull: { examfees: { _id: deleteId } } }
-    );
-    if (!result)
-      return res.status(400).json({ message: "Error deleting data" });
-    res.status(200).json({ message: "exam fee deleted" });
+    const {deleteId} = req.body;
+    const result = await accountsModel.updateOne({studentId: studentId}, {$pull: {examfees: {_id: deleteId}}});
+    if (!result) return res.status(400).json({message: 'Error deleting data'});
+    res.status(200).json({message: 'exam fee deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -327,23 +256,19 @@ const removeExamfee = async (req, res) => {
 const addAnnualdayFee = async (req, res) => {
   try {
     const feeData = req.body;
-    if (!feeData)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const { studentId, admnId } = feeData;
+    if (!feeData) return res.status(400).json({message: 'No data sent', success: false});
+    const {studentId, admnId} = feeData;
     const result = await accountsModel.updateOne(
-      { studentId: studentId },
+      {studentId: studentId},
       {
-        $addToSet: { annualDay: feeData },
+        $addToSet: {annualDay: feeData},
       }
     );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding fee", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding fee', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -352,87 +277,70 @@ const getAllAnnualdayFee = async (req, res) => {
     const result = await accountsModel.aggregate([
       {
         $match: {
-          annualDay: { $exists: true, $not: { $size: 0 } },
+          annualDay: {$exists: true, $not: {$size: 0}},
         },
       },
       {
-        $unwind: "$annualDay",
+        $unwind: '$annualDay',
       },
       {
-        $replaceRoot: { newRoot: "$annualDay" },
+        $replaceRoot: {newRoot: '$annualDay'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterAnnualdayFee = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, studentName, admnId, admsnDbId, rollNo, schoolId} = req.body;
 
-  if (!req.body)
-    return res.status(400).json({ message: "No data sent", success: false });
+  if (!req.body) return res.status(400).json({message: 'No data sent', success: false});
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$annualDay",
+        $unwind: '$annualDay',
       },
       {
-        $replaceRoot: { newRoot: "$annualDay" },
+        $replaceRoot: {newRoot: '$annualDay'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const removeAnnualdayfee = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { deleteId } = req.body;
-    if (!deleteId)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const result = await accountsModel.updateOne(
-      { studentId: studentId },
-      { $pull: { annualDay: { _id: deleteId } } }
-    );
-    if (!result)
-      return res.status(400).json({ message: "Error deleting data" });
-    res.status(200).json({ message: "Fee deleted" });
+    const {deleteId} = req.body;
+    if (!deleteId) return res.status(400).json({message: 'No data sent', success: false});
+    const result = await accountsModel.updateOne({studentId: studentId}, {$pull: {annualDay: {_id: deleteId}}});
+    if (!result) return res.status(400).json({message: 'Error deleting data'});
+    res.status(200).json({message: 'Fee deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -441,23 +349,19 @@ const removeAnnualdayfee = async (req, res) => {
 const addCompetitionFee = async (req, res) => {
   try {
     const feeData = req.body;
-    if (!feeData)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const { studentId, admnId } = feeData;
+    if (!feeData) return res.status(400).json({message: 'No data sent', success: false});
+    const {studentId, admnId} = feeData;
     const result = await accountsModel.updateOne(
-      { studentId: studentId },
+      {studentId: studentId},
       {
-        $addToSet: { competition: feeData },
+        $addToSet: {competition: feeData},
       }
     );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding fee", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding fee', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -466,87 +370,70 @@ const getAllCompetitionFee = async (req, res) => {
     const result = await accountsModel.aggregate([
       {
         $match: {
-          competition: { $exists: true, $not: { $size: 0 } },
+          competition: {$exists: true, $not: {$size: 0}},
         },
       },
       {
-        $unwind: "$competition",
+        $unwind: '$competition',
       },
       {
-        $replaceRoot: { newRoot: "$competition" },
+        $replaceRoot: {newRoot: '$competition'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterCompetitionFee = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, studentName, admnId, admsnDbId, rollNo, schoolId} = req.body;
 
-  if (!req.body)
-    return res.status(400).json({ message: "No data sent", success: false });
+  if (!req.body) return res.status(400).json({message: 'No data sent', success: false});
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$competition",
+        $unwind: '$competition',
       },
       {
-        $replaceRoot: { newRoot: "$competition" },
+        $replaceRoot: {newRoot: '$competition'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const removeCompetitionfee = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { deleteId } = req.body;
-    if (!deleteId)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const result = await accountsModel.updateOne(
-      { studentId: studentId },
-      { $pull: { competition: { _id: deleteId } } }
-    );
-    if (!result)
-      return res.status(400).json({ message: "Error deleting data" });
-    res.status(200).json({ message: "Fee deleted" });
+    const {deleteId} = req.body;
+    if (!deleteId) return res.status(400).json({message: 'No data sent', success: false});
+    const result = await accountsModel.updateOne({studentId: studentId}, {$pull: {competition: {_id: deleteId}}});
+    if (!result) return res.status(400).json({message: 'Error deleting data'});
+    res.status(200).json({message: 'Fee deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -555,23 +442,19 @@ const removeCompetitionfee = async (req, res) => {
 const addEventsFee = async (req, res) => {
   try {
     const feeData = req.body;
-    if (!feeData)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const { studentId, admnId } = feeData;
+    if (!feeData) return res.status(400).json({message: 'No data sent', success: false});
+    const {studentId, admnId} = feeData;
     const result = await accountsModel.updateOne(
-      { studentId: studentId },
+      {studentId: studentId},
       {
-        $addToSet: { events: feeData },
+        $addToSet: {events: feeData},
       }
     );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding fee", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding fee', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -580,87 +463,70 @@ const getAllEventsFee = async (req, res) => {
     const result = await accountsModel.aggregate([
       {
         $match: {
-          events: { $exists: true, $not: { $size: 0 } },
+          events: {$exists: true, $not: {$size: 0}},
         },
       },
       {
-        $unwind: "$events",
+        $unwind: '$events',
       },
       {
-        $replaceRoot: { newRoot: "$events" },
+        $replaceRoot: {newRoot: '$events'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterEventsFee = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, studentName, admnId, admsnDbId, rollNo, schoolId} = req.body;
 
-  if (!req.body)
-    return res.status(400).json({ message: "No data sent", success: false });
+  if (!req.body) return res.status(400).json({message: 'No data sent', success: false});
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$events",
+        $unwind: '$events',
       },
       {
-        $replaceRoot: { newRoot: "$events" },
+        $replaceRoot: {newRoot: '$events'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const removeEventsfee = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { deleteId } = req.body;
-    if (!deleteId)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const result = await accountsModel.updateOne(
-      { studentId: studentId },
-      { $pull: { events: { _id: deleteId } } }
-    );
-    if (!result)
-      return res.status(400).json({ message: "Error deleting data" });
-    res.status(200).json({ message: "Fee deleted" });
+    const {deleteId} = req.body;
+    if (!deleteId) return res.status(400).json({message: 'No data sent', success: false});
+    const result = await accountsModel.updateOne({studentId: studentId}, {$pull: {events: {_id: deleteId}}});
+    if (!result) return res.status(400).json({message: 'Error deleting data'});
+    res.status(200).json({message: 'Fee deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -669,23 +535,19 @@ const removeEventsfee = async (req, res) => {
 const addTourFee = async (req, res) => {
   try {
     const feeData = req.body;
-    if (!feeData)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const { studentId, admnId } = feeData;
+    if (!feeData) return res.status(400).json({message: 'No data sent', success: false});
+    const {studentId, admnId} = feeData;
     const result = await accountsModel.updateOne(
-      { studentId: studentId },
+      {studentId: studentId},
       {
-        $addToSet: { tour: feeData },
+        $addToSet: {tour: feeData},
       }
     );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding fee", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding fee', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -694,87 +556,70 @@ const getAllTourFee = async (req, res) => {
     const result = await accountsModel.aggregate([
       {
         $match: {
-          tour: { $exists: true, $not: { $size: 0 } },
+          tour: {$exists: true, $not: {$size: 0}},
         },
       },
       {
-        $unwind: "$tour",
+        $unwind: '$tour',
       },
       {
-        $replaceRoot: { newRoot: "$events" },
+        $replaceRoot: {newRoot: '$events'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterTourFee = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, studentName, schoolId, admnId, admsnDbId, rollNo} = req.body;
 
-  if (!req.body)
-    return res.status(400).json({ message: "No data sent", success: false });
+  if (!req.body) return res.status(400).json({message: 'No data sent', success: false});
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$tour",
+        $unwind: '$tour',
       },
       {
-        $replaceRoot: { newRoot: "$tour" },
+        $replaceRoot: {newRoot: '$tour'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const removeTourfee = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { deleteId } = req.body;
-    if (!deleteId)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const result = await accountsModel.updateOne(
-      { studentId: studentId },
-      { $pull: { tour: { _id: deleteId } } }
-    );
-    if (!result)
-      return res.status(400).json({ message: "Error deleting data" });
-    res.status(200).json({ message: "Fee deleted" });
+    const {deleteId} = req.body;
+    if (!deleteId) return res.status(400).json({message: 'No data sent', success: false});
+    const result = await accountsModel.updateOne({studentId: studentId}, {$pull: {tour: {_id: deleteId}}});
+    if (!result) return res.status(400).json({message: 'Error deleting data'});
+    res.status(200).json({message: 'Fee deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -783,23 +628,19 @@ const removeTourfee = async (req, res) => {
 const addFines = async (req, res) => {
   try {
     const feeData = req.body;
-    if (!feeData)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const { studentId, admnId } = feeData;
+    if (!feeData) return res.status(400).json({message: 'No data sent', success: false});
+    const {studentId, admnId} = feeData;
     const result = await accountsModel.updateOne(
-      { studentId: studentId },
+      {studentId: studentId},
       {
-        $addToSet: { tour: feeData },
+        $addToSet: {tour: feeData},
       }
     );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding fee", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding fee', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -808,87 +649,70 @@ const getAllFines = async (req, res) => {
     const result = await accountsModel.aggregate([
       {
         $match: {
-          tour: { $exists: true, $not: { $size: 0 } },
+          tour: {$exists: true, $not: {$size: 0}},
         },
       },
       {
-        $unwind: "$tour",
+        $unwind: '$tour',
       },
       {
-        $replaceRoot: { newRoot: "$events" },
+        $replaceRoot: {newRoot: '$events'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterFines = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, schoolId, studentName, admnId, admsnDbId, rollNo} = req.body;
 
-  if (!req.body)
-    return res.status(400).json({ message: "No data sent", success: false });
+  if (!req.body) return res.status(400).json({message: 'No data sent', success: false});
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$tour",
+        $unwind: '$tour',
       },
       {
-        $replaceRoot: { newRoot: "$tour" },
+        $replaceRoot: {newRoot: '$tour'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const removeFines = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { deleteId } = req.body;
-    if (!deleteId)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const result = await accountsModel.updateOne(
-      { studentId: studentId },
-      { $pull: { tour: { _id: deleteId } } }
-    );
-    if (!result)
-      return res.status(400).json({ message: "Error deleting data" });
-    res.status(200).json({ message: "Fee deleted" });
+    const {deleteId} = req.body;
+    if (!deleteId) return res.status(400).json({message: 'No data sent', success: false});
+    const result = await accountsModel.updateOne({studentId: studentId}, {$pull: {tour: {_id: deleteId}}});
+    if (!result) return res.status(400).json({message: 'Error deleting data'});
+    res.status(200).json({message: 'Fee deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -897,23 +721,19 @@ const removeFines = async (req, res) => {
 const addAcademicFee = async (req, res) => {
   try {
     const feeData = req.body;
-    if (!feeData)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const { studentId, admnId } = feeData;
+    if (!feeData) return res.status(400).json({message: 'No data sent', success: false});
+    const {studentId, admnId} = feeData;
     const result = await accountsModel.updateOne(
-      { studentId: studentId },
+      {studentId: studentId},
       {
-        $addToSet: { AcademicFee: feeData },
+        $addToSet: {AcademicFee: feeData},
       }
     );
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding fee", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding fee', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -922,92 +742,72 @@ const getAllAcademicFee = async (req, res) => {
     const result = await accountsModel.aggregate([
       {
         $match: {
-          AcademicFee: { $exists: true, $not: { $size: 0 } },
+          AcademicFee: {$exists: true, $not: {$size: 0}},
         },
       },
       {
-        $unwind: "$AcademicFee",
+        $unwind: '$AcademicFee',
       },
       {
-        $replaceRoot: { newRoot: "$AcademicFee" },
+        $replaceRoot: {newRoot: '$AcademicFee'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterAcademicFee = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-    installmentType,
-    feeInterval,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, schoolId, studentName, admnId, admsnDbId, rollNo, installmentType, feeInterval} = req.body;
 
-  if (!req.body)
-    return res.status(400).json({ message: "No data sent", success: false });
+  if (!req.body) return res.status(400).json({message: 'No data sent', success: false});
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
-  if (installmentType)
-    pipeline.push({ $match: { installmentType: installmentType } });
-  if (feeInterval) pipeline.push({ $match: { feeInterval: feeInterval } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (installmentType) pipeline.push({$match: {installmentType: installmentType}});
+  if (feeInterval) pipeline.push({$match: {feeInterval: feeInterval}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$AcademicFee",
+        $unwind: '$AcademicFee',
       },
       {
-        $replaceRoot: { newRoot: "$AcademicFee" },
+        $replaceRoot: {newRoot: '$AcademicFee'},
       },
     ]);
-    if (!result)
-      res.status(404).json({ message: "No data found", success: false });
+    if (!result) res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const removeAcademicFee = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { deleteId } = req.body;
-    if (!deleteId)
-      return res.status(400).json({ message: "No data sent", success: false });
-    const result = await accountsModel.updateOne(
-      { studentId: studentId },
-      { $pull: { AcademicFee: { _id: deleteId } } }
-    );
-    if (!result)
-      return res.status(400).json({ message: "Error deleting data" });
-    res.status(200).json({ message: "Fee deleted" });
+    const {deleteId} = req.body;
+    if (!deleteId) return res.status(400).json({message: 'No data sent', success: false});
+    const result = await accountsModel.updateOne({studentId: studentId}, {$pull: {AcademicFee: {_id: deleteId}}});
+    if (!result) return res.status(400).json({message: 'Error deleting data'});
+    res.status(200).json({message: 'Fee deleted'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
@@ -1016,73 +816,59 @@ const removeAcademicFee = async (req, res) => {
 const addConcessionStudents = async (req, res) => {
   try {
     const studentData = req.body;
-    const { studentArray } = studentData;
+    const {studentArray} = studentData;
 
-    const bulkOps = studentArray.map((Id) => ({
+    const bulkOps = studentArray.map(Id => ({
       updateOne: {
-        filter: { studentId: Id },
-        update: { $addToSet: { feeConcessions: studentData } },
+        filter: {studentId: Id},
+        update: {$addToSet: {feeConcessions: studentData}},
       },
     }));
     const result = await accountsModel.bulkWrite(bulkOps);
-    if (!result)
-      return res
-        .status(400)
-        .json({ message: "Error adding student concessions", success: false });
+    if (!result) return res.status(400).json({message: 'Error adding student concessions', success: false});
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 
 const filterFeeConcessions = async (req, res) => {
   const pipeline = [];
-  const {
-    id,
-    std,
-    classSection,
-    academicYear,
-    studentId,
-    studentName,
-    admnId,
-    admsnDbId,
-    rollNo,
-  } = req.body;
+  const {id, std, classSection, academicYear, studentId, studentName, admnId, admsnDbId, schoolId, rollNo} = req.body;
 
-  if (!req.body)
-    return res.status(400).json({ message: "No data sent", success: false });
+  if (!req.body) return res.status(400).json({message: 'No data sent', success: false});
 
-  if (id) pipeline.push({ $match: { _id: id } });
-  if (std) pipeline.push({ $match: { std: std } });
-  if (classSection) pipeline.push({ $match: { classSection: classSection } });
-  if (academicYear) pipeline.push({ $match: { academicYear: academicYear } });
-  if (studentId) pipeline.push({ $match: { studentId: studentId } });
-  if (studentName) pipeline.push({ $match: { studentName: studentName } });
-  if (admnId) pipeline.push({ $match: { admnId: admnId } });
-  if (admsnDbId) pipeline.push({ $match: { admsnDbId: admsnDbId } });
-  if (rollNo) pipeline.push({ $match: { rollNo: rollNo } });
+  if (id) pipeline.push({$match: {_id: id}});
+  if (std) pipeline.push({$match: {std: std}});
+  if (classSection) pipeline.push({$match: {classSection: classSection}});
+  if (academicYear) pipeline.push({$match: {academicYear: academicYear}});
+  if (studentId) pipeline.push({$match: {studentId: studentId}});
+  if (studentName) pipeline.push({$match: {studentName: studentName}});
+  if (admnId) pipeline.push({$match: {admnId: admnId}});
+  if (admsnDbId) pipeline.push({$match: {admsnDbId: admsnDbId}});
+  if (rollNo) pipeline.push({$match: {rollNo: rollNo}});
+  if (schoolId) pipeline.push({$match: {schoolId: schoolId}});
 
   try {
     const result = await accountsModel.aggregate([
       ...pipeline,
       {
-        $unwind: "$feeConcessions",
+        $unwind: '$feeConcessions',
       },
       {
-        $replaceRoot: { newRoot: "$feeConcessions" },
+        $replaceRoot: {newRoot: '$feeConcessions'},
       },
       // {
       //   $match: { status: "claimed" },
       // },
     ]);
     const templateId = result;
-    if (result?.length === 0)
-      return res.status(404).json({ message: "No data found", success: false });
+    if (result?.length === 0) return res.status(404).json({message: 'No data found', success: false});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: 'Server error'});
   }
 };
 

@@ -170,6 +170,19 @@ const getClassDropdowns = async (req, res) => {
     res.status(500).json({message: 'No server response', success: false});
   }
 };
+
+const filterClassDropdowns = async (req, res) => {
+  try {
+    const {schoolId} = req.body;
+    const classIds = await classSectionModel.aggregate([{$match: {schoolId: schoolId}}, {$group: {_id: '$std'}}, {$project: {_id: 0, std: '$_id'}}]);
+    const classIdArray = classIds.map(doc => doc.std);
+    res.status(200).json(classIdArray);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'No server response', success: false});
+  }
+};
+
 //////////////////////// Academic year dropdowns   ///////////////////
 const getAcademicYearDropdowns = async (req, res) => {
   try {
@@ -309,4 +322,5 @@ module.exports = {
   removeDropdownSub,
   getClassSectionManageClsDD,
   filterClasses,
+  filterClassDropdowns,
 };

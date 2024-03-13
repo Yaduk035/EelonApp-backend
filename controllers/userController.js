@@ -234,6 +234,68 @@ const getStudentsByLimit = async (req, res) => {
   }
 };
 
+const filterStudentsByLimit = async (req, res) => {
+  try {
+    const {schoolId} = req.body;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const pipeline = [
+      {
+        $match: {schoolId: schoolId},
+      },
+      {
+        $facet: {
+          metadata: [
+            {$count: 'totalStudents'},
+            {
+              $addFields: {
+                totalPages: {$ceil: {$divide: ['$totalStudents', limit]}},
+              },
+            },
+          ],
+          users: [{$skip: startIndex}, {$limit: limit}],
+        },
+      },
+      {
+        $project: {
+          users: 1,
+          pagination: {
+            totalPages: {$arrayElemAt: ['$metadata.totalPages', 0]},
+            currentPage: page,
+          },
+        },
+      },
+    ];
+
+    const result = await StudentSchema.aggregate(pipeline).exec();
+    const {users, pagination} = result[0];
+
+    if (!users || users.length === 0) return res.status(204).json('No books found');
+
+    if (endIndex < pagination.totalUsers) {
+      pagination.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      pagination.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+
+    res.status(200).json({users, pagination});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error: 'Server error'});
+  }
+};
+
 const filterStudentsByclass = async (req, res) => {
   try {
     const {classSection, std, classId, schoolId} = req.body;
@@ -591,4 +653,5 @@ module.exports = {
   updateSuperAdmin,
   getAllSuperAdmins,
   getSuperAdmin,
+  filterStudentsByLimit,
 };
