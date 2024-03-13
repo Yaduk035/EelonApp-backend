@@ -12,6 +12,7 @@ const hostelIn_outschema = new Schema(
     date: String,
     inTime: String,
     outTime: String,
+    status: String,
   },
   {timestamps: true}
 );

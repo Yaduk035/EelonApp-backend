@@ -1,14 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const librarySettingsController = require("../../controllers/LibrarySettingsController");
+const librarySettingsController = require('../../controllers/LibrarySettingsController');
 
 router
-  .route("/:id")
-  .put(librarySettingsController.updateGenreDropdown)
-  .delete(librarySettingsController.deleteGenre);
-router
-  .route("/")
+  .route('/')
   .post(librarySettingsController.AddGenreDropdown)
-  .get(librarySettingsController.getGenreDropdown);
+  .get(librarySettingsController.getAllGenreDropdown)
+  .put(librarySettingsController.getGenreDropdown)
+  .delete(librarySettingsController.deleteGenre);
 
 module.exports = router;
