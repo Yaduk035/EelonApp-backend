@@ -33,6 +33,8 @@ const schoolSchema = new Schema(
     email: String,
     hostelRoomTypes: [roomTypes],
     libraryGenre: [libarySettings],
+    subjects: Array,
+    academicYears: Array,
   },
   {timestamps: true}
 );

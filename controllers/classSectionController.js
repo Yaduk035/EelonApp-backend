@@ -2,6 +2,7 @@ const classSectionModel = require('../models/classSectionModel');
 const attendanceModel = require('../models/attendanceModel');
 const studentModel = require('../models/studentSchema');
 const classSectionDropdown = require('../models/classSectionDropdowns');
+const schoolModel = require('../models/schoolModel');
 const mongoose = require('mongoose');
 const {Types} = mongoose;
 

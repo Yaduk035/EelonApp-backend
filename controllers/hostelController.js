@@ -465,14 +465,9 @@ const getInOutDataById = async (req, res) => {
 
 const filterInOutData = async (req, res) => {
   try {
-    const {schoolId, occupantId, occupantName, occupantType, roomId, date, inTime, outTime} = req.body;
+    const {schoolId, occupantId, occupantName, occupantType, roomId, date, inTime, outTime, status} = req.body;
     const pipeline = [];
 
-    if (visitorName) {
-      pipeline.push({
-        $match: {visitorName: {$regex: new RegExp(visitorName, 'i')}},
-      });
-    }
     if (schoolId) {
       pipeline.push({$match: {schoolId: schoolId}});
     }
@@ -496,6 +491,9 @@ const filterInOutData = async (req, res) => {
     }
     if (outTime) {
       pipeline.push({$match: {outTime: outTime}});
+    }
+    if (status) {
+      pipeline.push({$match: {status: status}});
     }
 
     if (pipeline?.length === 0) return res.status(400).json({message: 'No filtering query sent', success: false});
