@@ -9,6 +9,7 @@ const notificationController = require('../../controllers/notificationController
 router.route('/admin/filter').put(userController.filterAdmin);
 
 router.route('/admin').get(userController.getAdmins).post(userController.addAdmin);
+router.route('/admin/:id').get(userController.getAdminById);
 // router.route("/student/:id").delete(userController.deleteAdmin);
 
 //////////////    Student routes     ////////////////
