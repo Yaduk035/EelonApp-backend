@@ -4,7 +4,7 @@ const classSectionController = require('../../controllers/classSectionController
 
 ////////'classsection/*' ///////////
 
-router.route('/dropdowns/std').get(classSectionController.getClassDropdowns);
+router.route('/dropdowns/std').get(classSectionController.getClassDropdowns).put(classSectionController.filterClassDropdowns);
 router.route('/dropdowns/').get(classSectionController.getClassSectionDropdowns);
 router.route('/dropdowns/manageclass/:id').get(classSectionController.getClassSectionManageClsDD);
 

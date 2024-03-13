@@ -14,7 +14,7 @@ router.route('/admin').get(userController.getAdmins).post(userController.addAdmi
 //////////////    Student routes     ////////////////
 router.route('/student/issuelibrarycard/:id').put(userController.issueLibCard).get(userController.getStudentByNameIssueLib);
 
-router.route('/student/pagination').get(userController.getStudentsByLimit);
+router.route('/student/pagination').get(userController.getStudentsByLimit).put(userController.filterStudentsByLimit);
 router.route('/student/filter').put(userController.filterStudentsByclass);
 
 router.route('/student/filterbydata').put(userController.studentFiltering);
