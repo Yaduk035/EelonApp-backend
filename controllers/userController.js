@@ -42,6 +42,17 @@ const getAdmins = async (req, res) => {
   }
 };
 
+const getAdminById = async (req, res) => {
+  try {
+    const users = await Admin.findById(req.params.id).exec();
+    if (!users) return res.status(400).json({message: 'No users found.', success: false});
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error: 'Server error'});
+  }
+};
+
 const filterAdmin = async (req, res) => {
   try {
     const {name, schoolId, email} = req.body;
@@ -654,4 +665,5 @@ module.exports = {
   getAllSuperAdmins,
   getSuperAdmin,
   filterStudentsByLimit,
+  getAdminById,
 };
