@@ -37,7 +37,7 @@ app.use('/api/logout', require('./routes/api/Logout'));
 
 /////////  JWT protected routes  ///////////
 
-app.use(verifyJwt);
+// app.use(verifyJwt);
 
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/library', require('./routes/api/library'));

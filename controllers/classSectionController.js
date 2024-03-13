@@ -4,7 +4,7 @@ const studentModel = require('../models/studentSchema');
 const classSectionDropdown = require('../models/classSectionDropdowns');
 const schoolModel = require('../models/schoolModel');
 const mongoose = require('mongoose');
-const {Types} = mongoose;
+const {ObjectId} = mongoose.Types;
 
 const addClass = async (req, res) => {
   try {
@@ -139,39 +139,23 @@ const getClassDropdowns = async (req, res) => {
     res.status(500).json({message: 'No server response', success: false});
   }
 };
-
+//////////////////////// Academic year dropdowns   ///////////////////
 const getAcademicYearDropdowns = async (req, res) => {
   try {
-    const academicYear = req.params.id;
-    const academicYrData = await classSectionDropdown.findOne({
-      type: academicYear,
-    });
+    const {schoolId} = req.body;
+    const academicYrData = await schoolModel.aggregate([
+      {
+        $match: {_id: new ObjectId(schoolId)},
+      },
+      {
+        $project: {
+          _id: 0,
+          academicYears: 1,
+        },
+      },
+    ]);
     if (!academicYrData) return res.status(404).json({message: 'No dropdown data found', success: false});
-    res.status(200).json(academicYrData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({message: 'No server response', success: false});
-  }
-};
-
-const getSubjectsDropdowns = async (req, res) => {
-  try {
-    const dropdownData = await classSectionDropdown.findOne({
-      type: 'subjects',
-    });
-    if (!dropdownData) return res.status(404).json({message: 'No dropdown data found', success: false});
-    res.status(200).json(dropdownData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({message: 'No server response', success: false});
-  }
-};
-
-const postAcademicYear = async (req, res) => {
-  try {
-    const data = req.body;
-    const result = await classSectionDropdown.create(data);
-    res.status(201).json(result);
+    res.status(200).json(...academicYrData);
   } catch (error) {
     console.error(error);
     res.status(500).json({message: 'No server response', success: false});
@@ -180,11 +164,35 @@ const postAcademicYear = async (req, res) => {
 
 const addAcademicYear = async (req, res) => {
   try {
-    const dataType = req.params.id;
-    const academicData = req.body.academicYear;
+    const {academicData, schoolId} = req.body;
     if (!academicData) return res.status(400).json({message: 'No data sent with body'});
 
-    const result = await classSectionDropdown.updateOne({type: dataType}, {$addToSet: {academicYear: {$each: academicData}}}, {upsert: true});
+    const result = await schoolModel.findByIdAndUpdate(
+      schoolId,
+      {
+        $addToSet: {academicYears: academicData},
+      },
+      {new: true}
+    );
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'No server response', success: false});
+  }
+};
+
+const removeAcademicYear = async (req, res) => {
+  try {
+    const {academicData, schoolId} = req.body;
+    if (!academicData || !schoolId) return res.status(400).json({message: 'No data sent with body'});
+
+    const result = await schoolModel.findByIdAndUpdate(
+      schoolId,
+      {
+        $pull: {academicYears: academicData},
+      },
+      {new: true}
+    );
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
@@ -194,25 +202,17 @@ const addAcademicYear = async (req, res) => {
 
 const addDropdownSubs = async (req, res) => {
   try {
-    const reqData = req.body.subjects;
-    if (!reqData) return res.status(400).json({message: 'No data sent with body'});
+    const {subjects, schoolId} = req.body;
+    if (!subjects || !schoolId) return res.status(400).json({message: 'No data sent with body'});
 
-    const result = await classSectionDropdown.updateOne({type: 'subjects'}, {$addToSet: {subjects: {$each: reqData}}}, {upsert: true});
-    res.status(200).json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({message: 'No server response', success: false});
-  }
-};
-
-const removeAcademicYear = async (req, res) => {
-  try {
-    const dataType = req.params.id;
-    const academicData = req.body.academicYear;
-    if (!academicData) return res.status(400).json({message: 'No data sent with body'});
-
-    const result = await classSectionDropdown.updateOne({type: dataType}, {$pull: {academicYear: {$in: academicData}}});
-    res.status(200).json(result);
+    const result = await schoolModel.findByIdAndUpdate(
+      schoolId,
+      {
+        $addToSet: {subjects: subjects},
+      },
+      {new: true}
+    );
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({message: 'No server response', success: false});
@@ -221,11 +221,39 @@ const removeAcademicYear = async (req, res) => {
 
 const removeDropdownSub = async (req, res) => {
   try {
-    const reqData = req.body.subjects;
-    if (!reqData) return res.status(400).json({message: 'No data sent with body'});
+    const {schoolId, subjects} = req.body;
+    if (!schoolId || !subjects) return res.status(400).json({message: 'No data sent with body'});
 
-    const result = await classSectionDropdown.updateOne({type: 'subjects'}, {$pull: {subjects: {$in: reqData}}});
+    const result = await schoolModel.findByIdAndUpdate(
+      schoolId,
+      {
+        $pull: {subjects: subjects},
+      },
+      {new: true}
+    );
     res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'No server response', success: false});
+  }
+};
+
+const getSubjectsDropdowns = async (req, res) => {
+  try {
+    const {schoolId} = req.body;
+    const academicYrData = await schoolModel.aggregate([
+      {
+        $match: {_id: new ObjectId(schoolId)},
+      },
+      {
+        $project: {
+          _id: 0,
+          subjects: 1,
+        },
+      },
+    ]);
+    if (!academicYrData) return res.status(404).json({message: 'No dropdown data found', success: false});
+    res.status(200).json(...academicYrData);
   } catch (error) {
     console.error(error);
     res.status(500).json({message: 'No server response', success: false});
@@ -242,7 +270,7 @@ module.exports = {
   addStudentToClass,
   getAcademicYearDropdowns,
   addAcademicYear,
-  postAcademicYear,
+
   removeAcademicYear,
   getClassDropdowns,
   getSubjectsDropdowns,

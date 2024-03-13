@@ -9,17 +9,17 @@ router.route('/dropdowns/').get(classSectionController.getClassSectionDropdowns)
 router.route('/dropdowns/manageclass/:id').get(classSectionController.getClassSectionManageClsDD);
 
 router.route('/addstudent/:id').put(classSectionController.addStudentToClass);
-router.route('/academicyear').post(classSectionController.postAcademicYear);
+// router.route('/academicyear').post(classSectionController.postAcademicYear);
 router
-  .route('/academicyear/:id')
-  .put(classSectionController.addAcademicYear)
-  .get(classSectionController.getAcademicYearDropdowns)
+  .route('/academicyear')
+  .post(classSectionController.addAcademicYear)
+  .put(classSectionController.getAcademicYearDropdowns)
   .delete(classSectionController.removeAcademicYear);
 
 router
-  .route('/subjects/dropdowns')
-  .put(classSectionController.addDropdownSubs)
-  .get(classSectionController.getSubjectsDropdowns)
+  .route('/subjects')
+  .post(classSectionController.addDropdownSubs)
+  .put(classSectionController.getSubjectsDropdowns)
   .delete(classSectionController.removeDropdownSub);
 
 router.route('/').post(classSectionController.addClass).get(classSectionController.getAllClasses);
