@@ -97,14 +97,20 @@ const schoolFiltering = async (req, res) => {
 const allocateAdminToSchool = async (req, res) => {
   try {
     const {schoolId, adminId} = req.body;
-    const school = await schoolModel.findByIdAndUpdate(schoolId, {
-      $addToSet: {admin: adminId},
-    });
-    const admin = await adminModel.findByIdAndUpdate(adminId, {schoolId});
+    const school = await schoolModel.findByIdAndUpdate(
+      schoolId,
+      {
+        $addToSet: {admin: adminId},
+      },
+      {new: true}
+    );
+    const admin = await adminModel.findByIdAndUpdate(adminId, {schoolId: schoolId}, {new: true});
+    if (!school || !admin) return res.status(400).json({message: 'Error allocating admin'});
+    res.status(201).json({school, admin});
   } catch (error) {
     console.error(error);
     res.status(500).json({message: 'Server error', success: false});
   }
 };
 
-module.exports = {addSchool, updateSchool, deleteSchool, getAllSchools, getSchool, schoolFiltering};
+module.exports = {addSchool, updateSchool, deleteSchool, getAllSchools, getSchool, schoolFiltering, allocateAdminToSchool};

@@ -8,6 +8,8 @@ const schoolController = require('../../controllers/schoolController');
 
 router.route('/filter').put(schoolController.schoolFiltering);
 
+router.route('/allocate-admin').post(schoolController.allocateAdminToSchool);
+
 router.route('/').get(schoolController.getAllSchools).post(schoolController.addSchool);
 
 router.route('/:id').get(schoolController.getSchool).put(schoolController.updateSchool).delete(schoolController.deleteSchool);
