@@ -228,7 +228,8 @@ const getBookByGenre = async (req, res) => {
 
 const getBookCount = async (req, res) => {
   try {
-    const count = await Books.countDocuments();
+    const {schoolId} = req.body;
+    const count = await Books.countDocuments({schoolId: schoolId});
     if (!count) return res.status(400).json({message: 'No data', success: false});
     res.status(200).json(count);
   } catch (error) {
@@ -239,10 +240,13 @@ const getBookCount = async (req, res) => {
 
 const getIssuedCount = async (req, res) => {
   try {
-    const issueCount = await Books.countDocuments({
-      'students.currentlyIssued': {$exists: true, $ne: null},
-    });
-    if (!issueCount) return res.status(404).json({message: 'No data found', success: false});
+    const schoolId = req.body.schoolId; // Assuming schoolId is in the request body
+
+    const count = await Books.aggregate([{$match: {schoolId: schoolId, 'students.currentlyIssued': {$exists: true, $ne: null}}}, {$count: 'issueCount'}]);
+
+    if (!count.length || count[0].issueCount === 0) {
+      return res.status(400).json({message: 'No data', success: false});
+    }
     res.status(200).json(issueCount);
   } catch (error) {
     console.error(error);
@@ -251,7 +255,13 @@ const getIssuedCount = async (req, res) => {
 
 const genreCount = async (req, res) => {
   try {
+    const {schoolId} = req.body;
     const count = await Books.aggregate([
+      {
+        $match: {
+          schoolId: schoolId,
+        },
+      },
       {
         $group: {
           _id: '$genre',
@@ -263,7 +273,7 @@ const genreCount = async (req, res) => {
     // count.forEach((genre) => {
     //   formattedGenreCount[genre._id] = genre.count;
     // });
-    if (!count) return res.status(400).json({message: 'No data', success: false});
+    if (count.length === 0) return res.status(400).json({message: 'No data', success: false});
     res.status(200).json(count);
   } catch (error) {
     console.error(error);

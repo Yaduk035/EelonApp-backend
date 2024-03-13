@@ -14,13 +14,13 @@ router.route('/books').get(booksController.getAllBooks).post(booksController.add
 
 router.route('/books/:id').get(booksController.getBook).delete(booksController.deleteBook).put(booksController.editBook);
 
-router.route('/reports/bookcount/filter').get(booksController.getBookCount);
-router.route('/reports/bookcount').get(booksController.getBookCount);
+router.route('/reports/bookcount/filter').put(booksController.getBookCount);
+// router.route('/reports/bookcount').get(booksController.getBookCount);
 
-router.route('/reports/issuecount/filter').get(booksController.getIssuedCount);
-router.route('/reports/issuecount').get(booksController.getIssuedCount);
+router.route('/reports/issuecount/filter').put(booksController.getIssuedCount);
+// router.route('/reports/issuecount').get(booksController.getIssuedCount);
 
-router.route('/reports/genrecount/filter').get(booksController.genreCount);
-router.route('/reports/genrecount').get(booksController.genreCount);
+router.route('/reports/genrecount/filter').put(booksController.genreCount);
+// router.route('/reports/genrecount').get(booksController.genreCount);
 
 module.exports = router;
