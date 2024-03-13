@@ -42,6 +42,31 @@ const getAdmins = async (req, res) => {
   }
 };
 
+const filterAdmin = async (req, res) => {
+  try {
+    const {name, schoolId, email} = req.body;
+    const pipeline = [];
+
+    if (name) {
+      pipeline.push({$match: {name: name}});
+    }
+    if (schoolId) {
+      pipeline.push({$match: {schoolId: schoolId}});
+    }
+    if (email) {
+      pipeline.push({$match: {email: email}});
+    }
+
+    const response = await StudentSchema.aggregate(pipeline);
+
+    if (response.length === 0) return res.status(400).json({message: 'No users found.', success: false});
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error: 'Server error'});
+  }
+};
+
 const addAdmin = async (req, res) => {
   try {
     const userData = req.body;
@@ -560,6 +585,7 @@ module.exports = {
   filterStudentsByclass,
   studentFiltering,
   staffFiltering,
+  filterAdmin,
   addSuperAdmin,
   deleteSuperAdmin,
   updateSuperAdmin,

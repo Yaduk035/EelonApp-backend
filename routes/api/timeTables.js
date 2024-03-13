@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const timetableController = require("../../controllers/timetableController");
-const examtableController = require("../../controllers/examTimetableController");
+const timetableController = require('../../controllers/timetableController');
+const examtableController = require('../../controllers/examTimetableController');
 
 // router
 //   .route("/class/template/editarray/:id")
@@ -18,17 +18,14 @@ const examtableController = require("../../controllers/examTimetableController")
 //   .put(timetableController.updateTemplateById)
 //   .delete(timetableController.deleteTemplateById);
 
-router
-  .route("/classwise/classid/:id")
-  .get(timetableController.getClasswiseTimetableByClassId);
+router.route('/classwise/classid/:id').get(timetableController.getClasswiseTimetableByClassId);
+
+router.route('/classwise/filter').put(timetableController.filterTimetables);
+
+router.route('/classwise').post(timetableController.addClasswiseTimetable).get(timetableController.getAllTimetables);
 
 router
-  .route("/classwise")
-  .post(timetableController.addClasswiseTimetable)
-  .get(timetableController.getAllTimetables);
-
-router
-  .route("/classwise/:id")
+  .route('/classwise/:id')
   .put(timetableController.updateClasswiseTimetable)
   .get(timetableController.getClasswiseTimetable)
   .delete(timetableController.deleteClasswiseTimetable);
@@ -38,15 +35,12 @@ router
 //   .get(timetableController.getTemplates)
 //   .post(timetableController.addTemplate);
 
-router
-  .route("/exam")
-  .post(examtableController.addTimetable)
-  .get(examtableController.getAllExamTimetables);
+router.route('/exam/filter').put(examtableController.filterExamTimetables);
 
-router
-  .route("/exam/classwise/:id")
-  .get(examtableController.getExamTimetableByClassId);
+router.route('/exam').post(examtableController.addTimetable).get(examtableController.getAllExamTimetables);
 
-router.route("/exam/:id").delete(examtableController.deleteExamTimetableById);
+router.route('/exam/classwise/:id').get(examtableController.getExamTimetableByClassId);
+
+router.route('/exam/:id').delete(examtableController.deleteExamTimetableById);
 
 module.exports = router;

@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const subjects = new Schema(
   {
     schoolId: String,
-    schoolId: String,
     art_craft: String,
     mentalAttitudes: String,
     activitiesLs: String,
@@ -19,7 +18,6 @@ const subjects = new Schema(
 
 const scholasticSchema = new Schema(
   {
-    schoolId: String,
     schoolId: String,
     classSection: {
       type: String,
