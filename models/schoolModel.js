@@ -10,6 +10,10 @@ const roomTypes = new Schema({
   rentPerDay: Number,
 });
 
+const libarySettings = new Schema({
+  genre: String,
+});
+
 const schoolSchema = new Schema(
   {
     schoolIndexNo: String,
@@ -24,10 +28,11 @@ const schoolSchema = new Schema(
     endDate: String,
     hostelName: String,
     hostelRoomNo: Number,
-    hostelRoomTypes: [roomTypes],
     status: String,
     contactNo: String,
     email: String,
+    hostelRoomTypes: [roomTypes],
+    libraryGenre: [libarySettings],
   },
   {timestamps: true}
 );

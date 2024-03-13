@@ -15,15 +15,6 @@ const adminSchema = new Schema(
     },
     roles: {
       admin: {
-        // createdAt: {
-        //   type: Date,
-        //   default: Date.now,
-        // },
-        // updatedAt: {
-        //   type: Date,
-        //   default: Date.now,
-        // },
-
         type: Number,
         default: 2000,
       },
